@@ -1,0 +1,58 @@
+﻿@page
+@model MadisonCountySystem.Pages.RecordCreate.CreateDatasetModel
+@{
+    ViewData["Title"] = "Create a Dataset";
+}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Create a Dataset</h2>
+    <form method="post">
+        <div class="row justify-content-md-center">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="DatasetName" class="form-label">Dataset Name:</label>
+                    <input asp-for="DatasetName" placeholder="Enter Dataset Name:" class="form-control" />
+                    <span asp-validation-for="DatasetName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="DatasetType" class="form-label">Dataset Type:</label>
+                    <select class="form-control" asp-for="DatasetType">
+                        <option>WORD</option>
+                        <option>CSV</option>
+                        <option>EXCEL</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="DatasetContents" class="form-label">Dataset Description:</label>
+                    <input asp-for="DatasetContents" placeholder="Enter Dataset Description:" class="form-control" />
+                    <span asp-validation-for="DatasetContents" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="FormFiles" class="form-label">Upload a File:</label>
+                    <input asp-for="FormFiles" type="file" accept=".csv" class="form-control" />
+                    <span asp-validation-for="FormFiles" class="text-danger"></span>
+                </div>
+
+                <div class="text-center">
+                    <button style="width: 30%" asp-page="CreateDataset" asp-page-handler="PopulateHandler" class="btn btn-outline-primary btn-lg" formnovalidate>Populate</button>
+                    <button style="width: 33%" asp-page="CreateDataset" formenctype="multipart/form-data" asp-page-handler="AddDB" class="btn btn-outline-success btn-lg">Upload Dataset</button>
+                    <button style="width: 30%" asp-page="CreateDataset" asp-page-handler="Cancel" class="btn btn-outline-danger btn-lg" formnovalidate>Clear</button>
+                </div>
+
+                @*                 <div class="text-center">
+                <h2>Select File To Import</h2>
+                <select asp-for="SelectedFileName" asp-items="Model.CSVFiles" multiple>
+                <option value=""></option>
+                </select>
+                <button style="width: 33%" asp-page="CreateDataset" asp-page-handler="UploadDataset" class="btn btn-outline-success btn-lg">Upload Dataset</button>
+                </div>
+
+                <div class="text-center">
+                <h2>Upload a CSV File</h2>
+                <input asp-for="FormFiles" type="file" multiple />
+                <input asp-page-handler="UploadFile" formenctype="multipart/form-data" type="submit" value="Upload File(s)" />
+                <button style="width: 33%" asp-page="CreateDataset" asp-page-handler="UploadFile" class="btn btn-outline-success btn-lg">Upload File(s)</button>
+                </div> *@
+            </div>
+        </div>
+    </form>
+</div>

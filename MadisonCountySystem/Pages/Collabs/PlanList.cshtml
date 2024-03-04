@@ -1,0 +1,86 @@
+﻿@page
+@model MadisonCountySystem.Pages.Collabs.PlanListModel
+@{
+    ViewData["Title"] = Model.CollabName + " Plan List";
+}
+
+@if (Model.ShowModal)
+{
+        <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4);">
+            <form method="post">
+                <div style="background-color:#fff; margin:10% auto; padding:20px; width:50%; max-width: 500px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <div class="col mb-4">
+                        <label for="activeDatasets"><strong>Select a Primary Plan or SWOT for the Report:</strong></label>
+                        <select class="form-control" id="activeDatasets" name="selectedItemId">
+                            <option class="dropdown-header" disabled>Plans</option>
+                        @foreach (var plan in Model.PlansList)
+                        {
+                                    <option value="@($"Plan-{plan.PlanID}")">@plan.PlanName</option>
+                        }
+                            <option class="dropdown-divider" disabled></option>
+                            <option class="dropdown-header" disabled>SWOT Items</option>
+                        @foreach (var knowledgeItem in Model.KnowledgeList)
+                        {
+                                    <option value="@($"Knowledge Item-{knowledgeItem.KnowledgeID}")">@knowledgeItem.KnowledgeTitle</option>
+                        }
+                        </select>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" asp-page="PlanList" asp-page-handler="Print" class="btn btn-outline-success mr-2" style="margin-right: 10px;">Create Report</button>
+                        <button asp-page="PlanList" asp-page-handler="Close" class="btn btn-outline-danger">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+}
+
+<form method="post">
+    <div style="display: flex; justify-content: space-between; align-items: center;" class="mb-3">
+        <h2>Plans for @Model.CollabName</h2>
+        <div class="col-auto">
+            <button asp-page="PlanList" asp-page-handler="AddPlan" class="btn btn-outline-primary">Add New Plan</button>
+        </div>
+    </div>
+</form>
+
+@* <form method="post">
+    <div class="row align-items-end">
+        <div class="col">
+            <label for="activeDatasets">Select a Plan to View Steps:</label>
+            <select class="form-control" id="activeDatasets" name="selectedPlan">
+                @foreach (var plan in Model.PlansList)
+                {
+                    <option value="@plan.PlanID"> @plan.PlanName</option>
+                }
+            </select>
+        </div>
+        <div class="col-auto">
+            <button asp-page="PlanList" asp-page-handler="ShowSteps" class="btn btn-outline-success">View Plan Steps</button>
+        </div>
+        <div class="col-auto">
+            <button asp-page="PlanList" asp-page-handler="AddPlan" class="btn btn-outline-primary">Add New Plan</button>
+        </div>
+    </div>
+</form>
+<br /> *@
+<table class="table table-bordered table-responsive table-hover">
+    <thead>
+        <tr>
+            <th style="background-color: #e3f2fd;">Plan Name:</th>
+            <th style="background-color: #e3f2fd;">Contents:</th>
+            <th style="background-color: #e3f2fd;">Created Date:</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var plan in Model.PlansList)
+            {
+                        <tr>
+                            <td><a asp-area="" asp-page="/Collabs/PlanStepTable" asp-route-planID="@plan.PlanID">@plan.PlanName</a></td>
+                            <td>@plan.PlanContents</td>
+                            <td>@plan.PlanCreatedDate</td>
+                        </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -1,0 +1,44 @@
+﻿@page
+@model MadisonCountySystem.Pages.Collabs.DatasetListModel
+@{
+    ViewData["Title"] = Model.CollabName + " Dataset List";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Datasets for @Model.CollabName</h2>
+    <form method="post">
+        <div class="row align-items-end">
+            <div class="col-auto">
+                <button asp-page="DatasetList" asp-page-handler="LinkItem" class="btn btn-outline-success">Add Existing Dataset</button>
+            </div>
+            <div class="col-auto">
+                <button asp-page="DatasetList" asp-page-handler="CreateItem" class="btn btn-outline-primary">Create New Dataset</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<table class="table table-bordered table-responsive table-hover">
+    <thead class="table-light">
+        <tr>
+            <th style="background-color: #e3f2fd;">Dataset Name:</th>
+            <th style="background-color: #e3f2fd;">Dataset Type:</th>
+            <th style="background-color: #e3f2fd;">Dataset Description:</th>
+            <th style="background-color: #e3f2fd;">Created Date:</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var dataset in Model.DatasetList)
+            {
+                <tr>
+                    <td><a asp-area="" asp-page="/Info/DatasetInfo" asp-route-dataID="@dataset.DatasetID">@dataset.DatasetName</a></td>
+                    <td>@dataset.DatasetType</td>
+                    <td>@dataset.DatasetContents</td>
+                    <td>@dataset.DatasetCreatedDate</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

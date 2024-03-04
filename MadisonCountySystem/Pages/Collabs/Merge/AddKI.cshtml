@@ -1,0 +1,22 @@
+﻿@page
+@model MadisonCountySystem.Pages.Collabs.Merge.AddKIModel
+@{
+    ViewData["Title"] = "Add Knowledge Item to " + Model.CollabName;
+}
+
+<h4>Add Knowledge</h4>
+<form method="post">
+    <div class="col">
+        <label for="activeCollab" class="form-label">Knowledge Item:</label>
+        <select class="form-control" id="activeCollab" name="selectedKnowledge">
+            @foreach (var item in Model.KnowledgeList)
+            {
+                <option value="@item.KnowledgeID"> @item.KnowledgeTitle</option>
+            }
+        </select>
+    </div>
+    <br />
+    <div class="col-auto">
+        <button asp-page="AddKI" asp-page-handler="UpdateDB" class="btn btn-outline-primary">Add</button>
+    </div>
+</form>

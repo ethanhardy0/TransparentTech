@@ -1,0 +1,63 @@
+﻿@page
+@model MadisonCountySystem.Pages.Info.DatasetInfoModel
+@{
+    ViewData["Title"] = Model.Dataset.DatasetName;
+}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">@Model.Dataset.DatasetName</h1>
+    <h3 class="text-center mb-4"><strong>Dataset Type:</strong> <span class="fw-normal">@Model.Dataset.DatasetType</span></h3>
+</div>
+<div class="row mt-4 mb-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Dataset Description:</h5>
+                <p class="card-text">@Model.Dataset.DatasetContents</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--This gives a visual representation of some dataset-->
+<div class="row align align-items-end">
+    <h1>Table: @Model.Dataset.DatasetName</h1>
+    <form asp-page-handler="RunQuery">
+        <input asp-for="sqlQuery" placeholder="Write SQL Query" class="form-control mb-2" />
+        <button type="submit" class="btn btn-outline-success">Run SQL Query</button>
+        <p class="text-danger">@ViewData["QueryError"]</p>
+    </form>
+    <p class="fst-italic">*Only Top 100 Rows Displayed</p>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <!--Loops through column names for header-->
+            @{
+                foreach (var col in Model.ColNames)
+                {
+                    <th>@col</th>
+                }
+            }
+        </tr>
+    </thead>
+    <tbody>
+        <!--Loops through the list of lists to create each row-->
+        @{
+            foreach (var list in Model.Rows)
+            {
+                <tr>
+                    @{
+
+                        foreach (var value in list)
+                        {
+                            <td>@value</td>
+                        }
+
+                    }
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<p class="text-center mt-4 text-secondary">Posted: @Model.Dataset.DatasetCreatedDate by @Model.Dataset.OwnerFirst @Model.Dataset.OwnerLast</p>

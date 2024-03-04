@@ -1,0 +1,57 @@
+﻿@page
+@model MadisonCountySystem.Pages.Main.AnalysisLibModel
+@{
+    ViewData["Title"] = "Analysis Library";
+}
+
+@{
+    if (HttpContext.Session.GetString("username") != null)
+    {
+        <h2>Analysis Management</h2>
+
+        <form method="post">
+            <div class="row align-items-end">
+                <!-- Use align-items-end to align items vertically at their end -->
+                <div class="col">
+                    <label for="activeAnalysis" class="form-label">Select an Analysis:</label>
+                    <select class="form-control" id="activeAnalysis" name="selectedAnalysis">
+                        @foreach (var Analysis in Model.AnalysisList)
+                        {
+                            <option value="@Analysis.AnalysisID"> @Analysis.AnalysisName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <!-- Use col-auto for button to take up only the required space -->
+                    <button asp-page="AnalysisLib" asp-page-handler="AddCollab" class="btn btn-outline-success">Add to Collaboration</button>
+                </div>
+                <div class="col-auto">
+                    <button asp-page="AnalysisLib" asp-page-handler="CreateAnalysis" class="btn btn-outline-primary">Create New Analysis</button>
+                </div>
+            </div>
+        </form>
+    }
+}
+<br />
+<h3>Analysis Library</h3>
+<table class="table table-bordered table-responsive table-hover">
+    <thead class="table-light">
+        <tr>
+            <th style="background-color: #e3e5fd;">Analysis Name:</th>
+            <th style="background-color: #e3e5fd;">Analysis Type:</th>
+            <th style="background-color: #e3e5fd;">Created Date:</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var analysis in Model.AnalysisList)
+            {
+                <tr>
+                    <td><a asp-area="" asp-page="/Info/AnalysisInfo" asp-route-analysisID="@analysis.AnalysisID">@analysis.AnalysisName</a></td>
+                    <td>@analysis.AnalysisType</td>
+                    <td>@analysis.AnalysisCreatedDate</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

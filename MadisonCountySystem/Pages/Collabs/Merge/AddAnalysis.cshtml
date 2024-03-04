@@ -1,0 +1,22 @@
+﻿@page
+@model MadisonCountySystem.Pages.Collabs.Merge.AddAnalysisModel
+@{
+    ViewData["Title"] = "Add Analysis to " + Model.CollabName;
+}
+
+<h4>Add Analysis</h4>
+<form method="post">
+    <div class="col">
+        <label for="activeCollab" class="form-label">Analysis:</label>
+        <select class="form-control" id="activeCollab" name="selectedAnalysis">
+            @foreach (var item in Model.AnalysisList)
+            {
+                <option value="@item.AnalysisID"> @item.AnalysisName</option>
+            }
+        </select>
+    </div>
+    <br />
+    <div class="col-auto">
+        <button asp-page="AddAnalysis" asp-page-handler="UpdateDB" class="btn btn-outline-primary">Add</button>
+    </div>
+</form>

@@ -1,0 +1,46 @@
+﻿@page
+@model MadisonCountySystem.Pages.Collabs.KnowledgeListModel
+@{
+    ViewData["Title"] = Model.CollabName + " Knowledge Library";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Knowledge Items for @Model.CollabName</h2>
+    <form method="post">
+        <div class="row align-items-end">
+            <div class="col-auto">
+                <button asp-page="KnowledgeList" asp-page-handler="LinkItem" class="btn btn-outline-success">Add Existing Knowledge Item</button>
+            </div>
+            <div class="col-auto">
+                <button asp-page="KnowledgeList" asp-page-handler="CreateItem" class="btn btn-outline-primary">Create New Knowledge Item</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<table class="table table-bordered table-responsive table-hover">
+    <thead class="table-light">
+        <tr>
+            <th style="background-color: #e3f2fd;">Knowledge Title:</th>
+            <th style="background-color: #e3f2fd;">Knowledge Subject:</th>
+            <th style="background-color: #e3f2fd;">Knowledge Category:</th>
+            <th style="background-color: #e3f2fd;">Posted Date:</th>
+            <th style="background-color: #e3f2fd;">Posted By:</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var knowledge in Model.KnowledgeList)
+            {
+                <tr>
+                    <td><a asp-area="" asp-page="/Info/KnowledgeInfo" asp-route-kiID="@knowledge.KnowledgeID">@knowledge.KnowledgeTitle</a></td>
+                    <td>@knowledge.KnowledgeSubject</td>
+                    <td>@knowledge.KnowledgeCategory</td>
+                    <td>@knowledge.KnowledgePostDate</td>
+                    <td>@knowledge.OwnerFirst @knowledge.OwnerLast</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

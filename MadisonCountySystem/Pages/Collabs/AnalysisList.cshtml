@@ -1,0 +1,42 @@
+﻿@page
+@model MadisonCountySystem.Pages.Collabs.AnalysisListModel
+@{
+    ViewData["Title"] = Model.CollabName + " Analysis List";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Analyses for @Model.CollabName</h2>
+    <form method="post">
+        <div class="row align-items-end">
+            <div class="col-auto">
+                <button asp-page="AnalysisList" asp-page-handler="LinkItem" class="btn btn-outline-success">Add Existing Analysis</button>
+            </div>
+            <div class="col-auto">
+                <button asp-page="AnalysisList" asp-page-handler="CreateItem" class="btn btn-outline-primary">Create New Analysis</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<table class="table table-bordered table-responsive table-hover">
+    <thead class="table-light">
+        <tr>
+            <th style="background-color: #e3f2fd;">Analysis Name:</th>
+            <th style="background-color: #e3f2fd;">Analysis Type:</th>
+            <th style="background-color: #e3f2fd;">Created Date:</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var analysis in Model.AnalysisList)
+            {
+                <tr>
+                    <td><a asp-area="" asp-page="/Info/AnalysisInfo" asp-route-analysisID="@analysis.AnalysisID">@analysis.AnalysisName</a></td>
+                    <td>@analysis.AnalysisType</td>
+                    <td>@analysis.AnalysisCreatedDate</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

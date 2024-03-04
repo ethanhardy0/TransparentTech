@@ -1,0 +1,32 @@
+﻿@page
+@model MadisonCountySystem.Pages.RecordCreate.CreatePlanModel
+@{
+    ViewData["Title"] = "Create a Plan for " + Model.CollabName;
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Create a Plan for @Model.CollabName</h2>
+    <form method="post">
+        <div class="row justify-content-md-center">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="PlanName" class="form-label">Plan Name:</label>
+                    <input asp-for="PlanName" placeholder="Enter Plan Name:" class="form-control" />
+                    <span asp-validation-for="PlanName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label">Description:</label>
+                    <input asp-for="Description" placeholder="Enter Description:" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="text-center">
+                    <button style="width: 30%" asp-page="CreatePlan" asp-page-handler="PopulateHandler" class="btn btn-outline-primary btn-lg">Populate</button>
+                    <button style="width: 33%" asp-page="CreatePlan" asp-page-handler="CreatePlan" class="btn btn-outline-success btn-lg" formnovalidate>Create</button>
+                    <button style="width: 30%" asp-page="CreatePlan" asp-page-handler="Clear" class="btn btn-outline-danger btn-lg" formnovalidate>Clear</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

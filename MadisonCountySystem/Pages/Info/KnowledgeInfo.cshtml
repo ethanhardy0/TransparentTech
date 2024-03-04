@@ -1,0 +1,74 @@
+﻿@page
+@model MadisonCountySystem.Pages.Info.KnowledgeInfoModel
+@{
+    ViewData["Title"] = Model.KnowledgeItem.KnowledgeTitle;
+}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">@Model.KnowledgeItem.KnowledgeTitle</h1>
+
+    <div class="text-center mb-4">
+        <h3><strong>Subject:</strong> <span class="fw-normal">@Model.KnowledgeItem.KnowledgeSubject</span></h3>
+        <h4><strong>Category:</strong> <span class="fw-normal">@Model.KnowledgeItem.KnowledgeCategory</span></h4>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
+        @if (Model.KnowledgeItem.Strengths != "0")
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Strengths</h5>
+                        <p class="card-text">@Model.KnowledgeItem.Strengths</p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.KnowledgeItem.Weaknesses != "0")
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Weaknesses</h5>
+                        <p class="card-text">@Model.KnowledgeItem.Weaknesses</p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.KnowledgeItem.Opportunities != "0")
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Opportunities</h5>
+                        <p class="card-text">@Model.KnowledgeItem.Opportunities</p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.KnowledgeItem.Threats != "0")
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Threats</h5>
+                        <p class="card-text">@Model.KnowledgeItem.Threats</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Knowledge Information</h5>
+                    <p class="card-text">@Model.KnowledgeItem.KnowledgeInformation</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p class="text-center mt-4">Posted: @Model.KnowledgeItem.KnowledgePostDate by @Model.KnowledgeItem.OwnerFirst @Model.KnowledgeItem.OwnerLast</p>
+</div>

@@ -1,0 +1,42 @@
+﻿@page
+@model MadisonCountySystem.Pages.Collabs.CollabUsersModel
+@{
+    ViewData["Title"] = Model.CollabName + " Members";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Members of @Model.CollabName</h2>
+    <form method="post">
+        <div class="row align-items-end">
+            <div class="col-auto">
+                <button asp-page="CollabUsers" asp-page-handler="LinkItem" class="btn btn-outline-primary">Add User to @Model.CollabName</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<table class="table table-bordered table-responsive table-hover">
+    <thead class="table-light">
+        <tr>
+            <th style="background-color: #e3f2fd;">Username:</th>
+            <th style="background-color: #e3f2fd;">Full Name:</th>
+            <th style="background-color: #e3f2fd;">Email:</th>
+            <th style="background-color: #e3f2fd;">Phone Number:</th>
+            <th style="background-color: #e3f2fd;">Role:</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var user in Model.UserList)
+            {
+                <tr>
+                    <td>@user.Username</td>
+                    <td>@user.FirstName @user.LastName</td>
+                    <td>@user.Email</td>
+                    <td>@user.Phone</td>
+                    <td>@user.UserRole</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

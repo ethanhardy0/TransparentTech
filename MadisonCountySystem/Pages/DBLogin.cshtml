@@ -1,0 +1,96 @@
+﻿@page
+@model MadisonCountySystem.Pages.DBLoginModel
+@{
+    if (HttpContext.Session.GetString("username") != null)
+    {
+        ViewData["Title"] = "Log Out";
+    }
+    else
+    {
+        ViewData["Title"] = "Log In";
+    }
+}
+@{
+    if (HttpContext.Session.GetString("username") != null)
+    {
+        <h5>You are logged in as @HttpContext.Session.GetString("username"). Are you sure that you want to log out?</h5>
+        // Log out here
+        <br />
+        <form asp-page="DBLogin" asp-page-handler="LogoutHandler">
+            <input type="submit" class="btn btn-danger" value="Confirm Logout">
+        </form>
+
+    }
+    else if (HttpContext.Session.GetString("LoginError") != null)
+    {
+        <br />
+        <br />
+        <h2 class="display-4 text-center font-weight-bold">Knowledge Management System Login</h2>
+        <p class="text-danger row justify-content-md-center">@ViewData["LoginMessage"]</p>
+        <p class="text-danger row justify-content-md-center">@HttpContext.Session.GetString("LoginError")</p>
+
+
+                // Let the user try login again.
+        <form method="post">
+            <div class="row justify-content-md-center">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Username" class="form-label">Username:</label>
+                        <input asp-for="Username" placeholder="Enter Username:" class="form-control" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">Password:</label>
+                        <input asp-for="Password" class="form-control" type="password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="text-center mb-4">
+                        @*                        <button style="width: 30%" asp-page="DBLogin" asp-page-handler="PopulateHandler" class="btn btn-outline-primary btn-lg" formnovalidate>Populate</button> *@
+                        <button style="width: 40%" asp-page="DBLogin" asp-page-handler="TryLogin" class="btn btn-outline-primary btn-lg">Log In</button>
+                        <button style="width: 40%" asp-page="DBLogin" asp-page-handler="Clear" class="btn btn-outline-danger btn-lg" formnovalidate>Clear</button>
+                    </div>
+
+                    @*                  For redirect to Signup form
+            <div class="text-center">
+            <button style="width: 40%" asp-page="DBLogin" asp-page-handler="TryLogin" class="btn btn-outline-primary btn-lg">Sign Up</button>
+            </div>*@
+                </div>
+            </div>
+        </form>
+
+    }
+    else
+    {
+        // First time loading the page
+        <br />
+        <br />
+        <h2 class="display-4 text-center font-weight-bold">Knowledge Management System Login</h2>
+        <br />
+        <p class="text-success row justify-content-md-center">@ViewData["LoginMessage"]</p>
+        <form method="post">
+            <div class="row justify-content-md-center">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="Username" class="form-label">Username:</label>
+                        <input asp-for="Username" placeholder="Enter Username:" class="form-control" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">Password:</label>
+                        <input asp-for="Password" class="form-control" type="password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="text-center mb-4">
+                        <button style="width: 40%" asp-page="DBLogin" asp-page-handler="TryLogin" class="btn btn-outline-primary btn-lg">Log In</button>
+                        <button style="width: 40%" asp-page="DBLogin" asp-page-handler="Clear" class="btn btn-outline-danger btn-lg" formnovalidate>Clear</button>
+                    </div>
+                    @*                    For redirect to Signup form *@
+                    <div class="text-center">
+                        <button style="width: 40%" asp-page="DBLogin" asp-page-handler="Signup" class="btn btn-outline-success btn-lg">Sign Up</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    }
+
+}

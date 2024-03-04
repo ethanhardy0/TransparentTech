@@ -1,0 +1,21 @@
+﻿@page
+@model MadisonCountySystem.Pages.ButtonCollab.AnalysisButtonModel
+@{
+    ViewData["Title"] = "Add Analysis to Collaboration";
+}
+<h4>Analysis: @Model.ItemName</h4>
+<form method="post">
+    <div class="col">
+        <label for="activeCollab" class="form-label">Collaboration:</label>
+        <select class="form-control" id="activeCollab" name="selectedCollab">
+            @foreach (var collab in Model.CollabList)
+            {
+                <option value="@collab.CollabID"> @collab.CollabName</option>
+            }
+        </select>
+    </div>
+    <br />
+    <div class="col-auto">
+        <button asp-page="AnalysisButton" asp-page-handler="UpdateDB" class="btn btn-outline-primary">Add</button>
+    </div>
+</form>

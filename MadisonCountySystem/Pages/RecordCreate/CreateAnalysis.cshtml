@@ -1,0 +1,52 @@
+﻿@page
+@model MadisonCountySystem.Pages.RecordCreate.CreateAnalysisModel
+@{
+    ViewData["Title"] = "Create an Analysis";
+}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Create an Analysis</h2>
+    <form method="post">
+        <div class="row justify-content-md-center">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="AnalysisName" class="form-label">Analysis Name:</label>
+                    <input asp-for="AnalysisName" placeholder="Enter Analysis Name:" class="form-control" />
+                    <span asp-validation-for="AnalysisName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="AnalysisType" class="form-label">Analysis Type:</label>
+                    <select class="form-control" asp-for="AnalysisType">
+                        <option>SUM</option>
+                        <option>COUNT</option>
+                        <option>MAX</option>
+                        <option>MIN</option>
+                        <option>MEAN</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="activeDataset" class="form-label">Dataset to Analyze:</label>
+                    <select class="form-control" id="activeDataset" name="selectedDataset" asp-for="activeDataset">
+                        @foreach (var dataset in Model.DatasetList)
+                        {
+                            <option value="@dataset.DatasetID"> @dataset.DatasetName</option>
+                        }
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="activeKI" class="form-label">Related Knowledge Item:</label>
+                    <select class="form-control" id="activeKI" name="selectedKI" asp-for="activeKI">
+                        @foreach (var knowledge in Model.KnowledgeItemList)
+                        {
+                            <option value="@knowledge.KnowledgeID"> @knowledge.KnowledgeTitle</option>
+                        }
+                    </select>
+                </div>
+                <div class="text-center">
+                    <button style="width: 30%" asp-page="CreateAnalysis" asp-page-handler="PopulateHandler" class="btn btn-outline-primary btn-lg" formnovalidate>Populate</button>
+                    <button style="width: 33%" asp-page="CreateAnalysis" asp-page-handler="AddDB" class="btn btn-outline-success btn-lg">Create</button>
+                    <button style="width: 30%" asp-page="CreateAnalysis" asp-page-handler="Clear" class="btn btn-outline-danger btn-lg" formnovalidate>Clear</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

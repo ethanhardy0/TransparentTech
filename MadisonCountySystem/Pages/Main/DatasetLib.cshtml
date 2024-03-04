@@ -1,0 +1,57 @@
+﻿@page
+@model MadisonCountySystem.Pages.Main.DatasetModel
+@{
+    ViewData["Title"] = "Dataset Library";
+}
+
+@{
+    if (HttpContext.Session.GetString("username") != null)
+    {
+        <h2>Dataset Management</h2>
+
+        <form method="post">
+            <div class="row align-items-end">
+                <div class="col">
+                    <label for="activeDatasets" class="form-label">Select a Dataset:</label>
+                    <select class="form-control" id="activeDatasets" name="selectedDataset">
+                        @foreach (var Dataset in Model.DatasetList)
+                        {
+                            <option value="@Dataset.DatasetID"> @Dataset.DatasetName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button asp-page="DatasetLib" asp-page-handler="AddCollab" class="btn btn-outline-success">Add to Collaboration</button>
+                </div>
+                <div class="col-auto">
+                    <button asp-page="DatasetLib" asp-page-handler="CreateDataset" class="btn btn-outline-primary">Create New Dataset</button>
+                </div>
+            </div>
+        </form>
+    }
+}
+<br />
+
+<h3>Dataset Library</h3>
+
+<table class="table table-bordered table-responsive table-hover">
+    <thead class="table-light">
+        <tr>
+            <th style="background-color: #e3e5fd;">Dataset Name:</th>
+            <th style="background-color: #e3e5fd;">File Type:</th>
+            <th style="background-color: #e3e5fd;">Created Date:</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var Dataset in Model.DatasetList)
+            {
+                <tr>
+                    <td><a asp-area="" asp-page="/Info/DatasetInfo" asp-route-dataID="@Dataset.DatasetID">@Dataset.DatasetName</a></td>
+                    <td>@Dataset.DatasetType</td>
+                    <td>@Dataset.DatasetCreatedDate</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

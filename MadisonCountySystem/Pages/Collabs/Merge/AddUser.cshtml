@@ -1,0 +1,32 @@
+﻿@page
+@model MadisonCountySystem.Pages.Collabs.Merge.AddUserModel
+@{
+    ViewData["Title"] = "Add User to " + Model.CollabName;
+}
+
+<h4>Add User</h4>
+<form method="post">
+    <div class="col">
+        <label for="activeCollab" class="form-label">User:</label>
+        <select class="form-control" id="activeCollab" name="selectedUser">
+            @foreach (var item in Model.UserList)
+            {
+                <option value="@item.UserID">@item.Username</option>
+            }
+        </select>
+    </div>
+    <br />
+    <div class="col">
+        <label asp-for="UserRole" class="form-label">User Role:</label>
+        <select asp-for="UserRole" class="form-control">
+            <option>Standard Member</option>
+            <option>Specialized Member</option>
+            <option>Administrator</option>
+        </select>
+        <span asp-validation-for="UserRole" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="col-auto">
+        <button asp-page="AddUser" asp-page-handler="UpdateDB" class="btn btn-outline-primary">Add</button>
+    </div>
+</form>

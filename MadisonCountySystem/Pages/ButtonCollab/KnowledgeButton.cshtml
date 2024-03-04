@@ -1,0 +1,21 @@
+﻿@page
+@model MadisonCountySystem.Pages.ButtonCollab.KnowledgeButtonModel
+@{
+    ViewData["Title"] = "Add Knowledge Item to Collaboration";
+}
+<h4>Knowledge Item: @Model.ItemName</h4>
+<form method="post">
+    <div class="col">
+        <label for="activeCollab" class="form-label">Collaboration:</label>
+        <select class="form-control" id="activeCollab" name="selectedCollab">
+            @foreach (var collab in Model.CollabList)
+            {
+                <option value="@collab.CollabID"> @collab.CollabName</option>
+            }
+        </select>
+    </div>
+    <br />
+    <div class="col-auto">
+        <button asp-page="KnowledgeButton" asp-page-handler="UpdateDB" class="btn btn-outline-primary">Add</button>
+    </div>
+</form>

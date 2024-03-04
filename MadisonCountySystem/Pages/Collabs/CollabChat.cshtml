@@ -1,0 +1,36 @@
+﻿@page
+@model MadisonCountySystem.Pages.Collabs.CollabChatModel
+@{
+    ViewData["Title"] = Model.CollabName + " Chat";
+}
+
+<div class="container mt-3">
+    <div class="border p-3 rounded">
+        <h2 class="text-center mb-4 font-weight-bold">@Model.CollabName Chat</h2>
+
+        <form method="post">
+            <div class="row align-items-end mb-3">
+                <div class="col-10">
+                    <input asp-for="Message" placeholder="Type your message here..." class="form-control btn-lg" />
+                    <span asp-validation-for="Message" class="text-danger"></span>
+                </div>
+                <div class="col-2">
+                    <button asp-page="CollabChat" asp-page-handler="Message" class="btn btn-outline-primary btn-block btn-lg">Send Chat</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="chat-messages" style="max-height: 400px; overflow-y: auto;">
+            @{
+                foreach (var post in Model.ChatList)
+                {
+                    <div>
+                        <p class="text-muted mb-1" style="font-size: 0.875rem;">[@post.PostedDate] @post.FirstName @post.LastName wrote:</p>
+                        <p class="pl-3 mb-2">@post.ChatContents</p>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+

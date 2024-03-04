@@ -3,16 +3,16 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MadisonCountySystem</title>
+    <title>@ViewData["Title"] - Knowledge Management System</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MadisonCountySystem.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/KnowledgeManagement_Lab1.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-0" style="background-color: #e3e5fd;">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">MadisonCountySystem</a>
+                <p class="navbar-brand text-dark">@ViewData["Title"]</p>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -22,14 +22,82 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
+                        @if (Context.Session.GetString("username") != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Main/Collaborations">Collaborations</a>
+                            </li>
+                        }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Main/KnowledgeLib">Knowledge Library</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Main/DatasetLib">Dataset Library</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Main/AnalysisLib">Analysis Library</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Main/ReportLib">Reports</a>
+                        </li>
+                        @if (Context.Session.GetString("username") != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Main/UserLib">Users</a>
+                            </li>
+                        }
                     </ul>
                 </div>
+                @{
+                    if (Context.Session.GetString("username") != null)
+                    {
+                        <a class="btn btn-danger position-relative" asp-area="" asp-page="/DBLogin">Logout</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary position-relative" asp-area="" asp-page="/DBLogin">Staff Login</a>
+                    }
+                }
             </div>
         </nav>
     </header>
+    @if (Context.Session.GetString("LibType") == "Collab")
+    {
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color: #e3f2fd;">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Collabs/PlanList">@Context.Session.GetString("collabName")</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Collabs/PlanList">Plans</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Collabs/KnowledgeList">Knowledge Items</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Collabs/DatasetList">Datasets</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Collabs/AnalysisList">Analyses</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Collabs/CollabChat">Chat</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Collabs/CollabUsers">Users</a>
+                        </li>
+                    </ul>
+                </div>
+                <form method="post" style="margin-bottom: 0;">
+                    <button asp-page="PlanList" asp-page-handler="ToggleModal" class="btn btn-secondary">Print Report</button>
+                </form>
+            </div>
+        </nav>
+    }
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -38,7 +106,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - MadisonCountySystem - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2024 - KnowledgeManagement_Lab1 - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
 
@@ -47,5 +115,6 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

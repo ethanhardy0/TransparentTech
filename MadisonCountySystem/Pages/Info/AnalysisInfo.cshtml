@@ -1,0 +1,38 @@
+﻿@page
+@model MadisonCountySystem.Pages.Info.AnalysisInfoModel
+@{
+    ViewData["Title"] = Model.Analysis.AnalysisName;
+}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">@Model.Analysis.AnalysisName</h1>
+    <h3 class="text-center">Type: <span class="fw-normal">@Model.Analysis.AnalysisType</span></h3>
+
+
+    <div class="row row-cols-1 row-cols-md-2 g-4 mt-4 justify-content-center">
+        <!-- Dataset Box -->
+        <div class="col">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title"><strong>Dataset</strong></h5>
+                    <p class="card-text">
+                        <a class="link-primary" asp-area="" asp-page="/Info/DatasetInfo" asp-route-dataID="@Model.Analysis.DatasetID">@Model.Analysis.DatasetName</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Knowledge Item Box -->
+        <div class="col">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title"><strong>Knowledge Item</strong></h5>
+                    <p class="card-text">
+                        <a class="link-primary" asp-area="" asp-page="/Info/KnowledgeInfo" asp-route-kiID="@Model.Analysis.KnowledgeID">@Model.Analysis.KnowledgeTitle</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="text-center mt-3">Posted: @Model.Analysis.AnalysisCreatedDate by @Model.Analysis.OwnerFirst @Model.Analysis.OwnerLast</p>
+</div>

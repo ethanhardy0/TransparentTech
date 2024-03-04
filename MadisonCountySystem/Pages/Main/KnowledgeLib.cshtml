@@ -1,0 +1,84 @@
+﻿@page
+@model MadisonCountySystem.Pages.Main.KnowledgeLibModel
+@{
+    ViewData["Title"] = "Knowledge Item Library";
+}
+@{
+    if (HttpContext.Session.GetString("username") != null)
+    {
+        <h2>Knowledge Item Management</h2>
+
+        <form method="post">
+            <div class="row align-items-end">
+                <div class="col">
+                    <label for="activeKnowledgeItems" class="form-label">Select a Knowledge Item:</label>
+                    <select class="form-control" id="activeKnowledgeItems" name="selectedKnowledgeItem">
+                        @foreach (var KnowledgeItem in Model.KnowledgeItemList)
+                        {
+                            <option value="@KnowledgeItem.KnowledgeID"> @KnowledgeItem.KnowledgeTitle</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button asp-page="KnowledgeLib" asp-page-handler="AddCollab" class="btn btn-outline-success">Add to Collaboration</button>
+                </div>
+                <div class="col-auto">
+                    <button asp-page="KnowledgeLib" asp-page-handler="CreateKnowledgeItem" class="btn btn-outline-primary">Create New Knowledge Item</button>
+                </div>
+            </div>
+        </form>
+    }
+}
+<br />
+<form method="post">
+    <div class="row align-items-end">
+        <div class="col">
+            <input asp-for="Search" placeholder="Search Knowledge Item Name, Owner Username..." class="form-control" />
+            <span asp-validation-for="Search" class="text-danger"></span>
+        </div>
+        <div class="col-auto">
+            <button asp-page="KnowledgeLib" asp-page-handler="NarrowSearch" class="btn btn-outline-success">Search</button>
+        </div>
+    </div>
+</form>
+
+<br />
+
+<h3>Knowledge Item Library</h3>
+
+<table class="table table-bordered table-responsive table-hover">
+    <thead class="table-light">
+        <tr>
+            <th style="background-color: #e3e5fd;">Knowlege Item Name:</th>
+            <th style="background-color: #e3e5fd;">Knowlege Item Subject:</th>
+            <th style="background-color: #e3e5fd;">Knowlege Item Category:</th>
+            <th style="background-color: #e3e5fd;">Date Created:</th>
+            <th style="background-color: #e3e5fd;">Owner:</th>
+            @*           <th>Actions:</th> *@
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var KnowledgeItem in Model.KnowledgeItemList)
+            {
+                <tr>
+                    <td><a asp-area="" asp-page="/Info/KnowledgeInfo" asp-route-kiID="@KnowledgeItem.KnowledgeID">@KnowledgeItem.KnowledgeTitle</a></td>
+                    <td>@KnowledgeItem.KnowledgeSubject</td>
+                    <td>@KnowledgeItem.KnowledgeCategory</td>
+                    <td>@KnowledgeItem.KnowledgePostDate</td>
+                    <td>@KnowledgeItem.OwnerName</td>
+                    @*                   <td>
+            <div class="col">
+            <!-- Dropdown for actions -->
+            <select class="form-control btn btn-secondary">
+            <option disabled selected>Actions</option>
+            <option><a class="dropdown-item" asp-area="" asp-page="/ButtonCollab/KnowledgeButton" asp-route-id="@KnowledgeItem.KnowledgeID">Edit</a></option>
+            <option><a class="dropdown-item" asp-area="" asp-page="/ButtonCollab/AnalysisButton" asp-route-itemID="@KnowledgeItem.KnowledgeID">Add to Collab</a></option>
+            </select>
+            </div>
+            </td> *@
+                </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -1,0 +1,202 @@
+﻿@page
+@model MadisonCountySystem.Pages.Collabs.PrintReportModel
+@{
+    ViewData["Title"] = Model.CollabName + " Report";
+}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">@Model.CollabName Report</h1>
+    <h2 class="text-center mb-4">Analysis Type: <span class="fw-normal">@Model.dataType</span></h2>
+    <h5 class="text-center mb-4">Date: <span class="fw-normal">@DateTime.Now.ToString()</span></h5>
+    <hr />
+</div>
+<br/>
+
+@if (Model.dataType == "Plan")
+{
+    <h2 class="text-center mb-4">@Model.PlanName Plan</h2>
+    <table class="table table-bordered table-responsive table-hover">
+        <thead>
+            <tr>
+                <th style="background-color: #e3f2fd;">Step:</th>
+                <th style="background-color: #e3f2fd;">Step Data:</th>
+                <th style="background-color: #e3f2fd;">Due Date:</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var step in Model.PlanSteps)
+                {
+                    <tr>
+                        <td>@step.PlanStepName</td>
+                        <td>@step.StepData</td>
+                        <td>@step.DueDate</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    foreach (var KnowledgeItem in Model.KeyKI)
+    {
+        <div class="text-center mb-4">
+            <h2> @KnowledgeItem.KnowledgeTitle</h2>
+            <h3><strong>Subject:</strong> <span class="fw-normal">@KnowledgeItem.KnowledgeSubject</span></h3>
+            <h4><strong>Category:</strong> <span class="fw-normal">@KnowledgeItem.KnowledgeCategory</span></h4>
+        </div>
+
+
+        <div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Strengths</h5>
+                        <p class="card-text">@KnowledgeItem.Strengths</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Weaknesses</h5>
+                        <p class="card-text">@KnowledgeItem.Weaknesses</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Opportunities</h5>
+                        <p class="card-text">@KnowledgeItem.Opportunities</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Threats</h5>
+                        <p class="card-text">@KnowledgeItem.Threats</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    } 
+}
+<br/>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">@Model.CollabName Research:</h1>
+    <hr />
+</div>
+@{
+    foreach (var KnowledgeItem in Model.Research)
+    {
+        <div class="text-center mb-4">
+            <h2>@KnowledgeItem.KnowledgeTitle</h2>
+            <h3><strong>Subject:</strong> <span class="fw-normal">@KnowledgeItem.KnowledgeSubject</span></h3>
+            <h4><strong>Category:</strong> <span class="fw-normal">@KnowledgeItem.KnowledgeCategory</span></h4>
+        </div>
+
+
+        <div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
+            @if (KnowledgeItem.Strengths != "0")
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Strengths</h5>
+                            <p class="card-text">@KnowledgeItem.Strengths</p>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (KnowledgeItem.Weaknesses != "0")
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Weaknesses</h5>
+                            <p class="card-text">@KnowledgeItem.Weaknesses</p>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (KnowledgeItem.Opportunities != "0")
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Opportunities</h5>
+                            <p class="card-text">@KnowledgeItem.Opportunities</p>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (KnowledgeItem.Threats != "0")
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Threats</h5>
+                            <p class="card-text">@KnowledgeItem.Threats</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Knowledge Information</h5>
+                        <p class="card-text">@KnowledgeItem.KnowledgeInformation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <hr />
+        <br/>
+        <br/>
+    }
+    <div>
+        <h1 class="text-center mb-4">@Model.CollabName Users:</h1>
+        <table class="table table-bordered table-responsive table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th style="background-color: #e3f2fd;">Username:</th>
+                    <th style="background-color: #e3f2fd;">Full Name:</th>
+                    <th style="background-color: #e3f2fd;">Email:</th>
+                    <th style="background-color: #e3f2fd;">Phone Number:</th>
+                    <th style="background-color: #e3f2fd;">Role:</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var user in Model.UserList)
+                    {
+                        <tr>
+                            <td>@user.Username</td>
+                            <td>@user.FirstName @user.LastName</td>
+                            <td>@user.Email</td>
+                            <td>@user.Phone</td>
+                            <td>@user.UserRole</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
+<hr/>
+<div class="text-end">
+    <form method="post">
+        <button asp-page="PrintReport" asp-page-handler="CreateReport" class="btn btn-outline-primary btn-lg">Post Report</button>
+    </form>
+</div>

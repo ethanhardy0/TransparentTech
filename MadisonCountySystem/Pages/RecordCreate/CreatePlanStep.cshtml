@@ -1,0 +1,36 @@
+﻿@page
+@model MadisonCountySystem.Pages.RecordCreate.CreatePlanStepModel
+@{
+    ViewData["Title"] = "Add Step to " + Model.PlanName;
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Add a Step to @Model.PlanName</h2>
+    <form method="post">
+        <div class="row justify-content-md-center">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="StepName" class="form-label">Step Title:</label>
+                    <input asp-for="StepName" placeholder="Name Step Title:" class="form-control" />
+                    <span asp-validation-for="StepName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="StepData" class="form-label">Description:</label>
+                    <input asp-for="StepData" placeholder="Enter Description:" class="form-control" />
+                    <span asp-validation-for="StepData" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="DueDate" class="form-label">Due Date:</label>
+                    <input asp-for="DueDate" type="date" value="@DateTime.Today.ToString("yyyy-MM-dd")" class="form-control" />
+                    <span asp-validation-for="DueDate" class="text-danger"></span>
+                </div>
+
+                <div class="text-center">
+                    <button style="width: 30%" asp-page="CreatePlanStep" asp-page-handler="PopulateHandler" class="btn btn-outline-primary btn-lg" formnovalidate>Populate</button>
+                    <button style="width: 33%" asp-page="CreatePlanStep" asp-page-handler="AddDB" class="btn btn-outline-success btn-lg">Create</button>
+                    <button style="width: 30%" asp-page="CreatePlanStep" asp-page-handler="Clear" class="btn btn-outline-danger btn-lg" formnovalidate>Clear</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

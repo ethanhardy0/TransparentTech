@@ -1,0 +1,22 @@
+﻿@page
+@model MadisonCountySystem.Pages.Collabs.Merge.AddDatasetModel
+@{
+    ViewData["Title"] = "Add Dataset to " + Model.CollabName;
+}
+
+<h4>Add Dataset</h4>
+<form method="post">
+    <div class="col">
+        <label for="activeCollab" class="form-label">Dataset:</label>
+        <select class="form-control" id="activeCollab" name="selectedDataset">
+            @foreach (var item in Model.DatasetList)
+            {
+                <option value="@item.DatasetID"> @item.DatasetName</option>
+            }
+        </select>
+    </div>
+    <br />
+    <div class="col-auto">
+        <button asp-page="AddDataset" asp-page-handler="UpdateDB" class="btn btn-outline-primary">Add</button>
+    </div>
+</form>

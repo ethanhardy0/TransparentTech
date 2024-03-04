@@ -1,0 +1,38 @@
+﻿@page
+@model MadisonCountySystem.Pages.Collabs.PlanStepTableModel
+@{
+    ViewData["Title"] = "Plan Step List";
+}
+<div class="container-fluid">
+    <div class="row justify-content-between align-items-center mb-3">
+        <div class="col-auto">
+            <h2>Plan Steps</h2>
+        </div>
+        <div class="col-auto">
+            <form method="post">
+                <button asp-page="PlanStepTable" asp-page-handler="AddStep" class="btn btn-outline-primary">Add Plan Step</button>
+            </form>
+        </div>
+    </div>
+</div>
+<table class="table table-bordered table-responsive table-hover">
+    <thead>
+        <tr>
+            <th style="background-color: #e3f2fd;">Step:</th>
+            <th style="background-color: #e3f2fd;">Step Data:</th>
+            <th style="background-color: #e3f2fd;">Due Date:</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var step in Model.PlanSteps)
+            {
+                <tr>
+                    <td>@step.PlanStepName</td>
+                    <td>@step.StepData</td>
+                    <td>@step.DueDate</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

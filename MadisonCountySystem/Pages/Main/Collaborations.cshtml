@@ -1,0 +1,45 @@
+﻿@page
+@model MadisonCountySystem.Pages.Main.CollaborationsModel
+@{
+    ViewData["Title"] = "Your Collaborations";
+}
+
+<form method="post">
+    <div class="row align-items-end">
+        <div class="col">
+            <h2>Collaboration Management</h2>
+        </div>
+
+        <div class="col-auto">
+            <button asp-page="Collaborations" asp-page-handler="CreateCollab" class="btn btn-outline-primary">Create New Collaboration</button>
+        </div>
+    </div>
+</form>
+<br />
+<table class="table table-bordered table-responsive table-hover">
+    <thead class="table-light">
+        <tr>
+            <th style="background-color: #e3e5fd;">Collaboration Name:</th>
+            <th style="background-color: #e3e5fd;">Created Date:</th>
+            <th style="background-color: #e3e5fd;">Your Role:</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var userCollab in Model.UserCollabs)
+            {
+                foreach (var collab in Model.CollabList)
+                {
+                    <tr>
+                        @if (userCollab.CollabID == collab.CollabID)
+                        {
+                            <td> <a asp-area="" asp-page="/Collabs/Index" asp-route-collabID="@collab.CollabID">@collab.CollabName</a> </td>
+                            <td> @collab.CollabCreatedDate </td>
+                            <td> @userCollab.UserRole </td>
+                        }
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
