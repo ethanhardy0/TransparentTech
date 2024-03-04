@@ -1,0 +1,6 @@
+CREATE PROCEDURE sp_Lab3Login @SysUsername NVARCHAR(50)
+AS BEGIN
+SELECT SysPassword
+FROM HashedCredentials
+Where SysUsername = @SysUsername
+END

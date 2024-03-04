@@ -1,0 +1,16 @@
+CREATE TABLE HashedCredentials(
+HashedCredentialID int IDENTITY(1,1) PRIMARY KEY,
+SysUsername nvarchar(50),
+SysPassword nvarchar(MAX),
+UserID int
+);
+
+INSERT INTO HashedCredentials(SysUsername, SysPassword, UserID) VALUES('admin', '1000:8OT+HyoVpGwU6SgvHXHDXDKXKgQmz7Ud:bEHl/yi5kJaIsAs9+RYDyJ4DWwQ=', 1);
+
+INSERT INTO HashedCredentials(SysUsername, SysPassword, UserID) VALUES('ezelljd', '1000:8OT+HyoVpGwU6SgvHXHDXDKXKgQmz7Ud:bEHl/yi5kJaIsAs9+RYDyJ4DWwQ=', 2);
+
+INSERT INTO HashedCredentials(SysUsername, SysPassword, UserID) VALUES('esweiler', '1000:8OT+HyoVpGwU6SgvHXHDXDKXKgQmz7Ud:bEHl/yi5kJaIsAs9+RYDyJ4DWwQ=', 3);
+
+INSERT INTO HashedCredentials(SysUsername, SysPassword, UserID) VALUES('cfitz', '1000:8OT+HyoVpGwU6SgvHXHDXDKXKgQmz7Ud:bEHl/yi5kJaIsAs9+RYDyJ4DWwQ=', 4);
+
+INSERT INTO HashedCredentials(SysUsername, SysPassword, UserID) VALUES('user3', '1000:8OT+HyoVpGwU6SgvHXHDXDKXKgQmz7Ud:bEHl/yi5kJaIsAs9+RYDyJ4DWwQ=', 5);
