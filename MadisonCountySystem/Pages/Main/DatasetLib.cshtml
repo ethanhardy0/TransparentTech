@@ -5,6 +5,7 @@
 }
 
 @{
+
     if (HttpContext.Session.GetString("username") != null)
     {
         <h2>Dataset Management</h2>
@@ -32,14 +33,20 @@
 }
 <br />
 
+<style type="text/css">
+    thead {
+        background-color: #EFC945;
+    }     
+</style>
+
 <h3>Dataset Library</h3>
 
 <table class="table table-bordered table-responsive table-hover">
-    <thead class="table-light">
+    <thead>
         <tr>
-            <th style="background-color: #e3e5fd;">Dataset Name:</th>
-            <th style="background-color: #e3e5fd;">File Type:</th>
-            <th style="background-color: #e3e5fd;">Created Date:</th>
+            <th>Dataset Name:</th>
+            <th>File Type:</th>
+            <th>Created Date:</th>
         </tr>
     </thead>
     <tbody>
