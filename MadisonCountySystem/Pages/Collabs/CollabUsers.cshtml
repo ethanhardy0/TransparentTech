@@ -4,6 +4,12 @@
     ViewData["Title"] = Model.CollabName + " Members";
 }
 
+<style type="text/css">
+    thead {
+        background-color: #EFC935;
+    }
+</style>
+
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Members of @Model.CollabName</h2>
     <form method="post">
@@ -16,13 +22,13 @@
 </div>
 
 <table class="table table-bordered table-responsive table-hover">
-    <thead class="table-light">
+    <thead>
         <tr>
-            <th style="background-color: #e3f2fd;">Username:</th>
-            <th style="background-color: #e3f2fd;">Full Name:</th>
-            <th style="background-color: #e3f2fd;">Email:</th>
-            <th style="background-color: #e3f2fd;">Phone Number:</th>
-            <th style="background-color: #e3f2fd;">Role:</th>
+            <th>Username:</th>
+            <th>Full Name:</th>
+            <th>Email:</th>
+            <th>Phone Number:</th>
+            <th>Role:</th>
         </tr>
     </thead>
     <tbody>

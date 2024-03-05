@@ -4,6 +4,12 @@
     ViewData["Title"] = Model.CollabName + " Knowledge Library";
 }
 
+<style type="text/css">
+    thead {
+        background-color: #EFC935;
+    }
+</style>
+
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Knowledge Items for @Model.CollabName</h2>
     <form method="post">
@@ -20,13 +26,13 @@
 
 
 <table class="table table-bordered table-responsive table-hover">
-    <thead class="table-light">
+    <thead>
         <tr>
-            <th style="background-color: #e3f2fd;">Knowledge Title:</th>
-            <th style="background-color: #e3f2fd;">Knowledge Subject:</th>
-            <th style="background-color: #e3f2fd;">Knowledge Category:</th>
-            <th style="background-color: #e3f2fd;">Posted Date:</th>
-            <th style="background-color: #e3f2fd;">Posted By:</th>
+            <th>Knowledge Title:</th>
+            <th>Knowledge Subject:</th>
+            <th>Knowledge Category:</th>
+            <th>Posted Date:</th>
+            <th>Posted By:</th>
         </tr>
     </thead>
     <tbody>

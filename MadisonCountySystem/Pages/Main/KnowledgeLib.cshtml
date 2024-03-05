@@ -3,6 +3,13 @@
 @{
     ViewData["Title"] = "Knowledge Item Library";
 }
+
+<style type="text/css">
+    thead {
+        background-color: #EFC935;
+    }
+</style>
+
 @{
     if (HttpContext.Session.GetString("username") != null)
     {
@@ -47,13 +54,13 @@
 <h3>Knowledge Item Library</h3>
 
 <table class="table table-bordered table-responsive table-hover">
-    <thead class="table-light">
+    <thead>
         <tr>
-            <th style="background-color: #e3e5fd;">Knowlege Item Name:</th>
-            <th style="background-color: #e3e5fd;">Knowlege Item Subject:</th>
-            <th style="background-color: #e3e5fd;">Knowlege Item Category:</th>
-            <th style="background-color: #e3e5fd;">Date Created:</th>
-            <th style="background-color: #e3e5fd;">Owner:</th>
+            <th>Knowlege Item Name:</th>
+            <th>Knowlege Item Subject:</th>
+            <th>Knowlege Item Category:</th>
+            <th>Date Created:</th>
+            <th>Owner:</th>
             @*           <th>Actions:</th> *@
         </tr>
     </thead>
