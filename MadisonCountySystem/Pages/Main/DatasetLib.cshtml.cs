@@ -19,6 +19,11 @@ namespace MadisonCountySystem.Pages.Main
 
         public void OnGet()
         {
+            if (HttpContext.Session.GetString("username") == null)
+            {
+                HttpContext.Session.SetString("LoginError", "You must login to access that page!");
+                HttpContext.Response.Redirect("/DBLogin");
+            }
             HttpContext.Session.SetString("LibType", "Main");
             SqlDataReader DatasetReader = DBClass.DatasetReader();
             while (DatasetReader.Read())
