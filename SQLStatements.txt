@@ -1,3 +1,4 @@
+DROP TABLE UserPhoto;
 DROP TABLE CollabReport;
 DROP TABLE CollabChat;
 DROP TABLE DatasetCollab;
@@ -140,6 +141,23 @@ CREATE TABLE CollabChat(
     CollabID int FOREIGN KEY REFERENCES Collaboration(CollabID)
 );
 
+CREATE TABLE CollabReport(
+	CollabReportID int IDENTITY(1,1) PRIMARY KEY,
+	KeyID int,
+	KeyType nvarchar(25),
+	ReportCreatedDate nvarchar(50),
+	CollabID int FOREIGN KEY REFERENCES Collaboration(CollabID),
+	KnowledgeID int FOREIGN KEY REFERENCES KnowledgeItem(KnowledgeID),
+	UserID int FOREIGN KEY REFERENCES SysUser(UserID),
+	CollabReportParent int FOREIGN KEY REFERENCES CollabReport(CollabReportID),
+	ItemType nvarchar(25)
+);
+
+CREATE TABLE UserPhoto(
+	UserPhotoID int IDENTITY(1,1) PRIMARY KEY,
+	UserID int FOREIGN KEY REFERENCES SysUser(UserID),
+	Directory nvarchar(max)
+);
 
 --Inserts
 --User
@@ -157,6 +175,9 @@ VALUES('cfitz', 'Connor', 'Fitzsimmons', 'connor@email.com', '888-555-3322', '88
 
 INSERT INTO SysUser(Username, FirstName, LastName, Email, Phone, Street, City, State, Zip, UserType)
 VALUES('user3', 'User3', 'User3', 'user3@email.com', '781-999-1092', '8921 Main St', 'Tulsa', 'OK', '28111', 'Admin');
+
+INSERT INTO SysUser(Username, FirstName, LastName)
+VALUES('CommunityUser', 'Madison County', 'Community User');
 
 --Collab
 INSERT INTO Collaboration(CollabName, CollabNotes, CollabCreatedDate)
@@ -371,6 +392,8 @@ INSERT INTO DatasetCollab (CollabID, DatasetID) VALUES (1, 1);
 INSERT INTO DatasetCollab (CollabID, DatasetID) VALUES (1, 2);
 INSERT INTO DatasetCollab (CollabID, DatasetID) VALUES (3, 2);
 
+
+
 --Example Datasets
 
 CREATE TABLE FinancialData (
@@ -423,19 +446,3 @@ VALUES
     (13, 22.7, 71.5, 1008.2),
     (14, 28.5, 58.7, 1014.0),
     (15, 25.3, 64.8, 1010.6);
-
-CREATE TABLE CollabReport(
-	CollabReportID int IDENTITY(1,1) PRIMARY KEY,
-	KeyID int,
-	KeyType nvarchar(25),
-	ReportCreatedDate nvarchar(50),
-	ReportStatus nvarchar(30),
-	CollabID int FOREIGN KEY REFERENCES Collaboration(CollabID),
-	KnowledgeID int FOREIGN KEY REFERENCES KnowledgeItem(KnowledgeID),
-	UserID int FOREIGN KEY REFERENCES SysUser(UserID),
-	CollabReportParent int FOREIGN KEY REFERENCES CollabReport(CollabReportID),
-	ItemType nvarchar(25)
-);
-
-INSERT INTO SysUser(Username, FirstName, LastName)
-VALUES('CommunityUser', 'Madison County', 'Community User');
