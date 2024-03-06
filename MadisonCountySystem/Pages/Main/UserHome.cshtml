@@ -1,0 +1,22 @@
+﻿@page
+@model MadisonCountySystem.Pages.Main.UserHomeModel
+@{
+}
+
+<style>
+    img {
+        border-radius: 50%;
+        object-fit: cover;
+    }
+</style>
+
+<h1 class="text-center mt-5">Welcome @Model.LoggedUser.Username</h1>
+
+<div class="col-lg-4">
+    <div class="card mb-4">
+        <div class="card-body text-center">
+            <img src=@Url.Content(Model.PhotoDir) width="200" height="200" />
+        </div>
+    </div>
+
+</div>

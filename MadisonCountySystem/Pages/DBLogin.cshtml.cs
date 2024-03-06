@@ -44,7 +44,7 @@ namespace MadisonCountySystem.Pages
                     }
                     DBClass.KnowledgeDBConnection.Close();
 
-                    return RedirectToPage("/Index");
+                    return RedirectToPage("/Main/UserHome");
 
                 }
                 else
