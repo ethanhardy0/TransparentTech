@@ -14,14 +14,15 @@ namespace MadisonCountySystem.Pages.Main
         [BindProperty]
         [Required] public String Search { get; set; }
 
-
+        public String ActionType { get; set; }
+        public int SelectedItem { get; set; }
 
         public KnowledgeLibModel()
         {
             KnowledgeItemList = new List<KnowledgeItem>();
         }
 
-        public void OnGet()
+        public void OnGet(String actionType)
         {
             if (HttpContext.Session.GetString("username") == null)
             {
@@ -29,6 +30,16 @@ namespace MadisonCountySystem.Pages.Main
                 HttpContext.Response.Redirect("/DBLogin");
             }
             HttpContext.Session.SetString("LibType", "Main");
+            if(actionType != null)
+            {
+                String[] parts = actionType.Split(':');
+                if (parts.Length == 2)
+                {
+                    ActionType = parts[0];
+                    SelectedItem = Int32.Parse(parts[1]);
+                }
+            }
+
             SqlDataReader KnowledgeItemReader = DBClass.KnowledgeItemReader();
             while (KnowledgeItemReader.Read())
             {
@@ -48,7 +59,7 @@ namespace MadisonCountySystem.Pages.Main
         public IActionResult OnPostAddCollab(int selectedKnowledgeItem)
         {
 
-            return RedirectToPage("/ButtonCollab/KnowledgeButton", new { itemID = selectedKnowledgeItem, itemType = "Knowledge" });
+            return RedirectToPage("/ButtonCollab/KnowledgeButton", new { itemID = selectedKnowledgeItem});
         }
         public IActionResult OnPostCreateKnowledgeItem()
         {
