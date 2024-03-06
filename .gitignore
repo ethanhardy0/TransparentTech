@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/MadisonCountySystem/wwwroot/csvupload/customers-100.csv
+/MadisonCountySystem/wwwroot/csvupload/organizations-100.csv
