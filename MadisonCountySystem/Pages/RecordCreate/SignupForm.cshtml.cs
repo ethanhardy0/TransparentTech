@@ -3,6 +3,7 @@ using MadisonCountySystem.Pages.DB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Eventing.Reader;
 using System.Security.Cryptography.X509Certificates;
 
 namespace MadisonCountySystem.Pages.RecordCreate
@@ -43,24 +44,26 @@ namespace MadisonCountySystem.Pages.RecordCreate
         [BindProperty]
         [Required]
         public String Zip { get; set; }
+        [BindProperty]
+        [Required]
         public String UserType { get; set; }
         public SysUser SysUser { get; set; }
 
         public string usertype { get; set; }
 
         public void OnGet()
-		{
+        {
             usertype = HttpContext.Session.GetString("typeUser");
 
-			if (HttpContext.Session.GetString("username") == null)
-			{
-				HttpContext.Session.SetString("LoginError", "You must login to access that page!");
-				HttpContext.Response.Redirect("/DBLogin");
-			}
-
-			if (usertype != "Admin")
+            if (HttpContext.Session.GetString("username") == null)
             {
-				HttpContext.Response.Redirect("/Index");
+                HttpContext.Session.SetString("LoginError", "You must login to access that page!");
+                HttpContext.Response.Redirect("/DBLogin");
+            }
+
+            if (usertype != "Admin")
+            {
+                HttpContext.Response.Redirect("/Index");
             }
         }
         public IActionResult OnPostPopulateHandler()
@@ -77,43 +80,46 @@ namespace MadisonCountySystem.Pages.RecordCreate
                 City = "Spokane";
                 State = "Washington";
                 Zip = "77321";
+                UserType = "Admin";
             }
             return Page();
         }
 
         public IActionResult OnPostAddDB()
         {
-            if (ModelState.IsValid)
+            // Check if model state is valid
+            if (!ModelState.IsValid)
             {
-                if (Password == ConfirmPassword)
-                {
-                    SysUser = new SysUser
-                    {
-                        Username = Username,
-                        Email = Email,
-                        FirstName = FirstName,
-                        LastName = LastName,
-                        Phone = Phone,
-                        Street = Street,
-                        City = City,
-                        State = State,
-                        Zip = Zip,
-                        UserType = "Standard User"
-                    };
-                    int newUserID = DBClass.InsertUserFull(SysUser);
-
-                    DBClass.CreateHashedUser(Username, Password, newUserID);
-                    DBClass.KnowledgeDBConnection.Close();
-
-                    //make sure user was successfully created before creating User and redirecting
-                }
-                else
-                {
-                    ViewData["SignupMessage"] = "Passwords did not match";
-                    return Page();
-                }
+                return Page();
             }
-            return RedirectToPage("/DBLogin", new { logout = "false" });
+
+            // Check if passwords match
+            if (Password != ConfirmPassword)
+            {
+                ViewData["SignupMessage"] = "Passwords did not match";
+                return Page();
+            }
+
+            // All validations passed, proceed with user creation
+            SysUser = new SysUser
+            {
+                Username = Username,
+                Email = Email,
+                FirstName = FirstName,
+                LastName = LastName,
+                Phone = Phone,
+                Street = Street,
+                City = City,
+                State = State,
+                Zip = Zip,
+                UserType = UserType
+            };
+            int newUserID = DBClass.InsertUserFull(SysUser);
+
+            DBClass.CreateHashedUser(Username, Password, newUserID);
+            DBClass.KnowledgeDBConnection.Close();
+
+            return RedirectToPage("/Main/UserLib");
         }
 
         public IActionResult OnPostClear()
@@ -130,6 +136,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
             City = null;
             State = null;
             Zip = null;
+            UserType = null;
             return Page();
         }
     }
