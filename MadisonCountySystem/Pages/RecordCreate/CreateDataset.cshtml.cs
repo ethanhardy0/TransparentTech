@@ -119,55 +119,6 @@ namespace MadisonCountySystem.Pages.RecordCreate
             }
         }
 
-        //public void OnPostUploadFile()
-        //{
-
-        //    List<String> filePaths = new List<String>();
-        //    foreach (var file in FormFiles)
-        //    {
-        //        if (file.Length > 0)
-        //        {
-        //            var filePath = Directory.GetCurrentDirectory() + @"/wwwroot/csvupload/" + file.FileName;
-        //            filePaths.Add(filePath);
-        //            using (var stream = new FileStream(filePath, FileMode.Create))
-        //            {
-        //                file.CopyTo(stream);
-        //            }
-        //        }
-        //    }
-        //}
-
-        //public IActionResult OnPostUploadDataset()
-        //{
-        //    List<String> filePaths = new List<String>();
-        //    foreach (var file in FormFiles)
-        //    {
-        //        if (file.Length > 0)
-        //        {
-        //            var filePath = Directory.GetCurrentDirectory() + @"/wwwroot/csvupload/" + file.FileName;
-        //            filePaths.Add(filePath);
-        //            using (var stream = new FileStream(filePath, FileMode.Create))
-        //            {
-        //                file.CopyTo(stream);
-        //            }
-        //        }
-        //    }
-
-        //    using (var reader = new StreamReader(Directory.GetCurrentDirectory() + @"/wwwroot/csvupload/" + SelectedFileName))
-        //    using (var csv = new CsvReader(reader, System.Globalization.CultureInfo.InvariantCulture))
-        //    {
-        //        using (var cdr = new CsvDataReader(csv))
-        //        {
-        //            var dt = new DataTable();
-        //            dt.Load(cdr);
-        //            DBClass.UploadDatasetCSV(dt, DatasetName, SelectedFileName);
-        //            DBClass.KnowledgeDBConnection.Close();
-        //        }
-        //    }
-
-        //    OnPostAddDB();
-        //    return RedirectToPage("/Main/DatasetLib");
-        //}
         public IActionResult OnPostPopulateHandler()
         {
             if (!ModelState.IsValid)
