@@ -38,6 +38,7 @@ namespace MadisonCountySystem.Pages.DB
 
             return tempReader;
         }
+
         public static void InsertUser(SysUser a)
         {
             String sqlQuery = "INSERT INTO SysUser (Username, Email, FirstName, LastName, Phone) VALUES (@Username," +
@@ -122,7 +123,6 @@ namespace MadisonCountySystem.Pages.DB
                 return newKnowledgeID;
             }
         }
-
 
         public static void DeleteKnowledgeItem(int KnowledgeID)
         {
