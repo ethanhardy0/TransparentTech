@@ -64,6 +64,13 @@
                     <input asp-for="Zip" class="form-control" placeholder="Enter Postal Code:" />
                     <span asp-validation-for="Zip" class="text-danger"></span>
                 </div>
+                <div class="mb-3">
+                    <label asp-for="UserType" class="form-label"></label>
+                    <select asp-for="UserType" class="form-control">
+                        <option value="Admin" selected="@Model.UserType == " Admin"">Admin</option>
+                        <option value="Standard" selected="@Model.UserType == " Standard"">Standard</option>
+                    </select>
+                </div>
                 <div class="text-center">
                     <button style="width: 30%" asp-page="SignupForm" asp-page-handler="PopulateHandler" class="btn btn-outline-primary btn-lg" formnovalidate>Populate</button>
                     <button style="width: 33%" asp-page="SignupForm" asp-page-handler="AddDB" class="btn btn-outline-success btn-lg">Sign Up</button>
