@@ -305,7 +305,7 @@ namespace MadisonCountySystem.Pages.DB
             SqlCommand cmdPlanRead = new SqlCommand();
             cmdPlanRead.Connection = KnowledgeDBConnection;
             cmdPlanRead.Connection.ConnectionString = KnowledgeDBConnString;
-            cmdPlanRead.CommandText = "SELECT * FROM SysPlan";
+            cmdPlanRead.CommandText = "SELECT * FROM SysPlan WHERE PlanStatus != 'Deleted' OR PlanStatus IS NULL;";
             cmdPlanRead.Connection.Open(); // Open connection here, close in Model!
 
             SqlDataReader tempReader = cmdPlanRead.ExecuteReader();
@@ -360,8 +360,37 @@ namespace MadisonCountySystem.Pages.DB
             }
         }
 
+        public static void DeletePlan(int PlanID)
+        {
+            String sqlQuery = "UPDATE SysPlan SET PlanStatus = 'Deleted' WHERE PlanID = @PlanID";
 
-// ------------------------------------------- Collabs -------------------------------------------------------------------------------------------------------
+            SqlCommand cmdUserRead = new SqlCommand();
+            cmdUserRead.Connection = KnowledgeDBConnection;
+            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdUserRead.CommandText = sqlQuery;
+            cmdUserRead.Parameters.AddWithValue("@PlanID", PlanID);
+            cmdUserRead.Connection.Open();
+            cmdUserRead.ExecuteNonQuery();
+        }
+
+        public static void UpdateExistingPlan(SysPlan k)
+        {
+            String sqlQuery = "UPDATE SysPlan SET PlanName = @PlanName, PlanContents = @PlanContents WHERE PlanID = @PlanID;";
+
+            SqlCommand cmdUserRead = new SqlCommand();
+            cmdUserRead.Connection = KnowledgeDBConnection;
+            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdUserRead.CommandText = sqlQuery;
+            cmdUserRead.Parameters.AddWithValue("@PlanID", k.PlanID);
+            cmdUserRead.Parameters.AddWithValue("@PlanName", k.PlanName); // AddWithValue for KnowledgeTitle
+            cmdUserRead.Parameters.AddWithValue("@PlanContents", k.PlanContents); // AddWithValue for KnowledgeSubject
+
+            cmdUserRead.Connection.Open();
+            cmdUserRead.ExecuteNonQuery();
+        }
+
+
+        // ------------------------------------------- Collabs -------------------------------------------------------------------------------------------------------
         public static SqlDataReader CollabReader()
         {
             SqlCommand cmdCollabRead = new SqlCommand();

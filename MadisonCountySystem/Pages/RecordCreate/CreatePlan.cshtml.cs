@@ -3,6 +3,8 @@ using MadisonCountySystem.Pages.DB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
+using System.Data.SqlClient;
+using System.Threading;
 
 namespace MadisonCountySystem.Pages.RecordCreate
 {
@@ -16,7 +18,10 @@ namespace MadisonCountySystem.Pages.RecordCreate
         public static int CollabID { get; set; }
         public SysPlan SysPlan { get; set; }
         public String CollabName { get; set; }
-        public void OnGet()
+        public static int ExistingPlanID { get; set; }
+        public String CreateorUpdate { get; set; }
+
+        public void OnGet(int ExistingID)
         {
             if (HttpContext.Session.GetString("username") == null)
             {
@@ -25,8 +30,24 @@ namespace MadisonCountySystem.Pages.RecordCreate
             }
             else
             {
+                CreateorUpdate = "Create";
+                ExistingPlanID = ExistingID;
                 CollabID = Int32.Parse(HttpContext.Session.GetString("collabID"));
                 CollabName = HttpContext.Session.GetString("collabName");
+                if (ExistingID != 0)
+                {
+                    CreateorUpdate = "Update";
+                    SqlDataReader PlanReader = DBClass.PlanReader();
+                    while (PlanReader.Read())
+                    {
+                        if (ExistingID == Int32.Parse(PlanReader["PlanID"].ToString()))
+                        {
+                            PlanName = PlanReader["PlanName"].ToString();
+                            Description = PlanReader["PlanContents"].ToString();
+                        }
+                    }
+                    DBClass.KnowledgeDBConnection.Close();
+                }
             }
 
         }
@@ -60,10 +81,19 @@ namespace MadisonCountySystem.Pages.RecordCreate
                 PlanName = PlanName,
                 PlanContents = Description,
                 PlanCreatedDate = DateTime.Now.ToString(),
-                CollabID = CollabID
+                CollabID = CollabID,
+                PlanID = ExistingPlanID
             };
-            DBClass.InsertPlan(SysPlan);
-            DBClass.KnowledgeDBConnection.Close();
+            if (ExistingPlanID == 0)
+            {
+                DBClass.InsertPlan(SysPlan);
+                DBClass.KnowledgeDBConnection.Close();
+            }
+            else
+            {
+                DBClass.UpdateExistingPlan(SysPlan);
+                DBClass.KnowledgeDBConnection.Close();
+            }
             return RedirectToPage("/Collabs/PlanList");
         }
     }
