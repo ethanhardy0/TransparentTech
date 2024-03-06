@@ -3,6 +3,45 @@
 @{
     ViewData["Title"] = "Knowledge Item Library";
 }
+@if (Model.ActionType == "Delete")
+{
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4);">
+        <form method="post">
+            <div style="background-color:#fff; margin:10% auto; padding:20px; width:50%; max-width: 500px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <p>Are you sure you want to delete @Model.SelectedKI.KnowledgeTitle?</p>
+                <div class="text-center mt-4">
+                    <button asp-page="KnowledgeLib" asp-page-handler="DeleteRecord" class="btn btn-outline-success mr-2" style="margin-right: 10px;">Yes, Delete</button>
+                    <button asp-page="KnowledgeLib" asp-page-handler="Close" class="btn btn-outline-danger">No, Go Back</button>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+@if (Model.ActionType == "Collab")
+{
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4);">
+        <form method="post">
+            <div style="background-color:#fff; margin:10% auto; padding:20px; width:50%; max-width: 500px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <div class="col">
+                    <label for="activeCollab" class="form-label">Collaboration:</label>
+                    <select class="form-control" id="activeCollab" name="selectedCollab">
+                        @foreach (var collab in Model.ActiveCollabs)
+                        {
+                            <option value="@collab.CollabID"> @collab.CollabName</option>
+                        }
+                    </select>
+                </div>
+                <br />
+                <div class="col-auto">
+                    <button asp-page="KnowledgeLib" asp-page-handler="AddCollab" class="btn btn-outline-primary">Add</button>
+                    <button asp-page="KnowledgeLib" asp-page-handler="Close" class="btn btn-outline-danger">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
 
 <style type="text/css">
     thead {
@@ -10,21 +49,11 @@
     }
 </style>
 <br/>
-<h2>Knowledge Item Management</h2>
 
 <form method="post">
     <div class="row align-items-end">
         <div class="col">
-            <label for="activeKnowledgeItems" class="form-label">Select a Knowledge Item:</label>
-            <select class="form-control" id="activeKnowledgeItems" name="selectedKnowledgeItem">
-                @foreach (var KnowledgeItem in Model.KnowledgeItemList)
-                {
-                    <option value="@KnowledgeItem.KnowledgeID"> @KnowledgeItem.KnowledgeTitle</option>
-                }
-            </select>
-        </div>
-        <div class="col-auto">
-            <button asp-page="KnowledgeLib" asp-page-handler="AddCollab" class="btn btn-outline-success">Add to Collaboration</button>
+            <h2>Knowledge Item Management</h2>
         </div>
         <div class="col-auto">
             <button asp-page="KnowledgeLib" asp-page-handler="CreateKnowledgeItem" class="btn btn-outline-primary">Create New Knowledge Item</button>
@@ -78,7 +107,7 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li><a class="dropdown-item" asp-area="" asp-page="/Main/KnowledgeLib" asp-route-actionType="Edit:@KnowledgeItem.KnowledgeID">Edit</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-page="/ButtonCollab/KnowledgeButton" asp-route-itemID="@KnowledgeItem.KnowledgeID">Collaborate</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/Main/KnowledgeLib" asp-route-actionType="Collab:@KnowledgeItem.KnowledgeID">Collaborate</a></li>
                                 <li><a class="dropdown-item" asp-area="" asp-page="/Main/KnowledgeLib" asp-route-actionType="Delete:@KnowledgeItem.KnowledgeID">Delete</a></li>
                             </ul>
                         </div>

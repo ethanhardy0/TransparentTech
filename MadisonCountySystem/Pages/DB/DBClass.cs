@@ -56,7 +56,7 @@ namespace MadisonCountySystem.Pages.DB
                 SqlCommand cmdKnowledgeRead = new SqlCommand();
                 cmdKnowledgeRead.Connection = KnowledgeDBConnection;
                 cmdKnowledgeRead.Connection.ConnectionString = KnowledgeDBConnString;
-                cmdKnowledgeRead.CommandText = "SELECT * FROM KnowledgeItem LEFT JOIN SysUser ON KnowledgeItem.OwnerID = SysUser.UserID";
+                cmdKnowledgeRead.CommandText = "SELECT * FROM KnowledgeItem LEFT JOIN SysUser ON KnowledgeItem.OwnerID = SysUser.UserID WHERE KnowledgeItem.KnowledgeStatus != 'Deleted' OR KnowledgeItem.KnowledgeStatus IS NULL;";
                 cmdKnowledgeRead.Connection.Open(); // Open connection here, close in Model!
 
                 SqlDataReader tempReader = cmdKnowledgeRead.ExecuteReader();
@@ -717,5 +717,17 @@ namespace MadisonCountySystem.Pages.DB
 
                 return tempReader;
             }
-        }
+            public static void DeleteKnowledgeItem(int KnowledgeID)
+            {
+                String sqlQuery = "UPDATE KnowledgeItem SET KnowledgeStatus = 'Deleted' WHERE KnowledgeID = @KnowledgeID";
+
+                SqlCommand cmdUserRead = new SqlCommand();
+                cmdUserRead.Connection = KnowledgeDBConnection;
+                cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
+                cmdUserRead.CommandText = sqlQuery;
+                cmdUserRead.Parameters.AddWithValue("@KnowledgeID", KnowledgeID);
+                cmdUserRead.Connection.Open();
+                cmdUserRead.ExecuteNonQuery();
+            }
+    }
     }
