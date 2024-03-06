@@ -3,6 +3,7 @@ using MadisonCountySystem.Pages.DB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography.X509Certificates;
 
 namespace MadisonCountySystem.Pages.RecordCreate
 {
@@ -45,8 +46,22 @@ namespace MadisonCountySystem.Pages.RecordCreate
         public String UserType { get; set; }
         public SysUser SysUser { get; set; }
 
+        public string usertype { get; set; }
+
         public void OnGet()
-        {
+		{
+            usertype = HttpContext.Session.GetString("typeUser");
+
+			if (HttpContext.Session.GetString("username") == null)
+			{
+				HttpContext.Session.SetString("LoginError", "You must login to access that page!");
+				HttpContext.Response.Redirect("/DBLogin");
+			}
+
+			if (usertype != "Admin")
+            {
+				HttpContext.Response.Redirect("/Index");
+            }
         }
         public IActionResult OnPostPopulateHandler()
         {

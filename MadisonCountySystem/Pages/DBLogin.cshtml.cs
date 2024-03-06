@@ -41,6 +41,7 @@ namespace MadisonCountySystem.Pages
                     while (LoginUser.Read())
                     {
                         HttpContext.Session.SetString("userID", LoginUser["UserID"].ToString());
+                        HttpContext.Session.SetString("typeUser", LoginUser["UserType"].ToString());
                     }
                     DBClass.KnowledgeDBConnection.Close();
 

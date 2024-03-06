@@ -664,7 +664,7 @@ namespace MadisonCountySystem.Pages.DB
             SqlCommand cmdLoginUserRead = new SqlCommand();
             cmdLoginUserRead.Connection = KnowledgeDBConnection;
             cmdLoginUserRead.Connection.ConnectionString = KnowledgeDBConnString;
-            cmdLoginUserRead.CommandText = "SELECT UserID FROM SysUser WHERE Username = @username";
+            cmdLoginUserRead.CommandText = "SELECT * FROM SysUser WHERE Username = @username";
             cmdLoginUserRead.Parameters.AddWithValue("@Username", Username);
             cmdLoginUserRead.Connection.Open(); // Open connection here, close in Model!
 

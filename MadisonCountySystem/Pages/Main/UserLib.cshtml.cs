@@ -40,7 +40,7 @@ namespace MadisonCountySystem.Pages.Main
         }
         public IActionResult OnPostCreateUser()
         {
-            return RedirectToPage("/RecordCreate/CreateUser");
+            return RedirectToPage("/RecordCreate/SignupForm");
         }
     }
 }

@@ -1,46 +1,52 @@
 ﻿@page
 @model MadisonCountySystem.Pages.Main.UserLibModel
 @{
-    ViewData["Title"] = "System Users";
+	ViewData["Title"] = "System Users";
 }
 
 <style type="text/css">
-    thead {
-        background-color: #EFC935;
-    }
+	thead {
+		background-color: #EFC935;
+	}
 </style>
 
+
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Users</h2>
-    <form method="post">
-        <div class="row align-items-end">
-            <div class="col-auto">
-                <button asp-page="UserLib" asp-page-handler="CreateUser" class="btn btn-outline-primary">Add User</button>
-            </div>
-        </div>
-    </form>
+	<h2>Users</h2>
+	@if (HttpContext.Session.GetString("typeUser") == "Admin")
+	{
+		<form method="post">
+			<div class="row align-items-end">
+				<div class="col-auto">
+					<button asp-page="UserLib" asp-page-handler="CreateUser" class="btn btn-outline-primary">Add User</button>
+				</div>
+			</div>
+		</form>
+	}
 </div>
 
+
+
 <table class="table table-bordered table-responsive table-hover">
-    <thead>
-        <tr>
-            <th>Username:</th>
-            <th>Full Name:</th>
-            <th>Email:</th>
-            <th>Phone:</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            foreach (var User in Model.UserList)
-            {
-                <tr>
-                    <td>@User.Username</td>
-                    <td>@User.FirstName @User.LastName</td>
-                    <td>@User.Email</td>
-                    <td>@User.Phone</td>
-                </tr>
-            }
-        }
-    </tbody>
+	<thead>
+		<tr>
+			<th>Username:</th>
+			<th>Full Name:</th>
+			<th>Email:</th>
+			<th>Phone:</th>
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			foreach (var User in Model.UserList)
+			{
+				<tr>
+					<td>@User.Username</td>
+					<td>@User.FirstName @User.LastName</td>
+					<td>@User.Email</td>
+					<td>@User.Phone</td>
+				</tr>
+			}
+		}
+	</tbody>
 </table>
