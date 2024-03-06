@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Text.RegularExpressions;
 using MadisonCountySystem.Pages.DataClasses;
 using MadisonCountySystem.Pages.DB;
+using OfficeOpenXml;
 
 namespace MadisonCountySystem.Pages.RecordCreate
 {
@@ -56,7 +57,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
 
         }
 
-        public IActionResult OnPostAddDB()
+        /*public IActionResult OnPostAddDB()
         {
             if (!ModelState.IsValid)
             {
@@ -88,6 +89,8 @@ namespace MadisonCountySystem.Pages.RecordCreate
                         }
                     }
                 }
+
+
             }
 
             Dataset = new Dataset()
@@ -117,8 +120,99 @@ namespace MadisonCountySystem.Pages.RecordCreate
             {
                 return RedirectToPage("/Main/DatasetLib");
             }
+        }*/
+
+        public IActionResult OnPostAddDB()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            List<String> filePaths = new List<String>();
+            foreach (var file in FormFiles)
+            {
+                if (file.FileName.EndsWith(".xlsx")) // Check if the file is an Excel file
+                {
+                    using (var stream = new MemoryStream())
+                    {
+                        file.CopyTo(stream);
+                        using (var package = new ExcelPackage(stream))
+                        {
+                            var worksheet = package.Workbook.Worksheets[0]; // Assuming data is in the first worksheet
+                            var rowCount = worksheet.Dimension.Rows;
+                            var colCount = worksheet.Dimension.Columns;
+
+                            // Read data from Excel and process as needed
+                            DataTable dt = new DataTable();
+                            for (int row = 1; row <= rowCount; row++)
+                            {
+                                var newRow = dt.Rows.Add();
+                                for (int col = 1; col <= colCount; col++)
+                                {
+                                    newRow[col - 1] = worksheet.Cells[row, col].Value?.ToString();
+                                }
+                            }
+
+                            // Upload data to database or perform other operations
+                            DBClass.UploadDatasetCSV(dt, DatasetName, file.FileName);
+                            DBClass.KnowledgeDBConnection.Close();
+                        }
+                    }
+                }
+                else if (file.FileName.EndsWith(".csv")) // Check if the file is a CSV file
+                {
+                    // Process CSV files similarly
+                    using (var reader = new StreamReader(Directory.GetCurrentDirectory() + @"/wwwroot/csvupload/" + file.FileName))
+                    {
+                        using (var csv = new CsvReader(reader, System.Globalization.CultureInfo.InvariantCulture))
+                        {
+                            using (var cdr = new CsvDataReader(csv))
+                            {
+                                var dt = new DataTable();
+                                dt.Load(cdr);
+                                DBClass.UploadDatasetCSV(dt, DatasetName, file.FileName);
+                                DBClass.KnowledgeDBConnection.Close();
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Create new Dataset
+            Dataset = new Dataset()
+            {
+                DatasetName = Regex.Replace(DatasetName, @"\s", string.Empty),
+                DatasetType = DatasetType,
+                DatasetContents = DatasetContents,
+                DatasetCreatedDate = DateTime.Now.ToString(),
+                OwnerID = Int32.Parse(HttpContext.Session.GetString("userID"))
+            };
+
+            // Insert Dataset into database
+            newDatasetID = DBClass.InsertDataset(Dataset);
+            DBClass.KnowledgeDBConnection.Close();
+
+            // Redirect based on current location
+            if (CurrentLocation == "Collab")
+            {
+                // Insert into DatasetCollab table if the current location is Collab
+                DatasetCollab = new DatasetCollab
+                {
+                    DatasetID = newDatasetID,
+                    CollabID = Int32.Parse(HttpContext.Session.GetString("collabID"))
+                };
+                DBClass.InsertDatasetCollab(DatasetCollab);
+                DBClass.KnowledgeDBConnection.Close();
+                return RedirectToPage("/Collabs/DatasetList");
+            }
+            else
+            {
+                // Otherwise, redirect to DatasetLib
+                return RedirectToPage("/Main/DatasetLib");
+            }
         }
-    
+
         public IActionResult OnPostPopulateHandler()
         {
             if (!ModelState.IsValid)
