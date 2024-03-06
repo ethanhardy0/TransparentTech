@@ -4,7 +4,16 @@
     ViewData["Title"] = "Create a Knowledge Item";
 }
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Create a Knowledge Item</h2>
+    @{
+        if (Model.CreateorUpdate == "Update")
+        {
+            <h2 class="text-center mb-4">Update @Model.KnowledgeTitle</h2>
+        }
+        else
+        {
+            <h2 class="text-center mb-4">Create a Knowledge Item</h2>
+        }
+    }
     <form method="post">
         <div class="row justify-content-md-center">
             <div class="col-md-6">
@@ -71,8 +80,17 @@
                 </div>
                 <div class="text-center">
                     <button style="width: 30%" asp-page="CreateKnowledge" asp-page-handler="PopulateHandler" class="btn btn-outline-primary btn-lg" formnovalidate>Populate</button>
-                    <button style="width: 33%" asp-page="CreateKnowledge" asp-page-handler="AddDB" class="btn btn-outline-success btn-lg">Create</button>
-                    <button style="width: 30%" asp-page="CreateKnowledge" asp-page-handler="Cancel" class="btn btn-outline-danger btn-lg" formnovalidate>Clear</button>
+                    @{
+                        if (Model.CreateorUpdate == "Update")
+                        {
+                            <button style="width: 33%" asp-page="CreateKnowledge" asp-page-handler="AddDB" class="btn btn-outline-success btn-lg">Update</button>
+                        }
+                        else
+                        {
+                            <button style="width: 33%" asp-page="CreateKnowledge" asp-page-handler="AddDB" class="btn btn-outline-success btn-lg">Create</button>
+                        }
+                    }
+                        <button style="width: 30%" asp-page="CreateKnowledge" asp-page-handler="Cancel" class="btn btn-outline-danger btn-lg" formnovalidate>Clear</button>
                 </div>
             </div>
         </div>
