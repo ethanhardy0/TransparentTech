@@ -753,7 +753,27 @@ namespace MadisonCountySystem.Pages.DB
             }
         }
 
-// ------------------------------------------ General Query --------------------------------------------------------------------------------------------------
+        // ------------------------------------------ User Photo --------------------------------------------------------------------------------------------------
+        public static String UserPhotoReader(int userID)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = KnowledgeDBConnection;
+            cmd.Connection.ConnectionString = KnowledgeDBConnString;
+            cmd.CommandText = "SELECT Directory FROM UserPhoto WHERE UserID = " + userID + ";";
+            cmd.Connection.Open();
+            SqlDataReader tempReader = cmd.ExecuteReader();
+
+            if (tempReader.HasRows)
+            {
+                tempReader.Read();
+                return tempReader["Directory"].ToString();
+            }
+            else
+            {
+                return "~/images/blankuser.jpg";
+            }
+        }
+        // ------------------------------------------ General Query --------------------------------------------------------------------------------------------------
         public static SqlDataReader GeneralReader(String sqlQuery)
         {
             SqlCommand cmd = new SqlCommand();

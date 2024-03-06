@@ -39,9 +39,9 @@ namespace MadisonCountySystem.Pages.Main
 
             DBClass.KnowledgeDBConnection.Close();
 
-            //PhotoDir = DBClass.UserPhotoReader(Int32.Parse(HttpContext.Session.GetString("userID")));
+            PhotoDir = DBClass.UserPhotoReader(Int32.Parse(HttpContext.Session.GetString("userID")));
 
-            //DBClass.KnowledgeDBConnection.Close();
+            DBClass.KnowledgeDBConnection.Close();
 
         }
     }
