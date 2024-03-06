@@ -106,7 +106,7 @@
                                 Actions
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item" asp-area="" asp-page="/Main/KnowledgeLib" asp-route-actionType="Edit:@KnowledgeItem.KnowledgeID">Edit</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/RecordCreate/CreateKnowledge" asp-route-ExistingID="@KnowledgeItem.KnowledgeID">Edit</a></li>
                                 <li><a class="dropdown-item" asp-area="" asp-page="/Main/KnowledgeLib" asp-route-actionType="Collab:@KnowledgeItem.KnowledgeID">Collaborate</a></li>
                                 <li><a class="dropdown-item" asp-area="" asp-page="/Main/KnowledgeLib" asp-route-actionType="Delete:@KnowledgeItem.KnowledgeID">Delete</a></li>
                             </ul>

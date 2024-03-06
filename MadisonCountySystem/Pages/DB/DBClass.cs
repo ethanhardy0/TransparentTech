@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace MadisonCountySystem.Pages.DB
 {
@@ -137,7 +138,32 @@ namespace MadisonCountySystem.Pages.DB
             cmdUserRead.ExecuteNonQuery();
         }
 
-// ------------------------------------------- Datasets ------------------------------------------------------------------------------------------------------
+        public static void UpdateExistingKI(KnowledgeItem k)
+        {
+            String sqlQuery = "UPDATE KnowledgeItem SET KnowledgeTitle = @KnowledgeTitle, KnowledgeSubject = @KnowledgeSubject, ";
+            sqlQuery += "KnowledgeCategory = @KnowledgeCategory, KnowledgeInformation = @KnowledgeInformation, Strengths = @Strengths, Weaknesses = @Weaknesses, ";
+            sqlQuery += "Opportunities = @Opportunities, Threats = @Threats WHERE KnowledgeID = @KnowledgeID;";
+
+    SqlCommand cmdUserRead = new SqlCommand();
+            cmdUserRead.Connection = KnowledgeDBConnection;
+            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdUserRead.CommandText = sqlQuery;
+            cmdUserRead.Parameters.AddWithValue("@KnowledgeID", k.KnowledgeID);
+            cmdUserRead.Parameters.AddWithValue("@KnowledgeTitle", k.KnowledgeTitle); // AddWithValue for KnowledgeTitle
+            cmdUserRead.Parameters.AddWithValue("@KnowledgeSubject", k.KnowledgeSubject); // AddWithValue for KnowledgeSubject
+            cmdUserRead.Parameters.AddWithValue("@KnowledgeCategory", k.KnowledgeCategory); // AddWithValue for KnowledgeCategory
+            cmdUserRead.Parameters.AddWithValue("@KnowledgeInformation", k.KnowledgeInformation); // AddWithValue for KnowledgeInformation
+            cmdUserRead.Parameters.AddWithValue("@Strengths", k.Strengths); // AddWithValue for Strengths
+            cmdUserRead.Parameters.AddWithValue("@Weaknesses", k.Weaknesses); // AddWithValue for Weaknesses
+            cmdUserRead.Parameters.AddWithValue("@Opportunities", k.Opportunities); // AddWithValue for Opportunities
+            cmdUserRead.Parameters.AddWithValue("@Threats", k.Threats); // AddWithValue for Threats
+
+            cmdUserRead.Connection.Open();
+            cmdUserRead.ExecuteNonQuery();
+        }
+
+
+        // ------------------------------------------- Datasets ------------------------------------------------------------------------------------------------------
         public static SqlDataReader DatasetReader()
         {
             SqlCommand cmdDatasetRead = new SqlCommand();

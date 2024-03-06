@@ -36,9 +36,10 @@ namespace MadisonCountySystem.Pages.RecordCreate
         public String Opportunities { get; set; }
         [BindProperty]
         public String Threats { get; set; }
+        public static int ExistingKIID { get; set; }
+        public String CreateorUpdate {  get; set; }
 
-
-        public void OnGet()
+        public void OnGet(int ExistingID)
         {
             if (HttpContext.Session.GetString("username") == null)
             {
@@ -47,7 +48,33 @@ namespace MadisonCountySystem.Pages.RecordCreate
             }
             else
             {
+                CreateorUpdate = "Create";
                 CurrentLocation = HttpContext.Session.GetString("LibType");
+                ExistingKIID = ExistingID;
+                if(ExistingKIID != 0)
+                {
+                    CreateorUpdate = "Update";
+                    SqlDataReader KnowledgeItemReader = DBClass.KnowledgeItemReader();
+                    while (KnowledgeItemReader.Read())
+                    {
+                        if (ExistingKIID == Int32.Parse(KnowledgeItemReader["KnowledgeID"].ToString()))
+                        {
+                            KnowledgeTitle = KnowledgeItemReader["KnowledgeTitle"].ToString();
+                            KnowledgeSubject = KnowledgeItemReader["KnowledgeSubject"].ToString();
+                            KnowledgeCategory = KnowledgeItemReader["KnowledgeCategory"].ToString();
+                            KnowledgeInformation = KnowledgeItemReader["KnowledgeInformation"].ToString();
+                            if(KnowledgeItemReader["Strengths"].ToString() != "0")
+                            {
+                                IsSwotItem = true;
+                                Strengths = KnowledgeItemReader["Strengths"].ToString();
+                                Weakness = KnowledgeItemReader["Weaknesses"].ToString();
+                                Opportunities = KnowledgeItemReader["Opportunities"].ToString();
+                                Threats = KnowledgeItemReader["Threats"].ToString();
+                            }
+                        }
+                    }
+                    DBClass.KnowledgeDBConnection.Close();
+                }
             }
 
         }
@@ -82,25 +109,42 @@ namespace MadisonCountySystem.Pages.RecordCreate
                 Strengths = Strengths,
                 Opportunities = Opportunities,
                 Threats = Threats,
-                Weaknesses = Weakness
+                Weaknesses = Weakness,
+                KnowledgeID = ExistingKIID
             };
-            int newKnowledgeID = DBClass.InsertKnowledgeItem(KnowledgeItem);
-            DBClass.KnowledgeDBConnection.Close();
-
-            if (CurrentLocation == "Collab")
+            if (ExistingKIID == 0)
             {
-                KnowledgeCollab = new KnowledgeItemCollab
-                {
-                    KnowledgeID = newKnowledgeID,
-                    CollabID = Int32.Parse(HttpContext.Session.GetString("collabID"))
-                };
-                DBClass.InsertKnowledgeCollab(KnowledgeCollab);
+                int newKnowledgeID = DBClass.InsertKnowledgeItem(KnowledgeItem);
                 DBClass.KnowledgeDBConnection.Close();
-                return RedirectToPage("/Collabs/KnowledgeList");
+
+                if (CurrentLocation == "Collab")
+                {
+                    KnowledgeCollab = new KnowledgeItemCollab
+                    {
+                        KnowledgeID = newKnowledgeID,
+                        CollabID = Int32.Parse(HttpContext.Session.GetString("collabID"))
+                    };
+                    DBClass.InsertKnowledgeCollab(KnowledgeCollab);
+                    DBClass.KnowledgeDBConnection.Close();
+                    return RedirectToPage("/Collabs/KnowledgeList");
+                }
+                else
+                {
+                    return RedirectToPage("/Main/KnowledgeLib");
+                }
             }
             else
             {
-                return RedirectToPage("/Main/KnowledgeLib");
+                DBClass.UpdateExistingKI(KnowledgeItem);
+                DBClass.KnowledgeDBConnection.Close();
+                if (CurrentLocation == "Collab")
+                {
+                    return RedirectToPage("/Collabs/KnowledgeList");
+                }
+                else
+                {
+                    return RedirectToPage("/Main/KnowledgeLib");
+                }
             }
         }
         public IActionResult OnPostPopulateHandler()
