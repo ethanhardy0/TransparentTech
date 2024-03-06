@@ -47,7 +47,7 @@ namespace MadisonCountySystem.Pages
         {
             if (HttpContext.Session.GetString("username") == null)
             {
-                return RedirectToPage("/Main/KnowledgeLib");
+                return RedirectToPage("/Main/ReportLib");
             }
             else
             {

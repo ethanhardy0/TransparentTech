@@ -3,16 +3,25 @@
 @{
     ViewData["Title"] = "Home";
 }
+
+@* <style>
+    img {
+        border-radius: 50%;
+        object-fit: cover;
+    }
+</style> *@
+
 <div class="container mt-5">
     <div class="jumbotron bg-light shadow-lg p-5 rounded">
         <form method="post">
             <h1 class="display-4 text-center font-weight-bold">Welcome, @Model.FirstName @Model.LastName!</h1>
             <p class="lead text-center">This is a Shared Knowledge Management System to Easily Access Information!</p>
             <hr class="my-4">
-            <p class="text-center font-italic">Produced by Evan Weiler & Connor Fitzsimmons</p>
             <div class="text-center mt-4">
                 <button asp-page="Index" asp-page-handler="Start" class="btn btn-primary btn-lg">Get Started</button>
             </div>
         </form>
     </div>
 </div>
+
+@* <img src="images/360_F_219633151_BW6TD8D1EA9OqZu4JgdmeJGg4JBaiAHj.jpg" width="200" height="200"/> *@

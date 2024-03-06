@@ -40,6 +40,7 @@ CREATE TABLE KnowledgeItem(
 	Opportunities nvarchar(MAX),
 	Threats nvarchar(MAX),
 	KnowledgePostDate nvarchar(30),
+	KnowledgeStatus nvarchar(30),
 	OwnerID int FOREIGN KEY REFERENCES SysUser(UserID)
 );
 
@@ -49,6 +50,7 @@ CREATE TABLE Dataset(
 	DatasetType nvarchar(20),
 	DatasetContents nvarchar(MAX),
 	DatasetCreatedDate nvarchar(30),
+	DatasetStatus nvarchar(30),
 	OwnerID int FOREIGN KEY REFERENCES SysUser(UserID)
 );
 
@@ -56,6 +58,7 @@ CREATE TABLE Collaboration(
 	CollabID int IDENTITY(1,1) PRIMARY KEY,
 	CollabName nvarchar(30),
 	CollabNotes nvarchar(MAX),
+	CollabStatus nvarchar(30),
 	CollabCreatedDate nvarchar(30)
 );
 
@@ -64,6 +67,7 @@ CREATE TABLE SysPlan(
 	PlanName nvarchar(100),
 	PlanContents nvarchar(MAX),
 	PlanCreatedDate nvarchar(30),
+	PlanStatus nvarchar(30),
 	CollabID int FOREIGN KEY REFERENCES Collaboration(CollabID)
 );
 
@@ -73,6 +77,7 @@ CREATE TABLE Analysis(
 	AnalysisType nvarchar(50),
 	AnalysisResult nvarchar(30),
 	AnalysisCreatedDate nvarchar(30),
+	AnalysisStatus nvarchar(30),
 	DatasetID int FOREIGN KEY REFERENCES Dataset(DatasetID),
 	OwnerID int FOREIGN KEY REFERENCES SysUser(UserID),
 	KnowledgeID int FOREIGN KEY REFERENCES KnowledgeItem(KnowledgeID)
@@ -97,6 +102,7 @@ CREATE TABLE PlanStep(
 	StepData nvarchar(MAX),
 	StepCreatedDate nvarchar(30),
 	DueDate nvarchar(20),
+	StepStatus nvarchar(30),
 	OwnerID int FOREIGN KEY REFERENCES SysUser(UserID),
 	PlanID int FOREIGN KEY REFERENCES SysPlan(PlanID)
 );
@@ -423,6 +429,7 @@ CREATE TABLE CollabReport(
 	KeyID int,
 	KeyType nvarchar(25),
 	ReportCreatedDate nvarchar(50),
+	ReportStatus nvarchar(30),
 	CollabID int FOREIGN KEY REFERENCES Collaboration(CollabID),
 	KnowledgeID int FOREIGN KEY REFERENCES KnowledgeItem(KnowledgeID),
 	UserID int FOREIGN KEY REFERENCES SysUser(UserID),
