@@ -4,6 +4,21 @@
     ViewData["Title"] = Model.CollabName + " Plan List";
 }
 
+@if (Model.ActionType == "Delete")
+{
+<div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4);">
+    <form method="post">
+        <div style="background-color:#fff; margin:10% auto; padding:20px; width:50%; max-width: 500px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <p>Are you sure you want to delete @Model.SelectedPlan.PlanName?</p>
+            <div class="text-center mt-4">
+                <button asp-page="PlanList" asp-page-handler="DeleteRecord" class="btn btn-outline-success mr-2" style="margin-right: 10px;">Yes, Delete</button>
+                <button asp-page="PlanList" asp-page-handler="Close" class="btn btn-outline-danger">No, Go Back</button>
+            </div>
+        </div>
+    </form>
+</div>
+}
+
 @if (Model.ShowModal)
 {
         <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4);">
@@ -75,17 +90,30 @@
             <th>Plan Name:</th>
             <th>Contents:</th>
             <th>Created Date:</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         @{
             foreach (var plan in Model.PlansList)
             {
-                        <tr>
-                            <td><a asp-area="" asp-page="/Collabs/PlanStepTable" asp-route-planID="@plan.PlanID">@plan.PlanName</a></td>
-                            <td>@plan.PlanContents</td>
-                            <td>@plan.PlanCreatedDate</td>
-                        </tr>
+                <tr>
+                    <td><a asp-area="" asp-page="/Collabs/PlanStepTable" asp-route-planID="@plan.PlanID">@plan.PlanName</a></td>
+                    <td>@plan.PlanContents</td>
+                    <td>@plan.PlanCreatedDate</td>
+                    <td>
+                        <!-- New column for actions -->
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                Actions
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" asp-area="" asp-page="/RecordCreate/CreatePlan" asp-route-ExistingID="@plan.PlanID">Edit</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/Collabs/PlanList" asp-route-actionType="Delete:@plan.PlanID">Delete</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
             }
         }
     </tbody>

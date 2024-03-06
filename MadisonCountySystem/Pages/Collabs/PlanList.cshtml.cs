@@ -13,6 +13,9 @@ namespace MadisonCountySystem.Pages.Collabs
         public List<SysPlan> PlansList { get; set; }
         public List<KnowledgeItem> KnowledgeList { get; set; }
         public List<KnowledgeItemCollab> KnowledgeCollabs { get; set; }
+        public String ActionType { get; set; }
+        public static int SelectedItemID { get; set; }
+        public SysPlan SelectedPlan { get; set; }
         public PlanListModel()
         {
             PlansList = new List<SysPlan>();
@@ -22,7 +25,7 @@ namespace MadisonCountySystem.Pages.Collabs
 
         public bool ShowModal { get; set; } = false;
 
-        public void OnGet()
+        public void OnGet(String actionType)
         {
             if (HttpContext.Session.GetString("username") == null)
             {
@@ -31,7 +34,28 @@ namespace MadisonCountySystem.Pages.Collabs
             }
             else
             {
-                HttpContext.Session.SetString("LibType", "Collab");
+                if (actionType != null)
+                {
+                    String[] parts = actionType.Split(':');
+                    if (parts.Length == 2)
+                    {
+                        ActionType = parts[0];
+                        SelectedItemID = Int32.Parse(parts[1]);
+                        SqlDataReader SelectedPlanReader = DBClass.PlanReader();
+                        while (SelectedPlanReader.Read())
+                        {
+                            if (parts[1] == SelectedPlanReader["PlanID"].ToString())
+                                SelectedPlan = new SysPlan
+                                {
+                                    PlanName = SelectedPlanReader["PlanName"].ToString(),
+                                    PlanContents = SelectedPlanReader["PlanContents"].ToString(),
+                                    PlanCreatedDate = SelectedPlanReader["PlanCreatedDate"].ToString(),
+                                };
+                        }
+                        DBClass.KnowledgeDBConnection.Close();
+                    }
+                }
+                        HttpContext.Session.SetString("LibType", "Collab");
                 CollabID = HttpContext.Session.GetString("collabID");
                 CollabName = HttpContext.Session.GetString("collabName");
                 SqlDataReader planReader = DBClass.PlanReader();
@@ -163,5 +187,11 @@ namespace MadisonCountySystem.Pages.Collabs
             DBClass.KnowledgeDBConnection.Close();
         }
 
+        public IActionResult OnPostDeleteRecord()
+        {
+            DBClass.DeletePlan(SelectedItemID);
+            DBClass.KnowledgeDBConnection.Close();
+            return RedirectToPage();
+        }
     }
 }
