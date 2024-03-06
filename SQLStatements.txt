@@ -1,3 +1,4 @@
+DROP TABLE UserPhoto;
 DROP TABLE CollabReport;
 DROP TABLE CollabChat;
 DROP TABLE DatasetCollab;
@@ -40,7 +41,6 @@ CREATE TABLE KnowledgeItem(
 	Opportunities nvarchar(MAX),
 	Threats nvarchar(MAX),
 	KnowledgePostDate nvarchar(30),
-	KnowledgeStatus nvarchar(30),
 	OwnerID int FOREIGN KEY REFERENCES SysUser(UserID)
 );
 
@@ -50,7 +50,6 @@ CREATE TABLE Dataset(
 	DatasetType nvarchar(20),
 	DatasetContents nvarchar(MAX),
 	DatasetCreatedDate nvarchar(30),
-	DatasetStatus nvarchar(30),
 	OwnerID int FOREIGN KEY REFERENCES SysUser(UserID)
 );
 
@@ -58,7 +57,6 @@ CREATE TABLE Collaboration(
 	CollabID int IDENTITY(1,1) PRIMARY KEY,
 	CollabName nvarchar(30),
 	CollabNotes nvarchar(MAX),
-	CollabStatus nvarchar(30),
 	CollabCreatedDate nvarchar(30)
 );
 
@@ -67,7 +65,6 @@ CREATE TABLE SysPlan(
 	PlanName nvarchar(100),
 	PlanContents nvarchar(MAX),
 	PlanCreatedDate nvarchar(30),
-	PlanStatus nvarchar(30),
 	CollabID int FOREIGN KEY REFERENCES Collaboration(CollabID)
 );
 
@@ -77,7 +74,6 @@ CREATE TABLE Analysis(
 	AnalysisType nvarchar(50),
 	AnalysisResult nvarchar(30),
 	AnalysisCreatedDate nvarchar(30),
-	AnalysisStatus nvarchar(30),
 	DatasetID int FOREIGN KEY REFERENCES Dataset(DatasetID),
 	OwnerID int FOREIGN KEY REFERENCES SysUser(UserID),
 	KnowledgeID int FOREIGN KEY REFERENCES KnowledgeItem(KnowledgeID)
@@ -102,7 +98,6 @@ CREATE TABLE PlanStep(
 	StepData nvarchar(MAX),
 	StepCreatedDate nvarchar(30),
 	DueDate nvarchar(20),
-	StepStatus nvarchar(30),
 	OwnerID int FOREIGN KEY REFERENCES SysUser(UserID),
 	PlanID int FOREIGN KEY REFERENCES SysPlan(PlanID)
 );
@@ -140,6 +135,23 @@ CREATE TABLE CollabChat(
     CollabID int FOREIGN KEY REFERENCES Collaboration(CollabID)
 );
 
+CREATE TABLE CollabReport(
+	CollabReportID int IDENTITY(1,1) PRIMARY KEY,
+	KeyID int,
+	KeyType nvarchar(25),
+	ReportCreatedDate nvarchar(50),
+	CollabID int FOREIGN KEY REFERENCES Collaboration(CollabID),
+	KnowledgeID int FOREIGN KEY REFERENCES KnowledgeItem(KnowledgeID),
+	UserID int FOREIGN KEY REFERENCES SysUser(UserID),
+	CollabReportParent int FOREIGN KEY REFERENCES CollabReport(CollabReportID),
+	ItemType nvarchar(25)
+);
+
+CREATE TABLE UserPhoto(
+	UserPhotoID int IDENTITY(1,1) PRIMARY KEY,
+	UserID int FOREIGN KEY REFERENCES SysUser(UserID),
+	Directory nvarchar(max)
+);
 
 --Inserts
 --User
@@ -157,6 +169,9 @@ VALUES('cfitz', 'Connor', 'Fitzsimmons', 'connor@email.com', '888-555-3322', '88
 
 INSERT INTO SysUser(Username, FirstName, LastName, Email, Phone, Street, City, State, Zip, UserType)
 VALUES('user3', 'User3', 'User3', 'user3@email.com', '781-999-1092', '8921 Main St', 'Tulsa', 'OK', '28111', 'Admin');
+
+INSERT INTO SysUser(Username, FirstName, LastName)
+VALUES('CommunityUser', 'Madison County', 'Community User');
 
 --Collab
 INSERT INTO Collaboration(CollabName, CollabNotes, CollabCreatedDate)
@@ -371,6 +386,8 @@ INSERT INTO DatasetCollab (CollabID, DatasetID) VALUES (1, 1);
 INSERT INTO DatasetCollab (CollabID, DatasetID) VALUES (1, 2);
 INSERT INTO DatasetCollab (CollabID, DatasetID) VALUES (3, 2);
 
+
+
 --Example Datasets
 
 CREATE TABLE FinancialData (
@@ -423,19 +440,3 @@ VALUES
     (13, 22.7, 71.5, 1008.2),
     (14, 28.5, 58.7, 1014.0),
     (15, 25.3, 64.8, 1010.6);
-
-CREATE TABLE CollabReport(
-	CollabReportID int IDENTITY(1,1) PRIMARY KEY,
-	KeyID int,
-	KeyType nvarchar(25),
-	ReportCreatedDate nvarchar(50),
-	ReportStatus nvarchar(30),
-	CollabID int FOREIGN KEY REFERENCES Collaboration(CollabID),
-	KnowledgeID int FOREIGN KEY REFERENCES KnowledgeItem(KnowledgeID),
-	UserID int FOREIGN KEY REFERENCES SysUser(UserID),
-	CollabReportParent int FOREIGN KEY REFERENCES CollabReport(CollabReportID),
-	ItemType nvarchar(25)
-);
-
-INSERT INTO SysUser(Username, FirstName, LastName)
-VALUES('CommunityUser', 'Madison County', 'Community User');
