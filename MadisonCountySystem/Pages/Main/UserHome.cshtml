@@ -15,6 +15,7 @@
         color: #fff;
         width: 80%;
         padding: 10px;
+        box-shadow: 2px 2px 5px black;    
     }
 
     #chgMessage {
@@ -36,7 +37,7 @@
 <h1 class="text-center mt-5">Welcome @Model.LoggedUser.Username</h1>
 
 <div class="col-lg-4">
-    <div id="userCard" class="text-center">
+    <div id="userCard" class="text-center box-shadow">
         <p id="chgMessage">Click To Change Profile Picture</p>
         @{
             if (Model.PhotoDir == "~/images/blankuser.jpg")
