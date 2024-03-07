@@ -1,0 +1,17 @@
+﻿@page
+@model MadisonCountySystem.Pages.RecordCreate.UserPhotoEditorModel
+@{
+}
+
+<form method="post">
+    <label asp-for="Image" class="form-label">Upload a Photo:</label>
+    <input asp-for="Image" type="file" accept=".jpg, .png" class="form-control" style="width: 30%;"/>
+    </br>
+    <button style="width: 33%" asp-page="UserPhotoEditor" formenctype="multipart/form-data" asp-page-handler="Preview" class="btn btn-outline-success btn-lg">Preview Profile Picture</button>
+    @{
+        if (Model.imgDir != null)
+        {
+            <img src=@Url.Content(Model.imgDir) width="200" height="200" />
+        }
+    }
+</form>

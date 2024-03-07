@@ -8,15 +8,26 @@
         border-radius: 50%;
         object-fit: cover;
     }
+
+    #userCard {
+        border-radius: 20%;
+        background-color: #004AAD;
+        color: #fff;
+        width: 80%;
+        padding: 10px;
+    }
 </style>
 
 <h1 class="text-center mt-5">Welcome @Model.LoggedUser.Username</h1>
 
 <div class="col-lg-4">
-    <div class="card mb-4">
-        <div class="card-body text-center">
-            <img src=@Url.Content(Model.PhotoDir) width="200" height="200" />
-        </div>
+    <div id="userCard" class="text-center">
+        <a asp-page="/RecordCreate/UserPhotoEditor"><img src=@Url.Content(Model.PhotoDir) width="175" height="175" /></a>
+        </br>
+        <p>@Model.LoggedUser.LastName, @Model.LoggedUser.FirstName</p>
+        <p>@Model.LoggedUser.Email</p>
+        <p>@Model.LoggedUser.Phone</p>
+        <p>Permission Level: @Model.LoggedUser.UserType</p>
     </div>
 
 </div>
