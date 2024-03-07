@@ -318,7 +318,7 @@ namespace MadisonCountySystem.Pages.DB
             SqlCommand cmdPlanStepRead = new SqlCommand();
             cmdPlanStepRead.Connection = KnowledgeDBConnection;
             cmdPlanStepRead.Connection.ConnectionString = KnowledgeDBConnString;
-            cmdPlanStepRead.CommandText = "SELECT * FROM PlanStep";
+            cmdPlanStepRead.CommandText = "SELECT * FROM PlanStep WHERE StepStatus != 'Deleted' OR StepStatus IS NULL;";
             cmdPlanStepRead.Connection.Open(); // Open connection here, close in Model!
 
             SqlDataReader tempReader = cmdPlanStepRead.ExecuteReader();
@@ -373,6 +373,19 @@ namespace MadisonCountySystem.Pages.DB
             cmdUserRead.ExecuteNonQuery();
         }
 
+        public static void DeletePlanStep(int PlanStepID)
+        {
+            String sqlQuery = "UPDATE PlanStep SET StepStatus = 'Deleted' WHERE PlanStepID = @PlanStepID";
+
+            SqlCommand cmdUserRead = new SqlCommand();
+            cmdUserRead.Connection = KnowledgeDBConnection;
+            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdUserRead.CommandText = sqlQuery;
+            cmdUserRead.Parameters.AddWithValue("@PlanStepID", PlanStepID);
+            cmdUserRead.Connection.Open();
+            cmdUserRead.ExecuteNonQuery();
+        }
+
         public static void UpdateExistingPlan(SysPlan k)
         {
             String sqlQuery = "UPDATE SysPlan SET PlanName = @PlanName, PlanContents = @PlanContents WHERE PlanID = @PlanID;";
@@ -384,6 +397,23 @@ namespace MadisonCountySystem.Pages.DB
             cmdUserRead.Parameters.AddWithValue("@PlanID", k.PlanID);
             cmdUserRead.Parameters.AddWithValue("@PlanName", k.PlanName); // AddWithValue for KnowledgeTitle
             cmdUserRead.Parameters.AddWithValue("@PlanContents", k.PlanContents); // AddWithValue for KnowledgeSubject
+
+            cmdUserRead.Connection.Open();
+            cmdUserRead.ExecuteNonQuery();
+        }
+
+        public static void UpdateExistingPlanStep(PlanStep k)
+        {
+            String sqlQuery = "UPDATE PlanStep SET PlanStepName = @PlanStepName, StepData = @StepData, DueDate = @DueDate WHERE PlanStepID = @PlanStepID;";
+
+            SqlCommand cmdUserRead = new SqlCommand();
+            cmdUserRead.Connection = KnowledgeDBConnection;
+            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdUserRead.CommandText = sqlQuery;
+            cmdUserRead.Parameters.AddWithValue("@PlanStepID", k.PlanStepID);
+            cmdUserRead.Parameters.AddWithValue("@PlanStepName", k.PlanStepName);
+            cmdUserRead.Parameters.AddWithValue("@StepData", k.StepData);
+            cmdUserRead.Parameters.AddWithValue("@DueDate", k.DueDate);
 
             cmdUserRead.Connection.Open();
             cmdUserRead.ExecuteNonQuery();

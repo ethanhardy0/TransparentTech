@@ -55,7 +55,7 @@ namespace MadisonCountySystem.Pages.Collabs
                         DBClass.KnowledgeDBConnection.Close();
                     }
                 }
-                        HttpContext.Session.SetString("LibType", "Collab");
+                HttpContext.Session.SetString("LibType", "Collab");
                 CollabID = HttpContext.Session.GetString("collabID");
                 CollabName = HttpContext.Session.GetString("collabName");
                 SqlDataReader planReader = DBClass.PlanReader();
@@ -109,7 +109,7 @@ namespace MadisonCountySystem.Pages.Collabs
         }
         public IActionResult OnPostShowSteps(int selectedPlan)
         {
-            return RedirectToPage("/Collabs/PlanStepTable", new { planID = selectedPlan });
+            return RedirectToPage("/Collabs/PlanStepTable", new { ActionType = "None:0:" + selectedPlan.ToString() });
         }
 
         public IActionResult OnPostAddPlan()

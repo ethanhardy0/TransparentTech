@@ -98,7 +98,7 @@
             foreach (var plan in Model.PlansList)
             {
                 <tr>
-                    <td><a asp-area="" asp-page="/Collabs/PlanStepTable" asp-route-planID="@plan.PlanID">@plan.PlanName</a></td>
+                    <td><a asp-area="" asp-page="/Collabs/PlanStepTable" asp-route-actionType="None:0:@plan.PlanID">@plan.PlanName</a></td>
                     <td>@plan.PlanContents</td>
                     <td>@plan.PlanCreatedDate</td>
                     <td>
