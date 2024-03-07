@@ -162,6 +162,17 @@ namespace MadisonCountySystem.Pages.RecordCreate
                 }
                 else if (file.FileName.EndsWith(".csv")) // Check if the file is a CSV file
                 {
+
+                    if (file.Length > 0)
+                    {
+                        var filePath = Directory.GetCurrentDirectory() + @"/wwwroot/csvupload/" + file.FileName;
+                        filePaths.Add(filePath);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            file.CopyTo(stream);
+                        }
+                    }
+
                     // Process CSV files similarly
                     using (var reader = new StreamReader(Directory.GetCurrentDirectory() + @"/wwwroot/csvupload/" + file.FileName))
                     {
