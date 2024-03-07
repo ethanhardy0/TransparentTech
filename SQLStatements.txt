@@ -102,7 +102,7 @@ CREATE TABLE PlanStep(
 	PlanStepName nvarchar(30),
 	StepData nvarchar(MAX),
 	StepCreatedDate nvarchar(30),
-	DueDate nvarchar(20),
+	DueDate nvarchar(35),
 	StepStatus nvarchar(30),
 	OwnerID int FOREIGN KEY REFERENCES SysUser(UserID),
 	PlanID int FOREIGN KEY REFERENCES SysPlan(PlanID)
