@@ -8,10 +8,14 @@
     <input asp-for="Image" type="file" accept=".jpg, .png" class="form-control" style="width: 30%;"/>
     </br>
     <button style="width: 33%" asp-page="UserPhotoEditor" formenctype="multipart/form-data" asp-page-handler="Preview" class="btn btn-outline-success btn-lg">Preview Profile Picture</button>
+    </br>
+    <p>Preview Will Appear Hear</p>
     @{
         if (Model.imgDir != null)
         {
-            <img src=@Url.Content(Model.imgDir) width="200" height="200" />
+            <img src="@Model.imgDir" width="200" height="200" />
+            <p></p>
+            <button style="width: 33%" asp-page="UserPhotoEditor" formenctype="multipart/form-data" asp-page-handler="Upload" class="btn btn-outline-success btn-lg">Upload Profile Picture</button>
         }
     }
 </form>

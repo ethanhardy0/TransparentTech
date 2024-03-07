@@ -802,6 +802,21 @@ namespace MadisonCountySystem.Pages.DB
                 return "~/images/blankuser.jpg";
             }
         }
+
+        public static void InsertUserPhoto(int userID, String imgDir)
+        {
+            String sqlQuery = "INSERT INTO UserPhoto (UserID, Directory) VALUES (@UserID, @Directory);";
+
+            SqlCommand cmdUserPhoto= new SqlCommand();
+            cmdUserPhoto.Connection = KnowledgeDBConnection;
+            cmdUserPhoto.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdUserPhoto.CommandText = sqlQuery;
+            cmdUserPhoto.Parameters.AddWithValue("@UserID", userID);
+            cmdUserPhoto.Parameters.AddWithValue("@Directory", imgDir);
+            cmdUserPhoto.Connection.Open();
+            cmdUserPhoto.ExecuteNonQuery();
+        }
+
         // ------------------------------------------ General Query --------------------------------------------------------------------------------------------------
         public static SqlDataReader GeneralReader(String sqlQuery)
         {

@@ -22,7 +22,15 @@
 
 <div class="col-lg-4">
     <div id="userCard" class="text-center">
-        <a asp-page="/RecordCreate/UserPhotoEditor"><img src=@Url.Content(Model.PhotoDir) width="175" height="175" /></a>
+        @{
+            if (Model.PhotoDir == "~/images/blankuser.jpg")
+            {
+                <a asp-page="/RecordCreate/UserPhotoEditor"><img src=@Url.Content(Model.PhotoDir) width="175" height="175" /></a>
+            } else
+            {
+                <a asp-page="/RecordCreate/UserPhotoEditor"><img src="@Model.PhotoDir" width="175" height="175" /></a>
+            }
+        }
         </br>
         <p>@Model.LoggedUser.LastName, @Model.LoggedUser.FirstName</p>
         <p>@Model.LoggedUser.Email</p>
