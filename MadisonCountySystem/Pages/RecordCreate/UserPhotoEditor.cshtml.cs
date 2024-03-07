@@ -24,22 +24,19 @@ namespace MadisonCountySystem.Pages.RecordCreate
         {
             if (Image.Length > 0)
             {
-                // Full path to file in temp location
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", Image.FileName);
 
-                // Save the uploaded file
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     Image.CopyTo(stream);
                 }
 
-                // Set imgDir to the virtual path
-                imgDir = "/images/" + Image.FileName; // Assuming wwwroot is the web root
+                imgDir = "/images/" + Image.FileName; 
             }
 
             HttpContext.Session.SetString("imgDir", imgDir);
-            // Other logic as needed
-            OnGet();
+            
+            //OnGet();
         }
 
         public IActionResult OnPostUpload()

@@ -3,6 +3,13 @@
 @{
 }
 
+<style type="text/css">
+    img {
+        border-radius: 50%;
+        object-fit: cover;
+    }
+</style>
+
 <form method="post">
     <label asp-for="Image" class="form-label">Upload a Photo:</label>
     <input asp-for="Image" type="file" accept=".jpg, .png" class="form-control" style="width: 30%;"/>

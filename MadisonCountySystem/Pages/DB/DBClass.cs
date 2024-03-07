@@ -805,6 +805,24 @@ namespace MadisonCountySystem.Pages.DB
 
         public static void InsertUserPhoto(int userID, String imgDir)
         {
+            SqlDataReader temp = GeneralReader("SELECT * FROM UserPhoto WHERE UserID = " + userID + ";");
+            // Removes current profile picture if it exists
+            if (temp.HasRows)
+            {
+                KnowledgeDBConnection.Close();
+                SqlCommand clearPhoto = new SqlCommand();
+                clearPhoto.Connection = KnowledgeDBConnection;
+                clearPhoto.Connection.ConnectionString = KnowledgeDBConnString;
+                clearPhoto.CommandText = "DELETE FROM UserPhoto WHERE UserID = " + userID + ";";
+                clearPhoto.Connection.Open();
+                clearPhoto.ExecuteNonQuery();
+                KnowledgeDBConnection.Close();
+            } else
+            {
+                KnowledgeDBConnection.Close();
+            }
+
+            // Inserts the new photo
             String sqlQuery = "INSERT INTO UserPhoto (UserID, Directory) VALUES (@UserID, @Directory);";
 
             SqlCommand cmdUserPhoto= new SqlCommand();

@@ -16,19 +16,35 @@
         width: 80%;
         padding: 10px;
     }
+
+    #chgMessage {
+        visibility: hidden;
+        font-style: italic;
+    }
 </style>
+
+<script type="text/javascript">
+    function chgPhoto() {
+        document.getElementById("chgMessage").style.visibility = "initial";
+    }
+
+    function revert() {
+        document.getElementById("chgMessage").style.visibility = "hidden";
+    }
+</script>
 
 <h1 class="text-center mt-5">Welcome @Model.LoggedUser.Username</h1>
 
 <div class="col-lg-4">
     <div id="userCard" class="text-center">
+        <p id="chgMessage">Click To Change Profile Picture</p>
         @{
             if (Model.PhotoDir == "~/images/blankuser.jpg")
             {
-                <a asp-page="/RecordCreate/UserPhotoEditor"><img src=@Url.Content(Model.PhotoDir) width="175" height="175" /></a>
+                        <a asp-page="/RecordCreate/UserPhotoEditor" onmouseover="chgPhoto();" onmouseout="revert();"><img src=@Url.Content(Model.PhotoDir) width="175" height="175" /></a>
             } else
             {
-                <a asp-page="/RecordCreate/UserPhotoEditor"><img src="@Model.PhotoDir" width="175" height="175" /></a>
+                        <a asp-page="/RecordCreate/UserPhotoEditor" onmouseover="chgPhoto();" onmouseout="revert();"><img src="@Model.PhotoDir" width="175" height="175" /></a>
             }
         }
         </br>
