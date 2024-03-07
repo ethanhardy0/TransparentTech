@@ -138,6 +138,20 @@ namespace MadisonCountySystem.Pages.DB
             cmdUserRead.ExecuteNonQuery();
         }
 
+        public static void RemoveKnowledgeItemCollab(int KnowledgeID, int CollabID)
+        {
+            String sqlQuery = "DELETE FROM KnowledgeCollab WHERE KnowledgeID = @KnowledgeID AND CollabID = @CollabID";
+
+            SqlCommand cmdUserRead = new SqlCommand();
+            cmdUserRead.Connection = KnowledgeDBConnection;
+            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdUserRead.CommandText = sqlQuery;
+            cmdUserRead.Parameters.AddWithValue("@KnowledgeID", KnowledgeID);
+            cmdUserRead.Parameters.AddWithValue("@CollabID", CollabID);
+            cmdUserRead.Connection.Open();
+            cmdUserRead.ExecuteNonQuery();
+        }
+
         public static void UpdateExistingKI(KnowledgeItem k)
         {
             String sqlQuery = "UPDATE KnowledgeItem SET KnowledgeTitle = @KnowledgeTitle, KnowledgeSubject = @KnowledgeSubject, ";

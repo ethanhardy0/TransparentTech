@@ -4,6 +4,36 @@
     ViewData["Title"] = Model.CollabName + " Knowledge Library";
 }
 
+@if (Model.ActionType == "Delete")
+{
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4);">
+        <form method="post">
+            <div style="background-color:#fff; margin:10% auto; padding:20px; width:50%; max-width: 500px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <p>Are you sure you want to delete @Model.SelectedKI.KnowledgeTitle?</p>
+                <div class="text-center mt-4">
+                    <button asp-page="KnowledgeList" asp-page-handler="DeleteRecord" class="btn btn-outline-success mr-2" style="margin-right: 10px;">Yes, Delete</button>
+                    <button asp-page="KnowledgeList" asp-page-handler="Close" class="btn btn-outline-danger">No, Go Back</button>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+@if(Model.ActionType == "Collab")
+{
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4);">
+        <form method="post">
+            <div style="background-color:#fff; margin:10% auto; padding:20px; width:50%; max-width: 500px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <p>Are you sure you want to remove @Model.SelectedKI.KnowledgeTitle from @Model.CollabName?</p>
+                <div class="text-center mt-4">
+                    <button asp-page="KnowledgeList" asp-page-handler="RemoveCollab" class="btn btn-outline-success mr-2" style="margin-right: 10px;">Yes, Remove</button>
+                    <button asp-page="KnowledgeList" asp-page-handler="Close" class="btn btn-outline-danger">No, Go Back</button>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
 <style type="text/css">
     thead {
         background-color: #EFC935;
@@ -33,6 +63,7 @@
             <th>Knowledge Category:</th>
             <th>Posted Date:</th>
             <th>Posted By:</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -45,6 +76,19 @@
                     <td>@knowledge.KnowledgeCategory</td>
                     <td>@knowledge.KnowledgePostDate</td>
                     <td>@knowledge.OwnerFirst @knowledge.OwnerLast</td>
+                    <td>
+                        <!-- New column for actions -->
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                Actions
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" asp-area="" asp-page="/RecordCreate/CreateKnowledge" asp-route-ExistingID="@knowledge.KnowledgeID">Edit</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/Collabs/KnowledgeList" asp-route-actionType="Collab:@knowledge.KnowledgeID">Remove from Collab</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/Collabs/KnowledgeList" asp-route-actionType="Delete:@knowledge.KnowledgeID">Delete</a></li>
+                            </ul>
+                        </div>
+                    </td>
                 </tr>
             }
         }

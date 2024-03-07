@@ -10,10 +10,13 @@ namespace MadisonCountySystem.Pages.Collabs
 {
     public class KnowledgeListModel : PageModel
     {
-        public String CollabID { get; set; }
+        public static String CollabID { get; set; }
         public String CollabName { get; set; }
         public List<KnowledgeItem> KnowledgeList { get; set; }
         public List<KnowledgeItemCollab> KnowledgeCollabs { get; set; }
+        public String ActionType { get; set; }
+        public static int SelectedItemID { get; set; }
+        public KnowledgeItem SelectedKI { get; set; }
 
         public KnowledgeListModel()
         {
@@ -21,7 +24,7 @@ namespace MadisonCountySystem.Pages.Collabs
             KnowledgeCollabs = new List<KnowledgeItemCollab>();
         }
 
-        public void OnGet()
+        public void OnGet(String actionType)
         {
             if (HttpContext.Session.GetString("username") == null)
             {
@@ -33,6 +36,32 @@ namespace MadisonCountySystem.Pages.Collabs
                 HttpContext.Session.SetString("LibType", "Collab");
                 CollabName = HttpContext.Session.GetString("collabName");
                 CollabID = HttpContext.Session.GetString("collabID");
+                if (actionType != null)
+                {
+                    String[] parts = actionType.Split(':');
+                    if (parts.Length == 2)
+                    {
+                        ActionType = parts[0];
+                        SelectedItemID = Int32.Parse(parts[1]);
+
+                        SqlDataReader SelectedKIReader = DBClass.KnowledgeItemReader();
+                        while (SelectedKIReader.Read())
+                        {
+                            if (parts[1] == SelectedKIReader["KnowledgeID"].ToString())
+                                SelectedKI = new KnowledgeItem
+                                {
+                                    KnowledgeTitle = SelectedKIReader["KnowledgeTitle"].ToString(),
+                                    KnowledgeSubject = SelectedKIReader["KnowledgeSubject"].ToString(),
+                                    KnowledgeCategory = SelectedKIReader["KnowledgeCategory"].ToString(),
+                                    // add Owner later
+                                    KnowledgePostDate = SelectedKIReader["KnowledgePostDate"].ToString(),
+                                    OwnerName = SelectedKIReader["Username"].ToString(),
+                                    KnowledgeID = Int32.Parse(SelectedKIReader["KnowledgeID"].ToString())
+                                };
+                        }
+                        DBClass.KnowledgeDBConnection.Close();
+                    }
+                }
 
                 SqlDataReader knowledgeCollabReader = DBClass.KnowledgeCollabReader();
                 while (knowledgeCollabReader.Read())
@@ -74,7 +103,6 @@ namespace MadisonCountySystem.Pages.Collabs
                 DBClass.KnowledgeDBConnection.Close();
             }
         }
-
         public IActionResult OnPostLinkItem()
         {
             return RedirectToPage("/Collabs/Merge/AddKI");
@@ -83,6 +111,25 @@ namespace MadisonCountySystem.Pages.Collabs
         public IActionResult OnPostCreateItem()
         {
             return RedirectToPage("/RecordCreate/CreateKnowledge");
+        }
+
+        public IActionResult OnPostClose()
+        {
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostDeleteRecord()
+        {
+            DBClass.DeleteKnowledgeItem(SelectedItemID);
+            DBClass.KnowledgeDBConnection.Close();
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostRemoveCollab()
+        {
+            DBClass.RemoveKnowledgeItemCollab(SelectedItemID, Int32.Parse(CollabID));
+            DBClass.KnowledgeDBConnection.Close();
+            return RedirectToPage();
         }
     }
 }
