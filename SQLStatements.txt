@@ -393,7 +393,6 @@ INSERT INTO DatasetCollab (CollabID, DatasetID) VALUES (1, 2);
 INSERT INTO DatasetCollab (CollabID, DatasetID) VALUES (3, 2);
 
 --UserPhoto
-INSERT INTO UserPhoto (UserID, Directory) VALUES (1, '/images/Pablo Escobar.jpg');
 
 --Example Datasets
 
