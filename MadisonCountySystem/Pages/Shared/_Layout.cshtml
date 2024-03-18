@@ -100,8 +100,8 @@
                         </li>
                     </ul>
                 </div>
-                <form method="post" style="margin-bottom: 0;">
-                    <button asp-page="PlanList" asp-page-handler="ToggleModal" class="btn btn-secondary">Print Report</button>
+                <form method="post" action="~/Collabs/PlanList?handler=ToggleModal" style="margin-bottom: 0;">
+                    <button type="submit" class="btn btn-secondary">Print Report</button>
                 </form>
             </div>
         </nav>
