@@ -30,10 +30,12 @@
         <div class="col">
             <h2>Collaboration Management</h2>
         </div>
-
-        <div class="col-auto">
-            <button asp-page="Collaborations" asp-page-handler="CreateCollab" class="btn btn-outline-primary">Create New Collaboration</button>
-        </div>
+        @if (Model.UserType == "Admin")
+        {
+            <div class="col-auto">
+                <button asp-page="Collaborations" asp-page-handler="CreateCollab" class="btn btn-outline-primary">Create New Collaboration</button>
+            </div>
+        }
     </div>
 </form>
 <br />
@@ -43,7 +45,11 @@
             <th>Collaboration Name:</th>
             <th>Created Date:</th>
             <th>Your Role:</th>
-            <th></th>
+
+            @if (Model.UserType == "Admin")
+            {
+                <th></th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -58,18 +64,21 @@
                             <td> <a asp-area="" asp-page="/Collabs/Index" asp-route-collabID="@collab.CollabID">@collab.CollabName</a> </td>
                             <td> @collab.CollabCreatedDate </td>
                             <td> @userCollab.UserRole </td>
-                            <td>
-                                <!-- New column for actions -->
-                                <div class="dropdown">
-                                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Actions
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/RecordCreate/CreateCollab" asp-route-ExistingID="@collab.CollabID">Edit</a></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Main/Collaborations" asp-route-actionType="Delete:@collab.CollabID">Delete</a></li>
-                                    </ul>
-                                </div>
-                            </td>
+                            @if (Model.UserType == "Admin")
+                            {
+                                <td>
+                                    <!-- New column for actions -->
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Actions
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                            <li><a class="dropdown-item" asp-area="" asp-page="/RecordCreate/CreateCollab" asp-route-ExistingID="@collab.CollabID">Edit</a></li>
+                                            <li><a class="dropdown-item" asp-area="" asp-page="/Main/Collaborations" asp-route-actionType="Delete:@collab.CollabID">Delete</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            }
                         }
                     </tr>
                 }

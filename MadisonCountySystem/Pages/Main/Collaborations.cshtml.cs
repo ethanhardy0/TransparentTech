@@ -16,6 +16,7 @@ namespace MadisonCountySystem.Pages.Main
         public String ActionType { get; set; }
         public static int SelectedItemID { get; set; }
         public Collab SelectedCollab { get; set; }
+        public String UserType { get; set; }
 
         public CollaborationsModel()
         {
@@ -32,6 +33,8 @@ namespace MadisonCountySystem.Pages.Main
             }
             else
             {
+                UserType = HttpContext.Session.GetString("typeUser");
+
                 if (actionType != null)
                 {
                     String[] parts = actionType.Split(':');

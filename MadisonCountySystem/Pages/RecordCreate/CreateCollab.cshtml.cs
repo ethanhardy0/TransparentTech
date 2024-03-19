@@ -39,6 +39,10 @@ namespace MadisonCountySystem.Pages.RecordCreate
                 HttpContext.Session.SetString("LoginError", "You must login to access that page!");
                 HttpContext.Response.Redirect("/DBLogin");
             }
+            else if (HttpContext.Session.GetString("typeUser") != "Admin")
+            {
+                HttpContext.Response.Redirect("/Main/Collaborations");
+            }
             else
             {
                 SqlDataReader userReader = DBClass.UserReader();
