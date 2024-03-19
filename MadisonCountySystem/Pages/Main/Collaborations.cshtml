@@ -3,6 +3,21 @@
 @{
     ViewData["Title"] = "Your Collaborations";
 }
+<br/>
+@if (Model.ActionType == "Delete")
+{
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4);">
+        <form method="post">
+            <div style="background-color:#fff; margin:10% auto; padding:20px; width:50%; max-width: 500px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <p>Are you sure you want to delete @Model.SelectedCollab.CollabName? This will delete the collaboration for all members.</p>
+                <div class="text-center mt-4">
+                    <button asp-page="Collaborations" asp-page-handler="DeleteRecord" class="btn btn-outline-success mr-2" style="margin-right: 10px;">Yes, Delete</button>
+                    <button asp-page="Collaborations" asp-page-handler="Close" class="btn btn-outline-danger">No, Go Back</button>
+                </div>
+            </div>
+        </form>
+    </div>
+}
 
 <style type="text/css">
     thead {
@@ -28,6 +43,7 @@
             <th>Collaboration Name:</th>
             <th>Created Date:</th>
             <th>Your Role:</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -42,6 +58,18 @@
                             <td> <a asp-area="" asp-page="/Collabs/Index" asp-route-collabID="@collab.CollabID">@collab.CollabName</a> </td>
                             <td> @collab.CollabCreatedDate </td>
                             <td> @userCollab.UserRole </td>
+                            <td>
+                                <!-- New column for actions -->
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/RecordCreate/CreateCollab" asp-route-ExistingID="@collab.CollabID">Edit</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Main/Collaborations" asp-route-actionType="Delete:@collab.CollabID">Delete</a></li>
+                                    </ul>
+                                </div>
+                            </td>
                         }
                     </tr>
                 }

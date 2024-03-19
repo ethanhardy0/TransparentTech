@@ -464,12 +464,41 @@ namespace MadisonCountySystem.Pages.DB
             SqlCommand cmdCollabRead = new SqlCommand();
             cmdCollabRead.Connection = KnowledgeDBConnection;
             cmdCollabRead.Connection.ConnectionString = KnowledgeDBConnString;
-            cmdCollabRead.CommandText = "SELECT * FROM Collaboration";
+            cmdCollabRead.CommandText = "SELECT * FROM Collaboration WHERE CollabStatus != 'Deleted' OR CollabStatus IS NULL;";
             cmdCollabRead.Connection.Open(); // Open connection here, close in Model!
 
             SqlDataReader tempReader = cmdCollabRead.ExecuteReader();
 
             return tempReader;
+        }
+
+        public static void DeleteCollab(int CollabID)
+        {
+            String sqlQuery = "UPDATE Collaboration SET CollabStatus = 'Deleted' WHERE CollabID = @CollabID";
+
+            SqlCommand cmdUserRead = new SqlCommand();
+            cmdUserRead.Connection = KnowledgeDBConnection;
+            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdUserRead.CommandText = sqlQuery;
+            cmdUserRead.Parameters.AddWithValue("@CollabID", CollabID);
+            cmdUserRead.Connection.Open();
+            cmdUserRead.ExecuteNonQuery();
+        }
+
+        public static void UpdateExistingCollab(Collab k)
+        {
+            String sqlQuery = "UPDATE Collaboration SET CollabName = @CollabName, CollabNotes = @CollabNotes WHERE CollabID = @CollabID;";
+
+            SqlCommand cmdUserRead = new SqlCommand();
+            cmdUserRead.Connection = KnowledgeDBConnection;
+            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdUserRead.CommandText = sqlQuery;
+            cmdUserRead.Parameters.AddWithValue("@CollabID", k.CollabID);
+            cmdUserRead.Parameters.AddWithValue("@CollabName", k.CollabName); // AddWithValue for KnowledgeTitle
+            cmdUserRead.Parameters.AddWithValue("@CollabNotes", k.CollabNotes); // AddWithValue for KnowledgeSubject
+
+            cmdUserRead.Connection.Open();
+            cmdUserRead.ExecuteNonQuery();
         }
 
         public static SqlDataReader UserCollabReader()

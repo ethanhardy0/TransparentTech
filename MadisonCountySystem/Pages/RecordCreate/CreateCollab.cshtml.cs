@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 
 namespace MadisonCountySystem.Pages.RecordCreate
 {
@@ -21,12 +22,17 @@ namespace MadisonCountySystem.Pages.RecordCreate
         [Required]
         public string CollabNotes { get; set; }
 
+        public static int ExistingCollabID { get; set; }
+        public String CreateorUpdate { get; set; }
+        public List<SysUser> ExistingUsers { get; set; }
+
         public CreateCollabModel()
         {
             UserList = new List<SysUser>();
+            ExistingUsers = new List<SysUser>();
         }
 
-        public void OnGet()
+        public void OnGet(int ExistingID)
         {
             if (HttpContext.Session.GetString("username") == null)
             {
@@ -46,6 +52,40 @@ namespace MadisonCountySystem.Pages.RecordCreate
                     });
                 }
                 DBClass.KnowledgeDBConnection.Close();
+
+
+                CreateorUpdate = "Create";
+                ExistingCollabID = ExistingID;
+                if (ExistingCollabID != 0)
+                {
+                    CreateorUpdate = "Update";
+                    SqlDataReader CollabReader = DBClass.CollabReader();
+                    while (CollabReader.Read())
+                    {
+                        if (ExistingCollabID == Int32.Parse(CollabReader["CollabID"].ToString()))
+                        {
+                            CollabName = CollabReader["CollabName"].ToString();
+                            CollabNotes = CollabReader["CollabNotes"].ToString();
+                        }
+                    }
+                    DBClass.KnowledgeDBConnection.Close();
+
+                    //SqlDataReader existingUserReader = DBClass.UserCollabReader();
+                    //while (existingUserReader.Read())
+                    //{
+                    //    if (ExistingCollabID == Int32.Parse(existingUserReader["CollabID"].ToString()))
+                    //    {
+                    //        foreach(var user in UserList)
+                    //        {
+                    //            if(user.UserID == Int32.Parse(existingUserReader["UserID"].ToString()))
+                    //            {
+                    //                ExistingUsers.Add(user);
+                    //            }
+                    //        }
+                    //    }
+                    //}
+                    //DBClass.KnowledgeDBConnection.Close();
+                }
             }
         }
         public IActionResult OnPostAddDB()
@@ -68,28 +108,37 @@ namespace MadisonCountySystem.Pages.RecordCreate
             {
                 CollabName = CollabName,
                 CollabNotes = CollabNotes,
-                CollabCreatedDate = DateTime.Now.ToString()
+                CollabCreatedDate = DateTime.Now.ToString(),
+                CollabID = ExistingCollabID
             };
-            int newCollabID = DBClass.InsertCollab(Collab);
-            DBClass.KnowledgeDBConnection.Close();
+            if (ExistingCollabID == 0)
+            {
+                int newCollabID = DBClass.InsertCollab(Collab);
+                DBClass.KnowledgeDBConnection.Close();
 
-            DBClass.InsertUserCollab(new UserCollab
-            {
-                UserRole = "Owner",
-                UserID = Int32.Parse(HttpContext.Session.GetString("userID")),
-                CollabID = newCollabID
-            });
-            DBClass.KnowledgeDBConnection.Close();
-            foreach (int userId in SelectedUserIds)
-            {
                 DBClass.InsertUserCollab(new UserCollab
                 {
-                    UserRole = "Member", // Or any appropriate role
-                    UserID = userId,
+                    UserRole = "Owner",
+                    UserID = Int32.Parse(HttpContext.Session.GetString("userID")),
                     CollabID = newCollabID
                 });
+                DBClass.KnowledgeDBConnection.Close();
+                foreach (int userId in SelectedUserIds)
+                {
+                    DBClass.InsertUserCollab(new UserCollab
+                    {
+                        UserRole = "Member", // Or any appropriate role
+                        UserID = userId,
+                        CollabID = newCollabID
+                    });
+                }
+                DBClass.KnowledgeDBConnection.Close();
             }
-            DBClass.KnowledgeDBConnection.Close();
+            else
+            {
+                DBClass.UpdateExistingCollab(Collab);
+                DBClass.KnowledgeDBConnection.Close();
+            }
             return RedirectToPage("/Main/Collaborations");
 
         }
