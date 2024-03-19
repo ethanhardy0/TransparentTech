@@ -2,6 +2,7 @@ using MadisonCountySystem.Pages.DataClasses;
 using MadisonCountySystem.Pages.DB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
 using System.Data.SqlClient;
 
 namespace MadisonCountySystem.Pages.Main
@@ -19,6 +20,10 @@ namespace MadisonCountySystem.Pages.Main
             {
                 HttpContext.Session.SetString("LoginError", "You must login to access that page!");
                 HttpContext.Response.Redirect("/DBLogin");
+            }
+            else if(HttpContext.Session.GetString("typeUser") != "Admin" || HttpContext.Session.GetString("typeUser") != "Super")
+            {
+                HttpContext.Response.Redirect("/Main/Collaborations");
             }
             else
             {

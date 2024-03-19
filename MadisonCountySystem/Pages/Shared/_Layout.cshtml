@@ -33,22 +33,25 @@
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-page="/Main/Collaborations">Collaborations</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-page="/Main/KnowledgeLib">Knowledge Library</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-page="/Main/DatasetLib">Dataset Library</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-page="/Main/AnalysisLib">Analysis Library</a>
-                            </li>
+                            @if (Context.Session.GetString("typeUser") == "Admin" || Context.Session.GetString("typeUser") == "Super")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-page="/Main/KnowledgeLib">Knowledge Library</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-page="/Main/DatasetLib">Dataset Library</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-page="/Main/AnalysisLib">Analysis Library</a>
+                                </li>
+                            }
                         }
 
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-page="/Main/ReportLib">Reports</a>
                         </li>
 
-                        @if (Context.Session.GetString("username") != null)
+                        @if (Context.Session.GetString("username") != null && (Context.Session.GetString("typeUser") == "Admin" || Context.Session.GetString("typeUser") == "Super"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-page="/Main/UserLib">Users</a>

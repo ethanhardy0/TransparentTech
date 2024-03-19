@@ -32,7 +32,7 @@ namespace MadisonCountySystem.Pages.DB
             SqlCommand cmdUserRead = new SqlCommand();
             cmdUserRead.Connection = KnowledgeDBConnection;
             cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
-            cmdUserRead.CommandText = "SELECT * FROM SysUser";
+            cmdUserRead.CommandText = "SELECT * FROM SysUser WHERE Email IS NOT NULL";
             cmdUserRead.Connection.Open(); // Open connection here, close in Model!
 
             SqlDataReader tempReader = cmdUserRead.ExecuteReader();

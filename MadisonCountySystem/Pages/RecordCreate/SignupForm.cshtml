@@ -65,10 +65,11 @@
                     <span asp-validation-for="Zip" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="UserType" class="form-label"></label>
+                    <label asp-for="UserType" class="form-label">Permission Level</label>
                     <select asp-for="UserType" class="form-control">
-                        <option value="Admin" selected="@Model.UserType == " Admin"">Admin</option>
-                        <option value="Standard" selected="@Model.UserType == " Standard"">Standard</option>
+                        <option value="Standard">Standard User</option>
+                        <option value="Super">Super User</option>
+                        <option value="Admin">Administrator</option>
                     </select>
                 </div>
                 <div class="text-center">
