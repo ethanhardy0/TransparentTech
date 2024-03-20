@@ -27,7 +27,8 @@ CREATE TABLE SysUser(
 	City nvarchar(30),
 	State nvarchar(29),
 	Zip nvarchar(10),
-	UserType nvarchar(15)
+	UserType nvarchar(15),
+	UserStatus nvarchar(30)
 );
 
 CREATE TABLE KnowledgeItem(
@@ -171,7 +172,7 @@ INSERT INTO SysUser(Username, FirstName, LastName, Email, Phone, Street, City, S
 VALUES('esweiler', 'Evan', 'Weiler', 'evan@email.com', '123-123-0000', '1234 Street Rd', 'Springfield', 'VA', '78299', 'Standard User');
 
 INSERT INTO SysUser(Username, FirstName, LastName, Email, Phone, Street, City, State, Zip, UserType)
-VALUES('cfitz', 'Connor', 'Fitzsimmons', 'connor@email.com', '888-555-3322', '888 Main St.', 'Madison', 'WI', '11928', 'Elite User');
+VALUES('cfitz', 'Connor', 'Fitzsimmons', 'connor@email.com', '888-555-3322', '888 Main St.', 'Madison', 'WI', '11928', 'Standard User');
 
 INSERT INTO SysUser(Username, FirstName, LastName, Email, Phone, Street, City, State, Zip, UserType)
 VALUES('user3', 'User3', 'User3', 'user3@email.com', '781-999-1092', '8921 Main St', 'Tulsa', 'OK', '28111', 'Admin');
@@ -179,9 +180,12 @@ VALUES('user3', 'User3', 'User3', 'user3@email.com', '781-999-1092', '8921 Main 
 INSERT INTO SysUser(Username, FirstName, LastName)
 VALUES('CommunityUser', 'Madison County', 'Community User');
 
+INSERT INTO SysUser(Username, FirstName, LastName, Email, Phone, Street, City, State, Zip, UserType)
+VALUES('SuperUser', 'Super', 'User', 'usersuper@email.com', '781-999-1092', '8921 Main St', 'Tulsa', 'OK', '28111', 'Super');
+
 --Collab
 INSERT INTO Collaboration(CollabName, CollabNotes, CollabCreatedDate)
-VALUES ('Collab 1', 'H', '1/10/2024');
+VALUES ('Finance', 'Group for Finance items', '1/10/2024');
 
 INSERT INTO Collaboration(CollabName, CollabNotes, CollabCreatedDate)
 VALUES ('Collab 2', 'I', '1/8/2024');
@@ -210,6 +214,12 @@ VALUES('Owner', 3, 2);
 
 INSERT INTO UserCollab(UserRole, UserID, CollabID)
 VALUES('Owner', 4, 3);
+
+INSERT INTO UserCollab(UserRole, UserID, CollabID)
+VALUES('Standard Member', 7, 2);
+
+INSERT INTO UserCollab(UserRole, UserID, CollabID)
+VALUES('Standard Member', 7, 1);
 
 --Dataset
 INSERT INTO Dataset (DatasetName, DatasetContents, DatasetType, DatasetCreatedDate, OwnerID) VALUES ('ClimateData', 'Temperature, Humidity, Pressure', 'CSV', '2024-02-01', 1);
