@@ -14,3 +14,5 @@ INSERT INTO HashedCredentials(SysUsername, SysPassword, UserID) VALUES('esweiler
 INSERT INTO HashedCredentials(SysUsername, SysPassword, UserID) VALUES('cfitz', '1000:8OT+HyoVpGwU6SgvHXHDXDKXKgQmz7Ud:bEHl/yi5kJaIsAs9+RYDyJ4DWwQ=', 4);
 
 INSERT INTO HashedCredentials(SysUsername, SysPassword, UserID) VALUES('user3', '1000:8OT+HyoVpGwU6SgvHXHDXDKXKgQmz7Ud:bEHl/yi5kJaIsAs9+RYDyJ4DWwQ=', 5);
+
+INSERT INTO HashedCredentials(SysUsername, SysPassword, UserID) VALUES('superuser', '1000:rDXUoUaEDa6nf8J/7c93KYmSOUXeRsyT:His3rRVGYRai5M2u+7BFvu+XJFM=', 7);
