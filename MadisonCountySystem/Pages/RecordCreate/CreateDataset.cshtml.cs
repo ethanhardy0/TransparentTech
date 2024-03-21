@@ -57,71 +57,6 @@ namespace MadisonCountySystem.Pages.RecordCreate
 
         }
 
-        /*public IActionResult OnPostAddDB()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-            List<String> filePaths = new List<String>();
-            foreach (var file in FormFiles)
-            {
-                if (file.Length > 0)
-                {
-                    var filePath = Directory.GetCurrentDirectory() + @"/wwwroot/csvupload/" + file.FileName;
-                    filePaths.Add(filePath);
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        file.CopyTo(stream);
-                    }
-                }
-
-                using (var reader = new StreamReader(Directory.GetCurrentDirectory() + @"/wwwroot/csvupload/" + file.FileName))
-                {
-                    using (var csv = new CsvReader(reader, System.Globalization.CultureInfo.InvariantCulture))
-                    {
-                        using (var cdr = new CsvDataReader(csv))
-                        {
-                            var dt = new DataTable();
-                            dt.Load(cdr);
-                            DBClass.UploadDatasetCSV(dt, DatasetName, file.FileName);
-                            DBClass.KnowledgeDBConnection.Close();
-                        }
-                    }
-                }
-
-
-            }
-
-            Dataset = new Dataset()
-            {
-                DatasetName = Regex.Replace(DatasetName, @"\s", string.Empty),
-                DatasetType = DatasetType,
-                DatasetContents = DatasetContents,
-                DatasetCreatedDate = DateTime.Now.ToString(),
-                OwnerID = Int32.Parse(HttpContext.Session.GetString("userID"))
-            };
-
-            newDatasetID = DBClass.InsertDataset(Dataset);
-            DBClass.KnowledgeDBConnection.Close();
-
-            if (CurrentLocation == "Collab")
-            {
-                DatasetCollab = new DatasetCollab
-                {
-                    DatasetID = newDatasetID,
-                    CollabID = Int32.Parse(HttpContext.Session.GetString("collabID"))
-                };
-                DBClass.InsertDatasetCollab(DatasetCollab);
-                DBClass.KnowledgeDBConnection.Close();
-                return RedirectToPage("/Collabs/DatasetList");
-            }
-            else
-            {
-                return RedirectToPage("/Main/DatasetLib");
-            }
-        }*/
-
         public IActionResult OnPostAddDB()
         {
             if (!ModelState.IsValid)
@@ -143,9 +78,15 @@ namespace MadisonCountySystem.Pages.RecordCreate
                             var rowCount = worksheet.Dimension.Rows;
                             var colCount = worksheet.Dimension.Columns;
 
-                            // Read data from Excel and process as needed
+                            // Create DataTable with columns
                             DataTable dt = new DataTable();
-                            for (int row = 1; row <= rowCount; row++)
+                            for (int col = 1; col <= colCount; col++)
+                            {
+                                dt.Columns.Add($"Column{col}", typeof(string)); // Add columns dynamically
+                            }
+
+                            // Read data from Excel and process as needed
+                            for (int row = 2; row <= rowCount; row++) // Start from row 2 assuming row 1 is header
                             {
                                 var newRow = dt.Rows.Add();
                                 for (int col = 1; col <= colCount; col++)
