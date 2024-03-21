@@ -54,6 +54,12 @@
                                 <a class="nav-link text-white" asp-area="" asp-page="/Main/UserLib"><h5>Users</h5></a>
                             </li>
                         }
+                        @if (Context.Session.GetString("username") != null && Context.Session.GetString("typeUser") == "Admin")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-page="/Main/DepartmentLib"><h5>Departments</h5></a>
+                            </li>
+                        }
                     </ul>
                 </div>
                 @{

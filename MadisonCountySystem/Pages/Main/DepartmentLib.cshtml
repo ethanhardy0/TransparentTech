@@ -1,0 +1,90 @@
+﻿@page
+@model MadisonCountySystem.Pages.Main.DepartmentLibModel
+@{
+    ViewData["Title"] = "Department Management";
+}
+@if(Model.ActionType == "Add"){
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4);">
+        <form method="post">
+            <div style="background-color:#fff; margin:10% auto; padding:20px; width:50%; max-width: 500px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <h4>Add User to @Model.SelectedName</h4>
+                <div class="mb-3">
+                    <label asp-for="activeDataset" class="form-label">User to Add:</label>
+                    <select class="form-control" id="activeDataset" name="selectedUser" asp-for="activeDataset">
+                        @foreach (var user in Model.OtherUsers)
+                        {
+                            <option value="@user.UserID"> @user.Username</option>
+                        }
+                    </select>
+                </div>
+                <div class="text-center mt-4">
+                    <button asp-page="DepartmentLib" asp-page-handler="AddUser" class="btn btn-outline-success mr-2" style="margin-right: 10px;">Add to Department</button>
+                    <button asp-page="DepartmentLib" asp-page-handler="Close" class="btn btn-outline-danger">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+@if (Model.ActionType == "Remove")
+{
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4);">
+        <form method="post">
+            <div style="background-color:#fff; margin:10% auto; padding:20px; width:50%; max-width: 500px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <h4>Remove User from @Model.SelectedName</h4>
+                <div class="mb-3">
+                    <label asp-for="activeDataset" class="form-label">User to Remove:</label>
+                    <select class="form-control" id="activeDataset" name="selectedUser" asp-for="activeDataset">
+                        @foreach (var user in Model.ExistingUsers)
+                        {
+                            <option value="@user.UserID"> @user.Username</option>
+                        }
+                    </select>
+                </div>
+                <div class="text-center mt-4">
+                    <button asp-page="DepartmentLib" asp-page-handler="RemoveUser" class="btn btn-outline-success mr-2" style="margin-right: 10px;">Remove from Department</button>
+                    <button asp-page="DepartmentLib" asp-page-handler="Close" class="btn btn-outline-danger">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+<style type="text/css">
+    thead {
+        background-color: #EFC935;
+    }
+</style>
+<br />
+<h2>Department Management</h2>
+
+<table class="table table-bordered table-responsive table-hover">
+    <thead>
+        <tr>
+            <th>Department:</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var dep in Model.Departments)
+            {
+                <tr>
+                    <td>@dep.DepartmentName</td>
+                    <td>
+                        
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                Actions
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" asp-area="" asp-page="/Main/DepartmentLib" asp-route-SelectedDepartmentID="Add:@dep.DepartmentID">Add User</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/Main/DepartmentLib" asp-route-SelectedDepartmentID="Remove:@dep.DepartmentID">Remove User</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
