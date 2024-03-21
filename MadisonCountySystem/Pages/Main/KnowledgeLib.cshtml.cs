@@ -10,6 +10,11 @@ namespace MadisonCountySystem.Pages.Main
     public class KnowledgeLibModel : PageModel
     {
         public List<KnowledgeItem> KnowledgeItemList { get; set; }
+        public List<KnowledgeItem> Dep1Knowledge { get; set; }
+        public List<KnowledgeItem> Dep2Knowledge { get; set; }
+        public List<KnowledgeItem> Dep3Knowledge { get; set; }
+        public List<KnowledgeItem> Dep4Knowledge { get; set; }
+        public List<KnowledgeItem> Dep5Knowledge { get; set; }
 
         [BindProperty]
         [Required] public String Search { get; set; }
@@ -49,7 +54,6 @@ namespace MadisonCountySystem.Pages.Main
                             KnowledgeTitle = SelectedKIReader["KnowledgeTitle"].ToString(),
                             KnowledgeSubject = SelectedKIReader["KnowledgeSubject"].ToString(),
                             KnowledgeCategory = SelectedKIReader["KnowledgeCategory"].ToString(),
-                            // add Owner later
                             KnowledgePostDate = SelectedKIReader["KnowledgePostDate"].ToString(),
                             OwnerName = SelectedKIReader["Username"].ToString(),
                             KnowledgeID = Int32.Parse(SelectedKIReader["KnowledgeID"].ToString())
@@ -79,6 +83,66 @@ namespace MadisonCountySystem.Pages.Main
                 });
             }
             DBClass.KnowledgeDBConnection.Close();
+
+            Dep1Knowledge = new List<KnowledgeItem>();
+            Dep2Knowledge = new List<KnowledgeItem>();
+            Dep3Knowledge = new List<KnowledgeItem>();
+            Dep4Knowledge = new List<KnowledgeItem>();
+            Dep5Knowledge = new List<KnowledgeItem>();
+
+            for (int i = 1; i < 6; i++)
+            {
+                List<int> IDs = new List<int>();
+
+                SqlDataReader depKIReader = DBClass.GeneralReader("SELECT KnowledgeID FROM DepartmentKnowledge WHERE DepartmentID = " + i + ";");
+
+                while (depKIReader.Read()) 
+                { 
+                    IDs.Add(depKIReader.GetInt32(0));
+                }
+
+                DBClass.KnowledgeDBConnection.Close();
+
+                foreach (var ID in IDs)
+                {
+                    SqlDataReader KIReader = DBClass.GeneralReader("SELECT * FROM KnowledgeItem WHERE KnowledgeID = " + ID + ";");
+
+                    if (KIReader.Read())
+                    {
+                        KnowledgeItem temp = new KnowledgeItem{
+                            KnowledgeTitle = KIReader["KnowledgeTitle"].ToString(),
+                            KnowledgeSubject = KIReader["KnowledgeSubject"].ToString(),
+                            KnowledgeCategory = KIReader["KnowledgeCategory"].ToString(),
+                            KnowledgePostDate = KIReader["KnowledgePostDate"].ToString(),
+                            //Add join to general reader to get owner name
+                            //OwnerName = KIReader["Username"].ToString(),
+                            KnowledgeID = Int32.Parse(KIReader["KnowledgeID"].ToString())
+                        };
+
+                        switch (i)
+                        {
+                            case 1: 
+                                Dep1Knowledge.Add(temp);
+                                break;
+                            case 2:
+                                Dep2Knowledge.Add(temp);
+                                break;
+                            case 3:
+                                Dep3Knowledge.Add(temp);
+                                break;
+                            case 4:
+                                Dep4Knowledge.Add(temp);
+                                break;
+                            case 5:
+                                Dep5Knowledge.Add(temp);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    DBClass.KnowledgeDBConnection.Close();
+                }
+            }
         }
         //public IActionResult OnPostAddCollab(int selectedKnowledgeItem)
         //{
