@@ -14,6 +14,11 @@ namespace MadisonCountySystem.Pages.Main
         public Dataset SelectedDataset { get; set; }
         public List<Collab> ActiveCollabs { get; set; }
         public List<Dataset> DatasetList { get; set; }
+        public List<Dataset> Dep1Data { get; set; }
+        public List<Dataset> Dep2Data { get; set; }
+        public List<Dataset> Dep3Data { get; set; }
+        public List<Dataset> Dep4Data { get; set; }
+        public List<Dataset> Dep5Data { get; set; }
 
 
         public DatasetModel()
@@ -73,7 +78,71 @@ namespace MadisonCountySystem.Pages.Main
                 });
             }
             DBClass.KnowledgeDBConnection.Close();
+
+            Dep1Data = new List<Dataset>();
+            Dep2Data = new List<Dataset>();
+            Dep3Data = new List<Dataset>();
+            Dep4Data = new List<Dataset>();
+            Dep5Data = new List<Dataset>();
+
+            for (int i = 1; i < 6; i++)
+            {
+                List<int> IDs = new List<int>();
+
+                SqlDataReader depDataReader = DBClass.GeneralReader("SELECT DatasetID FROM DepartmentDataset WHERE DatasetID = " + i + ";");
+
+                while (depDataReader.Read())
+                {
+                    IDs.Add(depDataReader.GetInt32(0));
+                }
+
+                DBClass.KnowledgeDBConnection.Close();
+
+                foreach (var ID in IDs)
+                {
+                    SqlDataReader DataReader = DBClass.GeneralReader("SELECT * FROM Dataset WHERE DatasetID = " + ID + ";");
+
+                    if (DataReader.Read())
+                    {
+                        Dataset temp = new Dataset
+                        {
+                            DatasetName = DataReader["DatasetName"].ToString(),
+                            DatasetType = DataReader["DatasetType"].ToString(),
+                            DatasetContents = DataReader["DatasetContents"].ToString(),
+                            DatasetCreatedDate = DataReader["DatasetCreatedDate"].ToString(),
+                            DatasetStatus = DataReader["DatasetStatus"].ToString(),
+                            //Add join to general reader to get owner name
+                            //OwnerName = KIReader["Username"].ToString(),
+                            DatasetID = Int32.Parse(DataReader["DatasetID"].ToString())
+                        };
+
+                        switch (i)
+                        {
+                            case 1:
+                                Dep1Data.Add(temp);
+                                break;
+                            case 2:
+                                Dep2Data.Add(temp);
+                                break;
+                            case 3:
+                                Dep3Data.Add(temp);
+                                break;
+                            case 4:
+                                Dep4Data.Add(temp);
+                                break;
+                            case 5:
+                                Dep5Data.Add(temp);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    DBClass.KnowledgeDBConnection.Close();
+                }
+            }
         }
+
+
 
         //public IActionResult OnPostAddCollab(int selectedDataset)
         //{
