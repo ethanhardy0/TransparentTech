@@ -56,3 +56,13 @@
     </div>
 
 </div>
+
+@{
+    for (int i = 1; i < 6; i++)
+    {
+        if (HttpContext.Session.GetInt32("dep" + i) == 1)
+        {
+            <p>You are in department @i</p>
+        }
+    }
+}

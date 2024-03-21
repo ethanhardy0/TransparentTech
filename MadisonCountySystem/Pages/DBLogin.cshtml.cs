@@ -45,6 +45,48 @@ namespace MadisonCountySystem.Pages
                     }
                     DBClass.KnowledgeDBConnection.Close();
 
+                    // Sets all departments to false
+                    HttpContext.Session.SetInt32("dep1", 0);
+                    HttpContext.Session.SetInt32("dep2", 0);
+                    HttpContext.Session.SetInt32("dep3", 0);
+                    HttpContext.Session.SetInt32("dep4", 0);
+                    HttpContext.Session.SetInt32("dep5", 0);
+
+                    SqlDataReader userDepReader = DBClass.UserDepartmentReader();
+
+                    // Sets department to true if user is in the department
+                    while(userDepReader.Read())
+                    {
+                        
+
+                        if (Int32.Parse(userDepReader["UserID"].ToString()) == Int32.Parse(HttpContext.Session.GetString("userID")))
+                        {
+                            switch (Int32.Parse(userDepReader["DepartmentID"].ToString()))
+                            {
+                                case 1:
+                                    HttpContext.Session.SetInt32("dep1", 1);
+                                    break;
+                                case 2:
+                                    HttpContext.Session.SetInt32("dep2", 1);
+                                    break;
+                                case 3:
+                                    HttpContext.Session.SetInt32("dep3", 1);
+                                    break;
+                                case 4:
+                                    HttpContext.Session.SetInt32("dep4", 1);
+                                    break;
+                                case 5:
+                                    HttpContext.Session.SetInt32("dep5", 1);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+
+                    }
+
+                    DBClass.KnowledgeDBConnection.Close();
+
                     return RedirectToPage("/Main/UserHome");
 
                 }
