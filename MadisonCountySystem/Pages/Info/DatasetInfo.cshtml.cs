@@ -82,44 +82,5 @@ namespace MadisonCountySystem.Pages.Info
             }
         }
 
-        public IActionResult OnPostRunQuery()
-        {
-
-            DBClass.KnowledgeDBConnection.Close();
-
-            SqlDataReader reader = DBClass.DatasetQueryReader(sqlQuery);
-
-            if (reader == null)
-            {
-                ViewData["QueryError"] = "Error: " + DBClass.QueryError;
-                DBClass.KnowledgeDBConnection.Close();
-                OnGet(DatasetID);
-                return Page();
-            }
-
-            ColNames = new List<String>();
-
-            for (int i = 0; i < reader.FieldCount; i++)
-            {
-                ColNames.Add(reader.GetName(i));
-            }
-
-            Rows = new List<List<String>>();
-
-            while (reader.Read())
-            {
-                RowValues = new List<String>();
-                for (int i = 0; i < reader.FieldCount; i++)
-                {
-                    RowValues.Add(reader[i].ToString());
-                }
-                Rows.Add(RowValues);
-            }
-            ViewData["QueryError"] = "";
-            DBClass.KnowledgeDBConnection.Close();
-            OnGet(DatasetID);
-            return Page();
-        }
-
     }
 }

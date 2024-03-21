@@ -28,11 +28,6 @@
 <!--This gives a visual representation of some dataset-->
 <div class="row align align-items-end">
     <h1>Table: @Model.Dataset.DatasetName</h1>
-    <form asp-page-handler="RunQuery">
-        <input asp-for="sqlQuery" placeholder="Write SQL Query" class="form-control mb-2" />
-        <button type="submit" class="btn btn-outline-success">Run SQL Query</button>
-        <p class="text-danger">@ViewData["QueryError"]</p>
-    </form>
     <p class="fst-italic">*Only Top 100 Rows Displayed</p>
 </div>
 

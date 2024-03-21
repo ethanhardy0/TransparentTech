@@ -307,27 +307,6 @@ namespace MadisonCountySystem.Pages.DB
             return tempReader;
         }
 
-        public static SqlDataReader DatasetQueryReader(String sqlQuery)
-        {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = KnowledgeDBConnection;
-            cmd.Connection.ConnectionString = KnowledgeDBConnString;
-            cmd.CommandText = sqlQuery;
-            cmd.Connection.Open();
-
-            try
-            {
-                SqlDataReader tempReader = cmd.ExecuteReader();
-                return tempReader;
-            }
-            catch (Exception ex)
-            {
-                QueryError = ex.Message;
-                return null;
-            }
-
-        }
-
         public static int InsertDataset(Dataset a)
         {
             String sqlQuery = "INSERT INTO Dataset (DatasetName, DatasetType, DatasetContents, DatasetCreatedDate, OwnerID) " +
