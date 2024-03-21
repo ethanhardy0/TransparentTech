@@ -1017,5 +1017,76 @@ namespace MadisonCountySystem.Pages.DB
             return tempReader;
 
         }
+
+        // ------------------------------------------ Department --------------------------------------------------------------------------------------------------
+        public static SqlDataReader DepartmentReader()
+        {
+            String SqlQuery = "SELECT * FROM Department;";
+            SqlCommand cmdAnalysisRead = new SqlCommand();
+            cmdAnalysisRead.Connection = KnowledgeDBConnection;
+            cmdAnalysisRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdAnalysisRead.CommandText = SqlQuery;
+            cmdAnalysisRead.Connection.Open(); // Open connection here, close in Model!
+
+            SqlDataReader tempReader = cmdAnalysisRead.ExecuteReader();
+
+            return tempReader;
+        }
+
+        public static SqlDataReader UserDepartmentReader()
+        {
+            String SqlQuery = "SELECT * FROM UserDepartment;";
+            SqlCommand cmdAnalysisRead = new SqlCommand();
+            cmdAnalysisRead.Connection = KnowledgeDBConnection;
+            cmdAnalysisRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdAnalysisRead.CommandText = SqlQuery;
+            cmdAnalysisRead.Connection.Open(); // Open connection here, close in Model!
+
+            SqlDataReader tempReader = cmdAnalysisRead.ExecuteReader();
+
+            return tempReader;
+        }
+
+        public static SqlDataReader DepartmentKnowledgeReader()
+        {
+            String SqlQuery = "SELECT * FROM DepartmentKnowledge;";
+            SqlCommand cmdAnalysisRead = new SqlCommand();
+            cmdAnalysisRead.Connection = KnowledgeDBConnection;
+            cmdAnalysisRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdAnalysisRead.CommandText = SqlQuery;
+            cmdAnalysisRead.Connection.Open(); // Open connection here, close in Model!
+
+            SqlDataReader tempReader = cmdAnalysisRead.ExecuteReader();
+
+            return tempReader;
+        }
+
+        public static SqlDataReader DepartmentAnalysisReader()
+        {
+            String SqlQuery = "SELECT * FROM DepartmentAnalysis;";
+            SqlCommand cmdAnalysisRead = new SqlCommand();
+            cmdAnalysisRead.Connection = KnowledgeDBConnection;
+            cmdAnalysisRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdAnalysisRead.CommandText = SqlQuery;
+            cmdAnalysisRead.Connection.Open(); // Open connection here, close in Model!
+
+            SqlDataReader tempReader = cmdAnalysisRead.ExecuteReader();
+
+            return tempReader;
+        }
+
+        public static SqlDataReader DepartmentDatasetReader()
+        {
+            String SqlQuery = "SELECT * FROM DepartmentDataset;";
+            SqlCommand cmdAnalysisRead = new SqlCommand();
+            cmdAnalysisRead.Connection = KnowledgeDBConnection;
+            cmdAnalysisRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdAnalysisRead.CommandText = SqlQuery;
+            cmdAnalysisRead.Connection.Open(); // Open connection here, close in Model!
+
+            SqlDataReader tempReader = cmdAnalysisRead.ExecuteReader();
+
+            return tempReader;
+        }
     }
 }
