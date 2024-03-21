@@ -1,3 +1,8 @@
+DROP TABLE DepartmentKnowledge;
+DROP TABLE DepartmentAnalysis;
+DROP TABLE DepartmentDataset;
+DROP TABLE UserDepartment;
+DROP TABLE Department;
 DROP TABLE UserPhoto;
 DROP TABLE CollabReport;
 DROP TABLE CollabChat;
@@ -456,3 +461,88 @@ VALUES
     (13, 22.7, 71.5, 1008.2),
     (14, 28.5, 58.7, 1014.0),
     (15, 25.3, 64.8, 1010.6);
+
+CREATE TABLE Department(
+	DepartmentID int IDENTITY(1,1) PRIMARY KEY,
+	DepartmentName nvarchar(60));
+
+INSERT INTO Department(DepartmentName) VALUES('Finance');
+INSERT INTO Department(DepartmentName) VALUES('Budgeting');
+INSERT INTO Department(DepartmentName) VALUES('Accounting');
+INSERT INTO Department(DepartmentName) VALUES('Personnel Policy');
+INSERT INTO Department(DepartmentName) VALUES('Administration');
+
+CREATE TABLE UserDepartment(
+	UserDepartmentID int IDENTITY(1,1) PRIMARY KEY,
+	UserID int FOREIGN KEY REFERENCES SysUser(UserID),
+	DepartmentID int FOREIGN KEY REFERENCES Department(DepartmentID));
+INSERT INTO UserDepartment(UserID, DepartmentID) VALUES(3, 1);
+INSERT INTO UserDepartment(UserID, DepartmentID) VALUES(3, 4);
+INSERT INTO UserDepartment(UserID, DepartmentID) VALUES(4, 1);
+INSERT INTO UserDepartment(UserID, DepartmentID) VALUES(4, 2);
+INSERT INTO UserDepartment(UserID, DepartmentID) VALUES(4, 3);
+INSERT INTO UserDepartment(UserID, DepartmentID) VALUES(7, 1);
+INSERT INTO UserDepartment(UserID, DepartmentID) VALUES(7, 3);
+INSERT INTO UserDepartment(UserID, DepartmentID) VALUES(7, 5);
+
+CREATE TABLE DepartmentKnowledge(
+	DepartmentKnowledgeID int IDENTITY(1,1) PRIMARY KEY,
+	KnowledgeID int FOREIGN KEY REFERENCES KnowledgeItem(KnowledgeID),
+	DepartmentID int FOREIGN KEY REFERENCES Department(DepartmentID));
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(1, 1);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(3, 1);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(4, 1);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(6, 1);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(7, 1);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(1, 2);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(4, 2);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(5, 2);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(6, 2);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(1, 3);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(2, 3);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(3, 3);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(4, 3);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(5, 3);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(6, 3);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(3, 4);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(5, 4);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(7, 4);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(8, 4);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(2, 4);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(1, 5);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(4, 5);
+INSERT INTO DepartmentKnowledge(KnowledgeID, DepartmentID) VALUES(8, 5);
+
+CREATE TABLE DepartmentDataset(
+	DepartmentDatasetID int IDENTITY(1,1) PRIMARY KEY,
+	DatasetID int FOREIGN KEY REFERENCES Dataset(DatasetID),
+	DepartmentID int FOREIGN KEY REFERENCES Department(DepartmentID));
+
+INSERT INTO DepartmentDataset(DatasetID, DepartmentID) VALUES(1, 5);
+INSERT INTO DepartmentDataset(DatasetID, DepartmentID) VALUES(2, 5);
+INSERT INTO DepartmentDataset(DatasetID, DepartmentID) VALUES(1, 4);
+INSERT INTO DepartmentDataset(DatasetID, DepartmentID) VALUES(1, 3);
+INSERT INTO DepartmentDataset(DatasetID, DepartmentID) VALUES(2, 3);
+INSERT INTO DepartmentDataset(DatasetID, DepartmentID) VALUES(2, 2);
+INSERT INTO DepartmentDataset(DatasetID, DepartmentID) VALUES(1, 1);
+
+
+CREATE TABLE DepartmentAnalysis(
+	DepartmentAnalysisID int IDENTITY(1,1) PRIMARY KEY,
+	AnalysisID int FOREIGN KEY REFERENCES Analysis(AnalysisID),
+	DepartmentID int FOREIGN KEY REFERENCES Department(DepartmentID));
+
+INSERT INTO DepartmentAnalysis(AnalysisID, DepartmentID) VALUES(1, 5);
+INSERT INTO DepartmentAnalysis(AnalysisID, DepartmentID) VALUES(2, 5);
+INSERT INTO DepartmentAnalysis(AnalysisID, DepartmentID) VALUES(3, 5);
+INSERT INTO DepartmentAnalysis(AnalysisID, DepartmentID) VALUES(3, 4);
+INSERT INTO DepartmentAnalysis(AnalysisID, DepartmentID) VALUES(4, 4);
+INSERT INTO DepartmentAnalysis(AnalysisID, DepartmentID) VALUES(5, 4);
+INSERT INTO DepartmentAnalysis(AnalysisID, DepartmentID) VALUES(1, 3);
+INSERT INTO DepartmentAnalysis(AnalysisID, DepartmentID) VALUES(3, 3);
+INSERT INTO DepartmentAnalysis(AnalysisID, DepartmentID) VALUES(2, 2);
+INSERT INTO DepartmentAnalysis(AnalysisID, DepartmentID) VALUES(5, 2);
+INSERT INTO DepartmentAnalysis(AnalysisID, DepartmentID) VALUES(3, 2);
+INSERT INTO DepartmentAnalysis(AnalysisID, DepartmentID) VALUES(1, 2);
+INSERT INTO DepartmentAnalysis(AnalysisID, DepartmentID) VALUES(1, 1);
+INSERT INTO DepartmentAnalysis(AnalysisID, DepartmentID) VALUES(2, 1);
