@@ -10,6 +10,12 @@ namespace MadisonCountySystem.Pages.Main
     public class AnalysisLibModel : PageModel
     {
         public List<Analysis> AnalysisList { get; set; }
+        public List<Analysis> Dep1Analysis { get; set; }
+        public List<Analysis> Dep2Analysis { get; set; }
+        public List<Analysis> Dep3Analysis { get; set; }
+        public List<Analysis> Dep4Analysis { get; set; }
+        public List<Analysis> Dep5Analysis { get; set; }
+
         public AnalysisLibModel()
         {
             AnalysisList = new List<Analysis>();
@@ -38,6 +44,68 @@ namespace MadisonCountySystem.Pages.Main
                 });
             }
             DBClass.KnowledgeDBConnection.Close();
+
+            Dep1Analysis = new List<Analysis>();
+            Dep2Analysis = new List<Analysis>();
+            Dep3Analysis = new List<Analysis>();
+            Dep4Analysis = new List<Analysis>();
+            Dep5Analysis = new List<Analysis>();
+
+            for (int i = 1; i < 6; i++)
+            {
+                List<int> IDs = new List<int>();
+
+                SqlDataReader depAnalysiseader = DBClass.GeneralReader("SELECT AnalysisID FROM DepartmentAnalysis WHERE AnalysisID = " + i + ";");
+
+                while (depAnalysiseader.Read())
+                {
+                    IDs.Add(depAnalysiseader.GetInt32(0));
+                }
+
+                DBClass.KnowledgeDBConnection.Close();
+
+                foreach (var ID in IDs)
+                {
+                    SqlDataReader AnalysisReader = DBClass.GeneralReader("SELECT * FROM Analysis WHERE AnalysisID = " + ID + ";");
+
+                    if (AnalysisReader.Read())
+                    {
+                        Analysis temp = new Analysis
+                        {
+                            AnalysisName = AnalysisReader["AnalysisName"].ToString(),
+                            AnalysisType = AnalysisReader["AnalysisType"].ToString(),
+                            AnalysisResult = AnalysisReader["AnalysisResult"].ToString(),
+                            AnalysisCreatedDate = AnalysisReader["AnalysisCreatedDate"].ToString(),
+                            AnalysisStatus = AnalysisReader["AnalysisStatus"].ToString(),
+                            //Add join to general reader to get owner name
+                            //OwnerName = KIReader["Username"].ToString(),
+                            AnalysisID = Int32.Parse(AnalysisReader["AnalysisID"].ToString())
+                        };
+
+                        switch (i)
+                        {
+                            case 1:
+                                Dep1Analysis.Add(temp);
+                                break;
+                            case 2:
+                                Dep2Analysis.Add(temp);
+                                break;
+                            case 3:
+                                Dep3Analysis.Add(temp);
+                                break;
+                            case 4:
+                                Dep4Analysis.Add(temp);
+                                break;
+                            case 5:
+                                Dep5Analysis.Add(temp);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    DBClass.KnowledgeDBConnection.Close();
+                }
+            }
         }
 
         public IActionResult OnPostAddCollab(int selectedAnalysis)

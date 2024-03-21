@@ -7,6 +7,7 @@
         public String? AnalysisType { get; set; }
         public String? AnalysisResult { get; set; }
         public String? AnalysisCreatedDate { get; set; }
+        public String? AnalysisStatus { get; set; }
         public int DatasetID { get; set; }
         public int OwnerID { get; set; }
         public int KnowledgeID { get; set; }

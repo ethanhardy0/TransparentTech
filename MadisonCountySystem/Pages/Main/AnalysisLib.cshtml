@@ -62,3 +62,36 @@
         }
     </tbody>
 </table>
+
+
+@{
+    <h1>Department 1 Analysis</h1>
+    foreach (var Analysis in Model.Dep1Analysis)
+    {
+        <p>@Analysis.AnalysisName</p>
+    }
+
+    <h1>Department 2 Analysis</h1>
+    foreach (var Analysis in Model.Dep2Analysis)
+    {
+        <p>@Analysis.AnalysisName</p>
+    }
+
+    <h1>Department 3 Analysis</h1>
+    foreach (var Analysis in Model.Dep3Analysis)
+    {
+        <p>@Analysis.AnalysisName</p>
+    }
+
+    <h1>Department 4 Analysis</h1>
+    foreach (var Analysis in Model.Dep4Analysis)
+    {
+        <p>@Analysis.AnalysisName</p>
+    }
+
+    <h1>Department 5 Analysis</h1>
+    foreach (var Analysis in Model.Dep5Analysis)
+    {
+        <p>@Analysis.AnalysisName</p>
+    }
+}
