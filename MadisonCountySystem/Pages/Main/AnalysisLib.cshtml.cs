@@ -55,7 +55,7 @@ namespace MadisonCountySystem.Pages.Main
             {
                 List<int> IDs = new List<int>();
 
-                SqlDataReader depAnalysiseader = DBClass.GeneralReader("SELECT AnalysisID FROM DepartmentAnalysis WHERE AnalysisID = " + i + ";");
+                SqlDataReader depAnalysiseader = DBClass.GeneralReader("SELECT AnalysisID FROM DepartmentAnalysis WHERE DepartmentID = " + i + ";");
 
                 while (depAnalysiseader.Read())
                 {

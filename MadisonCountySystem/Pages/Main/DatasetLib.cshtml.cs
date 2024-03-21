@@ -89,7 +89,7 @@ namespace MadisonCountySystem.Pages.Main
             {
                 List<int> IDs = new List<int>();
 
-                SqlDataReader depDataReader = DBClass.GeneralReader("SELECT DatasetID FROM DepartmentDataset WHERE DatasetID = " + i + ";");
+                SqlDataReader depDataReader = DBClass.GeneralReader("SELECT DatasetID FROM DepartmentDataset WHERE DepartmentID = " + i + ";");
 
                 while (depDataReader.Read())
                 {
