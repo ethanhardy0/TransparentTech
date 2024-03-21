@@ -22,6 +22,8 @@ namespace MadisonCountySystem.Pages.DB
         private static readonly String? KnowledgeDBConnString = "Server=Localhost;Database=Lab3;Trusted_Connection=True";
 
         private static readonly String? AUTHConnString = "Server=Localhost;Database=AUTH;Trusted_Connection=True";
+
+        private static readonly String? AuxConnString = "Server=Localhost;Database=Auxillary;Trusted_Connection=True";
         // Error Message
         public static String? QueryError { get; set; }
         //Connection Methods:
@@ -339,7 +341,7 @@ namespace MadisonCountySystem.Pages.DB
                 cmdDatasetRead.Parameters.AddWithValue("@DatasetContents", a.DatasetContents);
                 cmdDatasetRead.Parameters.AddWithValue("@DatasetCreatedDate", a.DatasetCreatedDate);
                 cmdDatasetRead.Parameters.AddWithValue("@OwnerID", a.OwnerID);
-
+                cmdDatasetRead.Connection.ConnectionString = KnowledgeDBConnString;
                 KnowledgeDBConnection.Open();
                 int newDatasetID = (int)cmdDatasetRead.ExecuteScalar(); // Executes the command and returns the new datasetID
                 KnowledgeDBConnection.Close(); // Don't forget to close the connection
@@ -359,7 +361,7 @@ namespace MadisonCountySystem.Pages.DB
             sql = sql.TrimEnd(new char[] { ',' }) + ")";
             SqlCommand cmd = new SqlCommand(sql);
             cmd.Connection = KnowledgeDBConnection;
-            cmd.Connection.ConnectionString = KnowledgeDBConnString;
+            cmd.Connection.ConnectionString = AuxConnString;
             cmd.Connection.Open();
             cmd.ExecuteNonQuery();
             cmd.Connection.Close();
@@ -1010,6 +1012,19 @@ namespace MadisonCountySystem.Pages.DB
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = KnowledgeDBConnection;
             cmd.Connection.ConnectionString = KnowledgeDBConnString;
+            cmd.CommandText = sqlQuery;
+            cmd.Connection.Open();
+            SqlDataReader tempReader = cmd.ExecuteReader();
+
+            return tempReader;
+
+        }
+
+        public static SqlDataReader AuxGeneralReader(String sqlQuery)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = KnowledgeDBConnection;
+            cmd.Connection.ConnectionString = AuxConnString;
             cmd.CommandText = sqlQuery;
             cmd.Connection.Open();
             SqlDataReader tempReader = cmd.ExecuteReader();

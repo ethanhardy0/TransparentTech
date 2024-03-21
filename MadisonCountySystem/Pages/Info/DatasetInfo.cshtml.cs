@@ -52,7 +52,7 @@ namespace MadisonCountySystem.Pages.Info
             {
 
                 ColNames = new List<String>();
-                SqlDataReader reader = DBClass.GeneralReader("SELECT name FROM sys.columns WHERE object_id = OBJECT_ID('" + Dataset.DatasetName + "');");
+                SqlDataReader reader = DBClass.AuxGeneralReader("SELECT name FROM sys.columns WHERE object_id = OBJECT_ID('" + Dataset.DatasetName + "');");
 
                 while (reader.Read())
                 {
@@ -63,7 +63,7 @@ namespace MadisonCountySystem.Pages.Info
 
                 if (Rows == null)
                 {
-                    reader = DBClass.GeneralReader("Select TOP(100) * from " + Dataset.DatasetName + ";");
+                    reader = DBClass.AuxGeneralReader("Select TOP(100) * from " + Dataset.DatasetName + ";");
                     Rows = new List<List<String>>();
 
                     while (reader.Read())
