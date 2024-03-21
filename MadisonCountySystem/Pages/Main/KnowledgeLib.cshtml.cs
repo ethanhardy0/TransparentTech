@@ -105,7 +105,8 @@ namespace MadisonCountySystem.Pages.Main
 
                 foreach (var ID in IDs)
                 {
-                    SqlDataReader KIReader = DBClass.GeneralReader("SELECT * FROM KnowledgeItem WHERE KnowledgeID = " + ID + ";");
+                    SqlDataReader KIReader = DBClass.GeneralReader("SELECT KnowledgeTitle, KnowledgeSubject, KnowledgeCategory, KnowledgePostDate, KnowledgeID, Username" + 
+                        " FROM KnowledgeItem JOIN SysUser ON KnowledgeItem.OwnerID = SysUser.UserID WHERE KnowledgeID = " + ID + ";");
 
                     if (KIReader.Read())
                     {
@@ -115,7 +116,7 @@ namespace MadisonCountySystem.Pages.Main
                             KnowledgeCategory = KIReader["KnowledgeCategory"].ToString(),
                             KnowledgePostDate = KIReader["KnowledgePostDate"].ToString(),
                             //Add join to general reader to get owner name
-                            //OwnerName = KIReader["Username"].ToString(),
+                            OwnerName = KIReader["Username"].ToString(),
                             KnowledgeID = Int32.Parse(KIReader["KnowledgeID"].ToString())
                         };
 
