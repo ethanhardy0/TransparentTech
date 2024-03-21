@@ -32,7 +32,7 @@ namespace MadisonCountySystem.Pages.DB
             SqlCommand cmdUserRead = new SqlCommand();
             cmdUserRead.Connection = KnowledgeDBConnection;
             cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
-            cmdUserRead.CommandText = "SELECT * FROM SysUser WHERE Email IS NOT NULL";
+            cmdUserRead.CommandText = "SELECT * FROM SysUser WHERE Email IS NOT NULL AND (UserStatus != 'Deleted' OR UserStatus IS NULL);";
             cmdUserRead.Connection.Open(); // Open connection here, close in Model!
 
             SqlDataReader tempReader = cmdUserRead.ExecuteReader();
@@ -85,7 +85,79 @@ namespace MadisonCountySystem.Pages.DB
             return newUserID;
         }
 
-// ------------------------------------------- KIs -----------------------------------------------------------------------------------------------------------
+		public static void RemoveUser(int UserID)
+		{
+			String sqlQuery = "UPDATE SysUser SET UserStatus = 'Deleted' WHERE UserID = @UserID";
+
+			SqlCommand cmdUserRead = new SqlCommand();
+			cmdUserRead.Connection = KnowledgeDBConnection;
+			cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
+			cmdUserRead.CommandText = sqlQuery;
+			cmdUserRead.Parameters.AddWithValue("@UserID", UserID);
+			cmdUserRead.Connection.Open();
+			cmdUserRead.ExecuteNonQuery();
+		}
+
+		public static void UpdateExistingUser(SysUser k)
+		{
+			String sqlQuery = "UPDATE SysUser SET Username = @Username, Email = @Email, ";
+			sqlQuery += "FirstName = @FirstName, LastName = @LastName, Street = @Street, Phone = @Phone, ";
+			sqlQuery += "City = @City, State = @State, Zip = @Zip, UserType = @UserType WHERE UserID = @UserID;";
+
+			SqlCommand cmdUserRead = new SqlCommand();
+			cmdUserRead.Connection = KnowledgeDBConnection;
+			cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
+			cmdUserRead.CommandText = sqlQuery;
+			cmdUserRead.Parameters.AddWithValue("@UserID", k.UserID);
+			cmdUserRead.Parameters.AddWithValue("@Username", k.Username); // AddWithValue for KnowledgeTitle
+			cmdUserRead.Parameters.AddWithValue("@Email", k.Email); // AddWithValue for KnowledgeSubject
+			cmdUserRead.Parameters.AddWithValue("@Phone", k.Phone); // AddWithValue for KnowledgeCategory
+			cmdUserRead.Parameters.AddWithValue("@FirstName", k.FirstName); // AddWithValue for KnowledgeInformation
+			cmdUserRead.Parameters.AddWithValue("@LastName", k.LastName); // AddWithValue for Strengths
+			cmdUserRead.Parameters.AddWithValue("@Street", k.Street); // AddWithValue for Weaknesses
+			cmdUserRead.Parameters.AddWithValue("@City", k.City); // AddWithValue for Opportunities
+			cmdUserRead.Parameters.AddWithValue("@State", k.State); // AddWithValue for Threats
+			cmdUserRead.Parameters.AddWithValue("@Zip", k.Zip); // AddWithValue for Threats
+			cmdUserRead.Parameters.AddWithValue("@UserType", k.UserType); // AddWithValue for Threats
+
+			cmdUserRead.Connection.Open();
+			cmdUserRead.ExecuteNonQuery();
+		}
+
+		public static void UpdateHashedUsername(string Username, int UserID)
+		{
+			string loginQuery = "UPDATE HashedCredentials SET SysUsername = @Username WHERE UserID = @UserID";
+			SqlCommand cmdLogin = new SqlCommand();
+			cmdLogin.Connection = KnowledgeDBConnection;
+			cmdLogin.Connection.ConnectionString = AUTHConnString;
+			cmdLogin.CommandText = loginQuery;
+			cmdLogin.Parameters.AddWithValue("@Username", Username);
+			cmdLogin.Parameters.AddWithValue("@UserID", UserID);
+			cmdLogin.Connection.Open();
+			// ExecuteScalar() returns back data type Object
+			// Use a typecast to convert this to an int.
+			// Method returns first column of first row.
+			cmdLogin.ExecuteNonQuery();
+		}
+
+        public static void UpdateHashedPassword(string Password, int UserID)
+        {
+            string loginQuery = "UPDATE HashedCredentials SET SysPassword = @SysPassword WHERE UserID = @UserID;";
+            SqlCommand cmdLogin = new SqlCommand();
+            cmdLogin.Connection = KnowledgeDBConnection;
+            cmdLogin.Connection.ConnectionString = AUTHConnString;
+            cmdLogin.CommandText = loginQuery;
+            cmdLogin.Parameters.AddWithValue("@UserID", UserID);
+            cmdLogin.Parameters.AddWithValue("@SysPassword",
+            PasswordHash.HashPassword(Password));
+            cmdLogin.Connection.Open();
+            // ExecuteScalar() returns back data type Object
+            // Use a typecast to convert this to an int.
+            // Method returns first column of first row.
+            cmdLogin.ExecuteNonQuery();
+        }
+
+        // ------------------------------------------- KIs -----------------------------------------------------------------------------------------------------------
         public static SqlDataReader KnowledgeItemReader()
         {
             SqlCommand cmdKnowledgeRead = new SqlCommand();

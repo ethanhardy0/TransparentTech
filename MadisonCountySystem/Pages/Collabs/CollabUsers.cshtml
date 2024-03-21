@@ -12,13 +12,16 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Members of @Model.CollabName</h2>
-    <form method="post">
-        <div class="row align-items-end">
-            <div class="col-auto">
-                <button asp-page="CollabUsers" asp-page-handler="LinkItem" class="btn btn-outline-primary">Add User to @Model.CollabName</button>
+    @if (HttpContext.Session.GetString("typeUser") == "Admin")
+    {
+        <form method="post">
+            <div class="row align-items-end">
+                <div class="col-auto">
+                    <button asp-page="CollabUsers" asp-page-handler="LinkItem" class="btn btn-outline-primary">Add User to @Model.CollabName</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    }
 </div>
 
 <table class="table table-bordered table-responsive table-hover">

@@ -72,21 +72,35 @@ namespace MadisonCountySystem.Pages.Main
                     });
                 }
                 DBClass.KnowledgeDBConnection.Close();
-                SqlDataReader UserCollabsReader = DBClass.UserCollabReader();
-                while (UserCollabsReader.Read())
+                if (UserType == "Admin")
                 {
-                    if (UserID == Int32.Parse(UserCollabsReader["UserID"].ToString()))
+                    foreach (var collab in CollabList)
                     {
                         UserCollabs.Add(new UserCollab
                         {
-                            UserCollabID = Int32.Parse(UserCollabsReader["UserCollabID"].ToString()),
-                            UserRole = UserCollabsReader["UserRole"].ToString(),
-                            UserID = Int32.Parse(UserCollabsReader["UserID"].ToString()),
-                            CollabID = Int32.Parse(UserCollabsReader["CollabID"].ToString())
+                            CollabID = collab.CollabID,
+                            UserRole = "Administrator"
                         });
                     }
                 }
-                DBClass.KnowledgeDBConnection.Close();
+                else
+                {
+                    SqlDataReader UserCollabsReader = DBClass.UserCollabReader();
+                    while (UserCollabsReader.Read())
+                    {
+                        if (UserID == Int32.Parse(UserCollabsReader["UserID"].ToString()))
+                        {
+                            UserCollabs.Add(new UserCollab
+                            {
+                                UserCollabID = Int32.Parse(UserCollabsReader["UserCollabID"].ToString()),
+                                UserRole = UserCollabsReader["UserRole"].ToString(),
+                                UserID = Int32.Parse(UserCollabsReader["UserID"].ToString()),
+                                CollabID = Int32.Parse(UserCollabsReader["CollabID"].ToString())
+                            });
+                        }
+                    }
+                    DBClass.KnowledgeDBConnection.Close();
+                }
             }
         }
         public IActionResult OnPostNavCollab(int selectedCollab)

@@ -1,0 +1,29 @@
+﻿@page
+@model MadisonCountySystem.Pages.RecordCreate.UpdatePassModel
+@{
+    ViewData["Title"] = "Update " + @HttpContext.Session.GetString("pwdName") + " Password";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Update Password for @HttpContext.Session.GetString("pwdName")</h2>
+    <form method="post">
+        <div class="row justify-content-md-center">
+            <div class="col-md-6">
+                <p class="text-danger">@ViewData["SignupMessage"]</p>
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label">New Password:</label>
+                    <input asp-for="Password" placeholder="Enter Password:" class="form-control" type="password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ConfirmPassword" class="form-label">Confirm New Password:</label>
+                    <input asp-for="ConfirmPassword" placeholder="Enter Password:" class="form-control" type="password" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="text-center">
+                    <button style="width: 30%" asp-page="UpdatePass" asp-page-handler="AddDB" class="btn btn-outline-success btn-lg">Update</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

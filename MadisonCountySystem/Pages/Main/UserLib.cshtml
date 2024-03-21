@@ -4,13 +4,28 @@
 	ViewData["Title"] = "System Users";
 }
 
+@if(Model.Action)
+{
+	<div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4);">
+		<form method="post">
+			<div style="background-color:#fff; margin:10% auto; padding:20px; width:50%; max-width: 500px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+				<p>Are you sure you want to remove @Model.UserRemoveName? This cannot be undone.</p>
+				<div class="text-center mt-4">
+					<button asp-page="UserLib" asp-page-handler="DeleteRecord" class="btn btn-outline-success mr-2" style="margin-right: 10px;">Yes, Remove</button>
+					<button asp-page="UserLib" asp-page-handler="Close" class="btn btn-outline-danger">No, Go Back</button>
+				</div>
+			</div>
+		</form>
+	</div>
+}
+
 <style type="text/css">
 	thead {
 		background-color: #EFC935;
 	}
 </style>
 
-
+<br/>
 <div class="d-flex justify-content-between align-items-center mb-3">
 	<h2>Users</h2>
 	@if (HttpContext.Session.GetString("typeUser") == "Admin")
@@ -33,7 +48,11 @@
 			<th>Username:</th>
 			<th>Full Name:</th>
 			<th>Email:</th>
-			<th>Phone:</th>
+			<th>Permisson Level:</th>
+			@if(HttpContext.Session.GetString("typeUser") == "Admin")
+			{
+				<th></th>
+			}
 		</tr>
 	</thead>
 	<tbody>
@@ -44,7 +63,23 @@
 					<td>@User.Username</td>
 					<td>@User.FirstName @User.LastName</td>
 					<td>@User.Email</td>
-					<td>@User.Phone</td>
+					<td>@User.UserRole</td>
+					@if (HttpContext.Session.GetString("typeUser") == "Admin")
+					{
+						<td>
+							<!-- New column for actions -->
+							<div class="dropdown">
+								<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+									Actions
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+									<li><a class="dropdown-item" asp-area="" asp-page="/RecordCreate/UpdateUser" asp-route-ExistingID="@User.UserID">View & Edit</a></li>
+									<li><a class="dropdown-item" asp-area="" asp-page="/RecordCreate/UpdatePass" asp-route-ExistingID="@User.UserID">Update Password</a></li>
+									<li><a class="dropdown-item" asp-area="" asp-page="/Main/UserLib" asp-route-userRemove="@User.UserID">Remove</a></li>
+								</ul>
+							</div>
+						</td>
+					}
 				</tr>
 			}
 		}

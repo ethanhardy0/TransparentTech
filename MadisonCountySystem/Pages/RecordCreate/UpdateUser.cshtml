@@ -1,0 +1,71 @@
+﻿@page
+@model MadisonCountySystem.Pages.RecordCreate.UpdateUserModel
+@{
+    ViewData["Title"] = Model.Username + " Information";
+}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">@Model.Username Information</h2>
+    <form method="post">
+        <div class="row justify-content-md-center">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Username" class="form-label">Username:</label>
+                    <input asp-for="Username" placeholder="Enter Username:" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">Email:</label>
+                    <input asp-for="Email" placeholder="Enter Email:" class="form-control" type="email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="FirstName" class="form-label">First Name:</label>
+                    <input asp-for="FirstName" placeholder="Enter First Name:" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="LastName" class="form-label">Last Name:</label>
+                    <input asp-for="LastName" placeholder="Enter Last Name:" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Phone" class="form-label">Phone Number:</label>
+                    <input asp-for="Phone" class="form-control" type="tel" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Street" class="form-label">Street Address:</label>
+                    <input asp-for="Street" class="form-control" placeholder="Enter Street Address:" />
+                    <span asp-validation-for="Street" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="City" class="form-label">City:</label>
+                    <input asp-for="City" class="form-control" placeholder="Enter City:" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="State" class="form-label">State:</label>
+                    <input asp-for="State" class="form-control" placeholder="Enter State:" />
+                    <span asp-validation-for="State" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Zip" class="form-label">Postal Code:</label>
+                    <input asp-for="Zip" class="form-control" placeholder="Enter Postal Code:" />
+                    <span asp-validation-for="Zip" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="UserType" class="form-label">Permission Level:</label>
+                    <select asp-for="UserType" class="form-control">
+                        <option value="Standard">Standard User</option>
+                        <option value="Super">Super User</option>
+                        <option value="Admin">Administrator</option>
+                    </select>
+                </div>
+                <div class="text-center">
+                    <button style="width: 30%" asp-page="UpdateUser" asp-page-handler="AddDB" class="btn btn-outline-success btn-lg">Update</button>
+                    <button style="width: 30%" asp-page="UpdateUser" asp-page-handler="Clear" class="btn btn-outline-danger btn-lg" formnovalidate>Clear</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
