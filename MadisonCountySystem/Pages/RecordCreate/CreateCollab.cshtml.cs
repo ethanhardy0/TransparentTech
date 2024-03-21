@@ -48,12 +48,15 @@ namespace MadisonCountySystem.Pages.RecordCreate
                 SqlDataReader userReader = DBClass.UserReader();
                 while (userReader.Read())
                 {
-                    UserList.Add(new SysUser
+                    if (!userReader["Username"].ToString().Equals(HttpContext.Session.GetString("username")))
                     {
-                        Username = userReader["Username"].ToString(),
-                        UserID = Int32.Parse(userReader["UserID"].ToString())
+                        UserList.Add(new SysUser
+                        {
+                            Username = userReader["Username"].ToString(),
+                            UserID = Int32.Parse(userReader["UserID"].ToString())
 
-                    });
+                        });
+                    }
                 }
                 DBClass.KnowledgeDBConnection.Close();
 
