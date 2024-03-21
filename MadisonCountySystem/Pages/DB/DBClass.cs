@@ -1082,5 +1082,33 @@ namespace MadisonCountySystem.Pages.DB
 
             return tempReader;
         }
+
+        public static void InsertUserDepartment(int DepartmentID, int UserID)
+        {
+            String sqlQuery = "INSERT INTO UserDepartment (UserID, DepartmentID) VALUES (@UserID, @DepartmentID);";
+
+            SqlCommand cmdUserRead = new SqlCommand();
+            cmdUserRead.Connection = KnowledgeDBConnection;
+            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdUserRead.CommandText = sqlQuery;
+            cmdUserRead.Parameters.AddWithValue("@UserID", UserID);
+            cmdUserRead.Parameters.AddWithValue("@DepartmentID", DepartmentID);
+            cmdUserRead.Connection.Open();
+            cmdUserRead.ExecuteNonQuery();
+        }
+
+        public static void DeleteUserDepartment(int DepartmentID, int UserID)
+        {
+            String sqlQuery = "DELETE FROM UserDepartment WHERE UserID = @UserID AND DepartmentID = @DepartmentID;";
+
+            SqlCommand cmdUserRead = new SqlCommand();
+            cmdUserRead.Connection = KnowledgeDBConnection;
+            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdUserRead.CommandText = sqlQuery;
+            cmdUserRead.Parameters.AddWithValue("@UserID", UserID);
+            cmdUserRead.Parameters.AddWithValue("@DepartmentID", DepartmentID);
+            cmdUserRead.Connection.Open();
+            cmdUserRead.ExecuteNonQuery();
+        }
     }
 }

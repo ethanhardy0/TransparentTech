@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using MadisonCountySystem.Pages.DataClasses;
+using System.ComponentModel.DataAnnotations;
 
 namespace MadisonCountySystem.Pages.Main
 {
     public class DepartmentLibModel : PageModel
     {
-        public String activeDataset { get; set; }
+        [BindProperty,Required]
+        public int activeDataset { get; set; }
         public List<Department> Departments { get; set; }
         public static int SelectedID { get; set; }
         public String SelectedName { get; set; }
@@ -147,11 +149,15 @@ namespace MadisonCountySystem.Pages.Main
 
         public IActionResult OnPostAddUser()
         {
+            DBClass.InsertUserDepartment(SelectedID, activeDataset);
+            DBClass.KnowledgeDBConnection.Close();
             return RedirectToPage();
         }
 
         public IActionResult OnPostRemoveUser()
         {
+            DBClass.DeleteUserDepartment(SelectedID, activeDataset);
+            DBClass.KnowledgeDBConnection.Close();
             return RedirectToPage();
         }
     }

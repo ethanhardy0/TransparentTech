@@ -10,7 +10,7 @@
                 <h4>Add User to @Model.SelectedName</h4>
                 <div class="mb-3">
                     <label asp-for="activeDataset" class="form-label">User to Add:</label>
-                    <select class="form-control" id="activeDataset" name="selectedUser" asp-for="activeDataset">
+                    <select class="form-control" asp-for="activeDataset">
                         @foreach (var user in Model.OtherUsers)
                         {
                             <option value="@user.UserID"> @user.Username</option>
@@ -34,7 +34,7 @@
                 <h4>Remove User from @Model.SelectedName</h4>
                 <div class="mb-3">
                     <label asp-for="activeDataset" class="form-label">User to Remove:</label>
-                    <select class="form-control" id="activeDataset" name="selectedUser" asp-for="activeDataset">
+                    <select class="form-control" asp-for="activeDataset">
                         @foreach (var user in Model.ExistingUsers)
                         {
                             <option value="@user.UserID"> @user.Username</option>
