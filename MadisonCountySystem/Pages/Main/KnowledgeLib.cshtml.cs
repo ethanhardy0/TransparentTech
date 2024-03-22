@@ -4,6 +4,8 @@ using System.Data.SqlClient;
 using System.ComponentModel.DataAnnotations;
 using MadisonCountySystem.Pages.DataClasses;
 using MadisonCountySystem.Pages.DB;
+using System.Linq;
+
 
 namespace MadisonCountySystem.Pages.Main
 {
@@ -144,6 +146,10 @@ namespace MadisonCountySystem.Pages.Main
                     DBClass.KnowledgeDBConnection.Close();
                 }
             }
+            if(HttpContext.Session.GetString("typeUser") != "Admin" && HttpContext.Session.GetString("typeUser") != "Super")
+            {
+                DepartmentItems();
+            }
         }
         //public IActionResult OnPostAddCollab(int selectedKnowledgeItem)
         //{
@@ -240,6 +246,34 @@ namespace MadisonCountySystem.Pages.Main
             }
             DBClass.KnowledgeDBConnection.Close();
             return CollabList;
+        }
+
+        public void DepartmentItems()
+        {
+            KnowledgeItemList = new List<KnowledgeItem>();
+            if (HttpContext.Session.GetInt32("dep1") == 1)
+            {
+                KnowledgeItemList.AddRange(Dep1Knowledge);
+            }
+            if (HttpContext.Session.GetInt32("dep2") == 1)
+            {
+                KnowledgeItemList.AddRange(Dep2Knowledge);
+            }
+            if (HttpContext.Session.GetInt32("dep3") == 1)
+            {
+                KnowledgeItemList.AddRange(Dep3Knowledge);
+            }
+            if (HttpContext.Session.GetInt32("dep4") == 1)
+            {
+                KnowledgeItemList.AddRange(Dep4Knowledge);
+            }
+            if (HttpContext.Session.GetInt32("dep5") == 1)
+            {
+                KnowledgeItemList.AddRange(Dep5Knowledge);
+            }
+
+
+            KnowledgeItemList = KnowledgeItemList.GroupBy(obj => obj.KnowledgeID).Select(group => group.First()).ToList();
         }
     }
 }
