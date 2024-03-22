@@ -1,6 +1,5 @@
 ﻿using MadisonCountySystem.Pages.DataClasses;
 using MadisonCountySystem.Pages.DB;
-using MadisonCountySystem.Pages.DB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
