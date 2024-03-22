@@ -7,6 +7,7 @@
         public String? DatasetType { get; set; }
         public String? DatasetContents { get; set; }
         public String? DatasetCreatedDate { get; set; }
+        public String? DatasetStatus { get; set; }
         public int OwnerID { get; set; }
         public String? OwnerName { get; set; }
         public String? OwnerFirst { get; set; }

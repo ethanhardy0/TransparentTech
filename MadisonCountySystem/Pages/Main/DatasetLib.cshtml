@@ -97,3 +97,35 @@
         }
     </tbody>
 </table>
+
+@{
+    <h1>Department 1 Dataset</h1>
+    foreach (var Data in Model.Dep1Data)
+    {
+        <p>@Data.DatasetName</p>
+    }
+
+    <h1>Department 2 Dataset</h1>
+    foreach (var Data in Model.Dep2Data)
+    {
+        <p>@Data.DatasetName</p>
+    }
+
+    <h1>Department 3 Dataset</h1>
+    foreach (var Data in Model.Dep3Data)
+    {
+        <p>@Data.DatasetName</p>
+    }
+
+    <h1>Department 4 Dataset</h1>
+    foreach (var Data in Model.Dep4Data)
+    {
+        <p>@Data.DatasetName</p>
+    }
+
+    <h1>Department 5 Dataset</h1>
+    foreach (var Data in Model.Dep5Data)
+    {
+        <p>@Data.DatasetName</p>
+    }
+}
