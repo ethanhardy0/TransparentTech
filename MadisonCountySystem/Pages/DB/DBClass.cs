@@ -44,49 +44,49 @@ namespace MadisonCountySystem.Pages.DB
 		}
 
 		public static void InsertUser(SysUser a)
-        {
-            String sqlQuery = "INSERT INTO SysUser (Username, Email, FirstName, LastName, Phone) VALUES (@Username," +
-                " @Email, @FirstName, @LastName, @Phone);";
+		{
+			string sqlQuery = "InsertUser";
 
-            using (SqlCommand cmdUserRead = new SqlCommand(sqlQuery, KnowledgeDBConnection))
-            {
-                cmdUserRead.Parameters.AddWithValue("@Username", a.Username);
-                cmdUserRead.Parameters.AddWithValue("@Email", a.Email);
-                cmdUserRead.Parameters.AddWithValue("@FirstName", a.FirstName);
-                cmdUserRead.Parameters.AddWithValue("@LastName", a.LastName);
-                cmdUserRead.Parameters.AddWithValue("@Phone", a.Phone);
+			using (SqlCommand cmdUserInsert = new SqlCommand(sqlQuery, KnowledgeDBConnection))
+			{
+				cmdUserInsert.CommandType = CommandType.StoredProcedure;
 
-                KnowledgeDBConnection.Open();
-                cmdUserRead.ExecuteNonQuery();
-            }
-        }
+				cmdUserInsert.Parameters.AddWithValue("@Username", a.Username);
+				cmdUserInsert.Parameters.AddWithValue("@Email", a.Email);
+				cmdUserInsert.Parameters.AddWithValue("@FirstName", a.FirstName);
+				cmdUserInsert.Parameters.AddWithValue("@LastName", a.LastName);
+				cmdUserInsert.Parameters.AddWithValue("@Phone", a.Phone);
 
-        public static int InsertUserFull(SysUser a)
-        {
-            String sqlQuery = "INSERT INTO SysUser (Username, Email, FirstName, LastName, Phone, Street, City, State, Zip, UserType) VALUES (@Username," +
-                " @Email, @FirstName, @LastName, @Phone, @Street, @City, @State, @Zip, @UserType);" +
-                "SELECT CAST(scope_identity() AS int);";
+				KnowledgeDBConnection.Open();
+				cmdUserInsert.ExecuteNonQuery();
+			}
+		}
 
-            SqlCommand cmdUserRead = new SqlCommand();
-            cmdUserRead.Connection = KnowledgeDBConnection;
-            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
-            cmdUserRead.CommandText = sqlQuery;
-            cmdUserRead.Parameters.AddWithValue("@Username", a.Username);
-            cmdUserRead.Parameters.AddWithValue("@Email", a.Email);
-            cmdUserRead.Parameters.AddWithValue("@FirstName", a.FirstName);
-            cmdUserRead.Parameters.AddWithValue("@LastName", a.LastName);
-            cmdUserRead.Parameters.AddWithValue("@Phone", a.Phone);
-            cmdUserRead.Parameters.AddWithValue("@Street", a.Street);
-            cmdUserRead.Parameters.AddWithValue("@City", a.City);
-            cmdUserRead.Parameters.AddWithValue("@State", a.State);
-            cmdUserRead.Parameters.AddWithValue("@Zip", a.Zip);
-            cmdUserRead.Parameters.AddWithValue("@UserType", a.UserType);
+		public static int InsertUserFull(SysUser a)
+		{
+			string sqlQuery = "InsertUserFull";
 
-            cmdUserRead.Connection.Open();
-            int newUserID = (int)cmdUserRead.ExecuteScalar();
-            KnowledgeDBConnection.Close(); // Don't forget to close the connection
-            return newUserID;
-        }
+			using (SqlCommand cmdUserInsert = new SqlCommand(sqlQuery, KnowledgeDBConnection))
+			{
+				cmdUserInsert.CommandType = CommandType.StoredProcedure;
+
+				cmdUserInsert.Parameters.AddWithValue("@Username", a.Username);
+				cmdUserInsert.Parameters.AddWithValue("@Email", a.Email);
+				cmdUserInsert.Parameters.AddWithValue("@FirstName", a.FirstName);
+				cmdUserInsert.Parameters.AddWithValue("@LastName", a.LastName);
+				cmdUserInsert.Parameters.AddWithValue("@Phone", a.Phone);
+				cmdUserInsert.Parameters.AddWithValue("@Street", a.Street);
+				cmdUserInsert.Parameters.AddWithValue("@City", a.City);
+				cmdUserInsert.Parameters.AddWithValue("@State", a.State);
+				cmdUserInsert.Parameters.AddWithValue("@Zip", a.Zip);
+				cmdUserInsert.Parameters.AddWithValue("@UserType", a.UserType);
+
+				KnowledgeDBConnection.Open();
+				int newUserID = (int)cmdUserInsert.ExecuteScalar();
+				KnowledgeDBConnection.Close(); // Don't forget to close the connection
+				return newUserID;
+			}
+		}
 
 		public static void RemoveUser(int UserID)
 		{
