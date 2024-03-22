@@ -101,16 +101,16 @@ namespace MadisonCountySystem.Pages.RecordCreate
         }
 
         // Reads Excel file to display on page then takes the data read and sends it to DB
-        private async Task ReadExcel(IFormFile file)
+        private void ReadExcel(IFormFile file)
         {
             using (var stream = new MemoryStream())
             {
-                await file.CopyToAsync(stream);
+                file.CopyTo(stream);
                 stream.Position = 0;
 
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
                 {
-                    var fileData = new DataClasses.ExcelTable();
+                    var fileData = new ExcelTable();
                     fileData.Columns = new List<string>();
                     fileData.Rows = new List<List<string>>();
 
@@ -135,15 +135,15 @@ namespace MadisonCountySystem.Pages.RecordCreate
                     HeadersByFile[file.FileName] = fileData;
 
                     // Call CreateTableAndInsertData
-                    await CreateTableAndInsertExcelData(Path.GetFileNameWithoutExtension(file.FileName), fileData.Columns, fileData.Rows);
+                    CreateTableAndInsertExcelData(Path.GetFileNameWithoutExtension(file.FileName), fileData.Columns, fileData.Rows);
                 }
             }
         }
 
-        private async Task CreateTableAndInsertExcelData(string tableName, List<string> headers, List<List<string>> rows)
+        private void CreateTableAndInsertExcelData(string tableName, List<string> headers, List<List<string>> rows)
         {
             // Create table script
-            StringBuilder createTableScript = new StringBuilder($"CREATE TABLE {tableName} (");
+            StringBuilder createTableScript = new StringBuilder($"CREATE TABLE [{tableName}] (");
 
             // Iterate over each header
             foreach (var header in headers)
@@ -160,21 +160,21 @@ namespace MadisonCountySystem.Pages.RecordCreate
             // Execute create table script
             using (var connection = new SqlConnection(connectionString)) // Replace 'connectionString' with your actual connection string
             {
-                await connection.OpenAsync();
+                connection.Open();
                 using (var command = new SqlCommand(createTableScript.ToString(), connection))
                 {
-                    await command.ExecuteNonQueryAsync();
+                    command.ExecuteNonQuery();
                 }
             }
 
             // Insert data into the table
             foreach (var row in rows)
             {
-                await InsertExcelData(tableName, headers, row);
+                InsertExcelData(tableName, headers, row);
             }
         }
 
-        private async Task InsertExcelData(string tableName, List<string> headers, List<string> rowData)
+        private void InsertExcelData(string tableName, List<string> headers, List<string> rowData)
         {
             // Construct insert query
             StringBuilder insertQuery = new StringBuilder($"INSERT INTO {tableName} (");
@@ -200,7 +200,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
             // Execute insert query
             using (var connection = new SqlConnection(connectionString))
             {
-                await connection.OpenAsync();
+                connection.Open();
                 using (var command = new SqlCommand(insertQuery.ToString(), connection))
                 {
                     // Add parameter values
@@ -209,7 +209,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
                         command.Parameters.AddWithValue("@param" + headers[i], rowData[i]);
                     }
 
-                    await command.ExecuteNonQueryAsync();
+                    command.ExecuteNonQuery();
                 }
             }
         }
