@@ -26,23 +26,24 @@ namespace MadisonCountySystem.Pages.DB
         private static readonly String? AuxConnString = "Server=Localhost;Database=Auxillary;Trusted_Connection=True";
         // Error Message
         public static String? QueryError { get; set; }
-        //Connection Methods:
+		//Connection Methods:
 
-// ------------------------------------------- Users ---------------------------------------------------------------------------------------------------------
-        public static SqlDataReader UserReader()
-        {
-            SqlCommand cmdUserRead = new SqlCommand();
-            cmdUserRead.Connection = KnowledgeDBConnection;
-            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
-            cmdUserRead.CommandText = "SELECT * FROM SysUser WHERE Email IS NOT NULL AND (UserStatus != 'Deleted' OR UserStatus IS NULL);";
-            cmdUserRead.Connection.Open(); // Open connection here, close in Model!
+		// ------------------------------------------- Users ---------------------------------------------------------------------------------------------------------
+		public static SqlDataReader UserReader()
+		{
+			SqlCommand cmdUserRead = new SqlCommand();
+			cmdUserRead.Connection = KnowledgeDBConnection;
+			cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
+			cmdUserRead.CommandText = "GetUserReader";
+			cmdUserRead.CommandType = CommandType.StoredProcedure;
+			cmdUserRead.Connection.Open(); // Open connection here, close in Model!
 
-            SqlDataReader tempReader = cmdUserRead.ExecuteReader();
+			SqlDataReader tempReader = cmdUserRead.ExecuteReader();
 
-            return tempReader;
-        }
+			return tempReader;
+		}
 
-        public static void InsertUser(SysUser a)
+		public static void InsertUser(SysUser a)
         {
             String sqlQuery = "INSERT INTO SysUser (Username, Email, FirstName, LastName, Phone) VALUES (@Username," +
                 " @Email, @FirstName, @LastName, @Phone);";
