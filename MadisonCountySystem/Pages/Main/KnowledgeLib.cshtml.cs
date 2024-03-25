@@ -26,6 +26,7 @@ namespace MadisonCountySystem.Pages.Main
         public static int SelectedItemID { get; set; }
         public KnowledgeItem SelectedKI { get; set; }
         public List<Collab> ActiveCollabs { get; set; }
+        public List<Department> ActiveDepts { get; set; }
 
         public static List<KnowledgeItem> SearchKI { get; set; }
         public List<DepartmentKnowledge> asscDepts { get; set; }
@@ -157,8 +158,6 @@ namespace MadisonCountySystem.Pages.Main
             {
                 DepartmentItems();
             }
-            SearchKI = new List<KnowledgeItem>();
-            SearchKI.AddRange(KnowledgeItemList);
             SqlDataReader depKI = DBClass.DepartmentKnowledgeReader();
             while (depKI.Read())
             {
@@ -183,12 +182,11 @@ namespace MadisonCountySystem.Pages.Main
                 ki.Departments.AddRange(asscDept2);
                 asscDept2.Clear();
             }
+            SearchKI = new List<KnowledgeItem>();
+            SearchKI.AddRange(KnowledgeItemList);
+            GetActiveDepts();
         }
-        //public IActionResult OnPostAddCollab(int selectedKnowledgeItem)
-        //{
 
-        //    return RedirectToPage("/ButtonCollab/KnowledgeButton", new { itemID = selectedKnowledgeItem});
-        //}
         public IActionResult OnPostCreateKnowledgeItem()
         {
             return RedirectToPage("/RecordCreate/CreateKnowledge");
@@ -196,26 +194,6 @@ namespace MadisonCountySystem.Pages.Main
 
         public IActionResult OnPostNarrowSearch()
         {
-            //SqlDataReader KnowledgeItemReader = DBClass.KnowledgeItemReader();
-            //while (KnowledgeItemReader.Read())
-            //{
-            //    if (KnowledgeItemReader["KnowledgeTitle"].ToString().ToLower().Contains(Search.ToLower()) || KnowledgeItemReader["Username"].ToString().ToLower().Contains(Search.ToLower()))
-            //    {
-            //        KnowledgeItemList.Add(new KnowledgeItem
-            //        {
-            //            KnowledgeTitle = KnowledgeItemReader["KnowledgeTitle"].ToString(),
-            //            KnowledgeSubject = KnowledgeItemReader["KnowledgeSubject"].ToString(),
-            //            KnowledgeCategory = KnowledgeItemReader["KnowledgeCategory"].ToString(),
-            //            // add Owner later
-            //            KnowledgePostDate = KnowledgeItemReader["KnowledgePostDate"].ToString(),
-            //            OwnerName = KnowledgeItemReader["Username"].ToString(),
-            //            KnowledgeID = Int32.Parse(KnowledgeItemReader["KnowledgeID"].ToString())
-            //        });
-            //    }
-            //}
-            //DBClass.KnowledgeDBConnection.Close();
-            //ModelState.Clear();
-            //Search = null;
             foreach (var item in SearchKI)
             {
                 if (item.KnowledgeTitle.ToLower().Contains(Search.ToLower()) || item.OwnerName.ToLower().Contains(Search.ToLower()))
@@ -223,6 +201,7 @@ namespace MadisonCountySystem.Pages.Main
                     KnowledgeItemList.Add(item);
                 }
             }
+            GetActiveDepts();
             return Page();
         }
 
@@ -314,6 +293,65 @@ namespace MadisonCountySystem.Pages.Main
 
 
             KnowledgeItemList = KnowledgeItemList.GroupBy(obj => obj.KnowledgeID).Select(group => group.First()).ToList();
+        }
+
+        public IActionResult OnPostFilterDep(String selectedDep)
+        {
+            foreach(var item in SearchKI)
+            {
+                foreach(var dep in item.Departments)
+                {
+                    if(dep == selectedDep)
+                    {
+                        KnowledgeItemList.Add(item);
+                        break;
+                    }
+                }
+            }
+            GetActiveDepts();
+            ModelState.Clear();
+            return Page();
+        }
+
+        public void GetActiveDepts()
+        {
+            ActiveDepts = new List<Department>();
+
+            if (HttpContext.Session.GetString("typeUser") != "Admin" && HttpContext.Session.GetString("typeUser") != "Super")
+            {
+                for (int i = 1; i < 6; i++)
+                {
+                    SqlDataReader depReader = DBClass.DepartmentReader();
+                    while (depReader.Read())
+                    {
+                        if (Int32.Parse(depReader["DepartmentID"].ToString()) == i)
+                        {
+                            if (HttpContext.Session.GetInt32("dep" + i) == 1)
+                            {
+                                ActiveDepts.Add(new Department
+                                {
+                                    DepartmentID = i,
+                                    DepartmentName = depReader["DepartmentName"].ToString()
+                                });
+                            }
+                        }
+                    }
+                    DBClass.KnowledgeDBConnection.Close();
+                }
+            }
+            else
+            {
+                SqlDataReader depReader = DBClass.DepartmentReader();
+                while (depReader.Read())
+                {
+                    ActiveDepts.Add(new Department
+                    {
+                        DepartmentID = Int32.Parse(depReader["DepartmentID"].ToString()),
+                        DepartmentName = depReader["DepartmentName"].ToString()
+                    });
+                }
+                DBClass.KnowledgeDBConnection.Close();
+            }
         }
     }
 }

@@ -75,7 +75,28 @@
 
 <br />
 
-<h3>Knowledge Item Library</h3>
+<form method="post">
+    <div class="row align-items-end mb-3">
+        <div class="col">
+            <h3>Knowledge Item Library</h3>
+        </div>
+        <div class="col-auto">
+            <label for="activeDep" class="form-label">Filter Department:</label>
+            <select class="form-control" id="activeDep" name="selectedDep">
+                @foreach (var dep in Model.ActiveDepts)
+                {
+                    <option> @dep.DepartmentName</option>
+                }
+            </select>
+        </div>
+        <div class="col-auto">
+            <button asp-page="KnowledgeLib" asp-page-handler="FilterDep" class="btn btn-outline-primary" formnovalidate>Filter</button>
+        </div>
+        <div class="col-auto">
+            <button asp-page="KnowledgeLib" asp-page-handler="Close" class="btn btn-outline-danger" formnovalidate>Clear All Filters</button>
+        </div>
+    </div>
+</form>
 
 <table class="table table-bordered table-responsive table-hover">
     <thead>
