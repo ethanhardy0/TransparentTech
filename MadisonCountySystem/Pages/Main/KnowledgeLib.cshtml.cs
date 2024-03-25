@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using MadisonCountySystem.Pages.DataClasses;
 using MadisonCountySystem.Pages.DB;
 using System.Linq;
+using System.Collections.Generic;
 
 
 namespace MadisonCountySystem.Pages.Main
@@ -25,6 +26,8 @@ namespace MadisonCountySystem.Pages.Main
         public static int SelectedItemID { get; set; }
         public KnowledgeItem SelectedKI { get; set; }
         public List<Collab> ActiveCollabs { get; set; }
+
+        public static List<KnowledgeItem> SearchKI { get; set; }
 
         public KnowledgeLibModel()
         {
@@ -150,6 +153,8 @@ namespace MadisonCountySystem.Pages.Main
             {
                 DepartmentItems();
             }
+            SearchKI = new List<KnowledgeItem>();
+            SearchKI.AddRange(KnowledgeItemList);
         }
         //public IActionResult OnPostAddCollab(int selectedKnowledgeItem)
         //{
@@ -163,26 +168,37 @@ namespace MadisonCountySystem.Pages.Main
 
         public IActionResult OnPostNarrowSearch()
         {
-            SqlDataReader KnowledgeItemReader = DBClass.KnowledgeItemReader();
-            while (KnowledgeItemReader.Read())
+            //SqlDataReader KnowledgeItemReader = DBClass.KnowledgeItemReader();
+            //while (KnowledgeItemReader.Read())
+            //{
+            //    if (KnowledgeItemReader["KnowledgeTitle"].ToString().ToLower().Contains(Search.ToLower()) || KnowledgeItemReader["Username"].ToString().ToLower().Contains(Search.ToLower()))
+            //    {
+            //        KnowledgeItemList.Add(new KnowledgeItem
+            //        {
+            //            KnowledgeTitle = KnowledgeItemReader["KnowledgeTitle"].ToString(),
+            //            KnowledgeSubject = KnowledgeItemReader["KnowledgeSubject"].ToString(),
+            //            KnowledgeCategory = KnowledgeItemReader["KnowledgeCategory"].ToString(),
+            //            // add Owner later
+            //            KnowledgePostDate = KnowledgeItemReader["KnowledgePostDate"].ToString(),
+            //            OwnerName = KnowledgeItemReader["Username"].ToString(),
+            //            KnowledgeID = Int32.Parse(KnowledgeItemReader["KnowledgeID"].ToString())
+            //        });
+            //    }
+            //}
+            //DBClass.KnowledgeDBConnection.Close();
+            //ModelState.Clear();
+            //Search = null;
+            foreach (var item in SearchKI)
             {
-                if (KnowledgeItemReader["KnowledgeTitle"].ToString().ToLower().Contains(Search.ToLower()) || KnowledgeItemReader["Username"].ToString().ToLower().Contains(Search.ToLower()))
+                if (item.KnowledgeTitle.ToLower().Contains(Search.ToLower()) || item.OwnerName.ToLower().Contains(Search.ToLower()))
                 {
-                    KnowledgeItemList.Add(new KnowledgeItem
-                    {
-                        KnowledgeTitle = KnowledgeItemReader["KnowledgeTitle"].ToString(),
-                        KnowledgeSubject = KnowledgeItemReader["KnowledgeSubject"].ToString(),
-                        KnowledgeCategory = KnowledgeItemReader["KnowledgeCategory"].ToString(),
-                        // add Owner later
-                        KnowledgePostDate = KnowledgeItemReader["KnowledgePostDate"].ToString(),
-                        OwnerName = KnowledgeItemReader["Username"].ToString(),
-                        KnowledgeID = Int32.Parse(KnowledgeItemReader["KnowledgeID"].ToString())
-                    });
+                    KnowledgeItemList.Add(item);
+                }
+                else
+                {
+                    
                 }
             }
-            DBClass.KnowledgeDBConnection.Close();
-            ModelState.Clear();
-            Search = null;
             return Page();
         }
 
