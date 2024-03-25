@@ -10,7 +10,9 @@ using System.Text.RegularExpressions;
 using MadisonCountySystem.Pages.DataClasses;
 using MadisonCountySystem.Pages.DB;
 using ExcelDataReader;
+using System.IO;
 using System.Text;
+using System.Reflection.PortableExecutable;
 
 namespace MadisonCountySystem.Pages.RecordCreate
 {
@@ -65,7 +67,6 @@ namespace MadisonCountySystem.Pages.RecordCreate
             }
 
         }
-
         public IActionResult OnPostAddDB()
         {
             if (!ModelState.IsValid)
@@ -73,12 +74,15 @@ namespace MadisonCountySystem.Pages.RecordCreate
                 return Page();
             }
 
-            List<String> filePaths = new List<String>();
             foreach (var file in FormFiles)
             {
                 if (file.FileName.EndsWith(".xlsx") || file.FileName.EndsWith(".xls")) // Check if the file is an Excel file
                 {
-                    ReadExcel(file);
+                    using (var stream = file.OpenReadStream())
+                    {
+                        // Read Excel file and insert data into the database
+                        ReadExcel(stream, file.FileName);
+                    }
                 }
                 else if (file.FileName.EndsWith(".csv")) // Check if the file is a CSV file
                 {
@@ -89,56 +93,41 @@ namespace MadisonCountySystem.Pages.RecordCreate
             CreateAndInsertDataset();
 
             // Redirect based on current location
-            if (CurrentLocation == "Collab")
-            {
-                return InsertDatasetCollab();
-            }
-            else
-            {
-                // Otherwise, redirect to DatasetLib
-                return RedirectToPage("/Main/DatasetLib");
-            }
+            return CurrentLocation == "Collab"
+                ? InsertDatasetCollab()
+                : RedirectToPage("/Main/DatasetLib");
         }
 
         // Reads Excel file to display on page then takes the data read and sends it to DB
-        private void ReadExcel(IFormFile file)
+        public void ReadExcel(Stream fileStream, string fileName)
         {
-            using (var stream = new MemoryStream())
+            using (var reader = ExcelReaderFactory.CreateReader(fileStream))
             {
-                file.CopyTo(stream);
-                stream.Position = 0;
+                var fileData = new ExcelTable();
+                fileData.Columns = new List<string>();
+                fileData.Rows = new List<List<string>>();
 
-                using (var reader = ExcelReaderFactory.CreateReader(stream))
+                // Read headers
+                reader.Read();
+                for (int i = 0; i < reader.FieldCount; i++)
                 {
-                    var fileData = new ExcelTable();
-                    fileData.Columns = new List<string>();
-                    fileData.Rows = new List<List<string>>();
+                    fileData.Columns.Add(reader.GetValue(i)?.ToString());
+                }
 
-                    // Read headers
-                    reader.Read();
+                // Read rows
+                while (reader.Read())
+                {
+                    var row = new List<string>();
                     for (int i = 0; i < reader.FieldCount; i++)
                     {
-                        fileData.Columns.Add(reader.GetValue(i)?.ToString());
+                        row.Add(reader.GetValue(i)?.ToString());
                     }
-
-                    // Read rows
-                    while (reader.Read())
-                    {
-                        var row = new List<string>();
-                        for (int i = 0; i < reader.FieldCount; i++)
-                        {
-                            row.Add(reader.GetValue(i)?.ToString());
-                        }
-                        fileData.Rows.Add(row);
-                    }
-
-                    HeadersByFile[file.FileName] = fileData;
-
-                    // Call CreateTableAndInsertData
-                    CreateTableAndInsertExcelData(Path.GetFileNameWithoutExtension(file.FileName), fileData.Columns, fileData.Rows);
+                    fileData.Rows.Add(row);
                 }
+                CreateTableAndInsertExcelData(DatasetName, fileData.Columns, fileData.Rows);
             }
         }
+
 
         private void CreateTableAndInsertExcelData(string tableName, List<string> headers, List<List<string>> rows)
         {
@@ -148,9 +137,9 @@ namespace MadisonCountySystem.Pages.RecordCreate
             // Iterate over each header
             foreach (var header in headers)
             {
-                var columnName = header;
-                // Append column name with TEXT data type
-                createTableScript.Append($"[{columnName}] TEXT, ");
+                var columnName = header.Replace(" ", "_"); // Replace spaces with underscores
+                                                           // Append column name with TEXT data type
+                createTableScript.Append($"[{columnName}] NVARCHAR(100), ");
             }
 
             // Remove trailing comma and space
@@ -158,7 +147,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
             createTableScript.Append(")");
 
             // Execute create table script
-            using (var connection = new SqlConnection(connectionString)) // Replace 'connectionString' with your actual connection string
+            using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 using (var command = new SqlCommand(createTableScript.ToString(), connection))
@@ -174,13 +163,16 @@ namespace MadisonCountySystem.Pages.RecordCreate
             }
         }
 
+
+        // Inserts headers in first then inserts row data
         private void InsertExcelData(string tableName, List<string> headers, List<string> rowData)
         {
             // Construct insert query
             StringBuilder insertQuery = new StringBuilder($"INSERT INTO {tableName} (");
             foreach (var header in headers)
             {
-                insertQuery.Append($"{header}, ");
+                var columnName = header.Replace(" ", "_"); // Replace spaces with underscores
+                insertQuery.Append($"[{columnName}], ");
             }
 
             // Remove trailing comma and space
@@ -190,7 +182,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
             // Add parameter placeholders
             foreach (var header in headers)
             {
-                insertQuery.Append("@param" + header + ", ");
+                insertQuery.Append($"@param{header.Replace(" ", "_")}, ");
             }
 
             // Remove trailing comma and space
@@ -206,7 +198,16 @@ namespace MadisonCountySystem.Pages.RecordCreate
                     // Add parameter values
                     for (int i = 0; i < headers.Count; i++)
                     {
-                        command.Parameters.AddWithValue("@param" + headers[i], rowData[i]);
+                        // Check if the value is numerical
+                        if (double.TryParse(rowData[i], out double numericValue))
+                        {
+                            command.Parameters.AddWithValue($"@param{headers[i].Replace(" ", "_")}", numericValue);
+                        }
+                        else
+                        {
+                            // If not numerical, add as string
+                            command.Parameters.AddWithValue($"@param{headers[i].Replace(" ", "_")}", rowData[i]);
+                        }
                     }
 
                     command.ExecuteNonQuery();
