@@ -12,7 +12,6 @@ namespace MadisonCountySystem.Pages.Main
         public SysUser LoggedUser { get; set; }
         public String? PhotoDir { get; set; }
         public List<Collab> Collabs { get; set; }
-        public List<UserCollab> UserCollabs {  get; set; }
         public IActionResult OnGet()
         {
             // Redirects user if not logged in
@@ -48,11 +47,10 @@ namespace MadisonCountySystem.Pages.Main
 
                 DBClass.KnowledgeDBConnection.Close();
 
-                SqlDataReader read = DBClass.GeneralReader("SELECT Collaboration.CollabID, CollabName, UserRole FROM UserCollab JOIN Collaboration ON Collaboration.CollabID " +
+                SqlDataReader read = DBClass.GeneralReader("SELECT Collaboration.CollabID, CollabName FROM UserCollab JOIN Collaboration ON Collaboration.CollabID " +
                     "= UserCollab.CollabID WHERE UserCollab.UserID = " + HttpContext.Session.GetString("userID") + ";");
 
                 Collabs = new List<Collab>();
-                UserCollabs = new List<UserCollab>();
 
                 while (read.Read())
                 {
@@ -60,11 +58,6 @@ namespace MadisonCountySystem.Pages.Main
                     {
                         CollabName = read["CollabName"].ToString(),
                         CollabID = Int32.Parse(read["CollabID"].ToString())
-                    });
-
-                    UserCollabs.Add(new UserCollab
-                    {
-                        UserRole = read["UserRole"].ToString()
                     });
                 }
 
