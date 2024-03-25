@@ -80,9 +80,10 @@
 <table class="table table-bordered table-responsive table-hover">
     <thead>
         <tr>
-            <th>Knowlege Item Name:</th>
-            <th>Knowlege Item Subject:</th>
-            <th>Knowlege Item Category:</th>
+            <th>Name:</th>
+            <th>Subject:</th>
+            <th>Category:</th>
+            <th>Departments:</th>
             <th>Date Created:</th>
             <th>Owner:</th>
             <th></th>
@@ -96,6 +97,11 @@
                     <td><a asp-area="" asp-page="/Info/KnowledgeInfo" asp-route-kiID="@KnowledgeItem.KnowledgeID">@KnowledgeItem.KnowledgeTitle</a></td>
                     <td>@KnowledgeItem.KnowledgeSubject</td>
                     <td>@KnowledgeItem.KnowledgeCategory</td>
+                    <td>
+                    @String.Join(", ", KnowledgeItem.Departments)
+                        
+                    </td>
+
                     <td>@KnowledgeItem.KnowledgePostDate</td>
                     <td>@KnowledgeItem.OwnerName</td>
                     <td>

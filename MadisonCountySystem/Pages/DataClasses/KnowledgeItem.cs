@@ -16,5 +16,6 @@
         public String? Weaknesses { get; set; }
         public String? Opportunities { get; set; }
         public String? Threats { get; set; }
+        public List<String> Departments { get; set; }
     }
 }

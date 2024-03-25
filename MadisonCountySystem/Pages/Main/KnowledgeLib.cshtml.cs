@@ -28,10 +28,12 @@ namespace MadisonCountySystem.Pages.Main
         public List<Collab> ActiveCollabs { get; set; }
 
         public static List<KnowledgeItem> SearchKI { get; set; }
+        public List<DepartmentKnowledge> asscDepts { get; set; }
 
         public KnowledgeLibModel()
         {
             KnowledgeItemList = new List<KnowledgeItem>();
+            asscDepts = new List<DepartmentKnowledge>();
         }
 
         public void OnGet(String actionType)
@@ -88,6 +90,8 @@ namespace MadisonCountySystem.Pages.Main
                 });
             }
             DBClass.KnowledgeDBConnection.Close();
+
+            
 
             Dep1Knowledge = new List<KnowledgeItem>();
             Dep2Knowledge = new List<KnowledgeItem>();
@@ -155,6 +159,30 @@ namespace MadisonCountySystem.Pages.Main
             }
             SearchKI = new List<KnowledgeItem>();
             SearchKI.AddRange(KnowledgeItemList);
+            SqlDataReader depKI = DBClass.DepartmentKnowledgeReader();
+            while (depKI.Read())
+            {
+                asscDepts.Add(new DepartmentKnowledge
+                {
+                    KnowledgeID = Int32.Parse(depKI["KnowledgeID"].ToString()),
+                    DepartmentName = depKI["DepartmentName"].ToString()
+                });
+            }
+            DBClass.KnowledgeDBConnection.Close();
+            List<String> asscDept2 = new List<String>();
+            foreach (var ki in KnowledgeItemList)
+            {
+                foreach (var dep in asscDepts)
+                {
+                    if (dep.KnowledgeID == ki.KnowledgeID)
+                    {
+                        asscDept2.Add(dep.DepartmentName);
+                    }
+                }
+                ki.Departments = new List<String>();
+                ki.Departments.AddRange(asscDept2);
+                asscDept2.Clear();
+            }
         }
         //public IActionResult OnPostAddCollab(int selectedKnowledgeItem)
         //{
@@ -193,10 +221,6 @@ namespace MadisonCountySystem.Pages.Main
                 if (item.KnowledgeTitle.ToLower().Contains(Search.ToLower()) || item.OwnerName.ToLower().Contains(Search.ToLower()))
                 {
                     KnowledgeItemList.Add(item);
-                }
-                else
-                {
-                    
                 }
             }
             return Page();
