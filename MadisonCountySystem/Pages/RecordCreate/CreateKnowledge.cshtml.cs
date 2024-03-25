@@ -38,6 +38,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
         public String Threats { get; set; }
         public static int ExistingKIID { get; set; }
         public String CreateorUpdate {  get; set; }
+        public List<Department> ActiveDepts { get; set; }
 
         public void OnGet(int ExistingID)
         {
@@ -75,6 +76,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
                     }
                     DBClass.KnowledgeDBConnection.Close();
                 }
+                GetActiveDepts();
             }
 
         }
@@ -86,14 +88,17 @@ namespace MadisonCountySystem.Pages.RecordCreate
             Weakness = null;
             Opportunities = null;
             Threats = null;
+            CreateorUpdate = "Create";
+            GetActiveDepts();
             return Page();
         }
 
-        public IActionResult OnPostAddDB()
+        public IActionResult OnPostAddDB(int selectedDep)
         {
 
             if (!ModelState.IsValid)
             {
+                GetActiveDepts();
                 return Page();
             }
 
@@ -115,6 +120,12 @@ namespace MadisonCountySystem.Pages.RecordCreate
             if (ExistingKIID == 0)
             {
                 int newKnowledgeID = DBClass.InsertKnowledgeItem(KnowledgeItem);
+                DBClass.KnowledgeDBConnection.Close();
+                DBClass.InsertDepartmentKnowledge(new DepartmentKnowledge
+                {
+                    KnowledgeID = newKnowledgeID,
+                    DepartmentID = selectedDep
+                });
                 DBClass.KnowledgeDBConnection.Close();
 
                 if (CurrentLocation == "Collab")
@@ -164,7 +175,9 @@ namespace MadisonCountySystem.Pages.RecordCreate
                 KnowledgeSubject = "Wisdom";
                 KnowledgeCategory = "Book";
                 KnowledgeInformation = "300 Pages";
+                CreateorUpdate = "Create";
             }
+            GetActiveDepts();
             return Page();
         }
         public IActionResult OnPostCancel()
@@ -178,7 +191,50 @@ namespace MadisonCountySystem.Pages.RecordCreate
             Weakness = null;
             Opportunities = null;
             Threats = null;
+            CreateorUpdate = "Create";
+            GetActiveDepts();
             return Page();
+        }
+
+        public void GetActiveDepts()
+        {
+            ActiveDepts = new List<Department>();
+
+            if (HttpContext.Session.GetString("typeUser") != "Admin" && HttpContext.Session.GetString("typeUser") != "Super")
+            {
+                for (int i = 1; i < 6; i++)
+                {
+                    SqlDataReader depReader = DBClass.DepartmentReader();
+                    while (depReader.Read())
+                    {
+                        if (Int32.Parse(depReader["DepartmentID"].ToString()) == i)
+                        {
+                            if (HttpContext.Session.GetInt32("dep" + i) == 1)
+                            {
+                                ActiveDepts.Add(new Department
+                                {
+                                    DepartmentID = i,
+                                    DepartmentName = depReader["DepartmentName"].ToString()
+                                });
+                            }
+                        }
+                    }
+                    DBClass.KnowledgeDBConnection.Close();
+                }
+            }
+            else
+            {
+                SqlDataReader depReader = DBClass.DepartmentReader();
+                while (depReader.Read())
+                {
+                    ActiveDepts.Add(new Department
+                    {
+                        DepartmentID = Int32.Parse(depReader["DepartmentID"].ToString()),
+                        DepartmentName = depReader["DepartmentName"].ToString()
+                    });
+                }
+                DBClass.KnowledgeDBConnection.Close();
+            }
         }
     }
 }

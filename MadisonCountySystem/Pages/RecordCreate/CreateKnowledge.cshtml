@@ -72,12 +72,26 @@
                         </div>
                     }
                 }
-
+                
                 <div class="mb-3">
                     <label asp-for="KnowledgeInformation" class="form-label">Knowledge Information:</label>
                     <textarea asp-for="KnowledgeInformation" placeholder="Enter Knowledge Information:" class="form-control" rows="4"></textarea>
                     <span asp-validation-for="KnowledgeInformation" class="text-danger"></span>
                 </div>
+
+                @if(Model.CreateorUpdate == "Create")
+                {
+                    <div class="mb-3">
+                        <label for="activeDep" class="form-label">Add to a Department:</label>
+                        <select class="form-control" id="activeDep" name="selectedDep">
+                            @foreach(var dep in Model.ActiveDepts)
+                            {
+                                <option value="@dep.DepartmentID">@dep.DepartmentName</option>
+                            }
+                        </select>
+                    </div>
+                }
+
                 <div class="text-center">
                     <button style="width: 30%" asp-page="CreateKnowledge" asp-page-handler="PopulateHandler" class="btn btn-outline-primary btn-lg" formnovalidate>Populate</button>
                     @{

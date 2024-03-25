@@ -1111,5 +1111,19 @@ namespace MadisonCountySystem.Pages.DB
             cmdUserRead.Connection.Open();
             cmdUserRead.ExecuteNonQuery();
         }
+
+        public static void InsertDepartmentKnowledge(DepartmentKnowledge d)
+        {
+            String sqlQuery = "INSERT INTO DepartmentKnowledge (KnowledgeID, DepartmentID) VALUES (@KnowledgeID, @DepartmentID);";
+
+            SqlCommand cmdUserRead = new SqlCommand();
+            cmdUserRead.Connection = KnowledgeDBConnection;
+            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdUserRead.CommandText = sqlQuery;
+            cmdUserRead.Parameters.AddWithValue("@KnowledgeID", d.KnowledgeID);
+            cmdUserRead.Parameters.AddWithValue("@DepartmentID", d.DepartmentID);
+            cmdUserRead.Connection.Open();
+            cmdUserRead.ExecuteNonQuery();
+        }
     }
 }

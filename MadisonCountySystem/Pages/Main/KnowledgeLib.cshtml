@@ -41,6 +41,29 @@
     </div>
 }
 
+@if (Model.ActionType == "Dept")
+{
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4);">
+        <form method="post">
+            <div style="background-color:#fff; margin:10% auto; padding:20px; width:50%; max-width: 500px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <div class="col">
+                    <label for="activeDep" class="form-label">Department:</label>
+                    <select class="form-control" id="activeDep" name="selectedDep">
+                        @foreach (var dep in Model.ActiveDepts)
+                        {
+                            <option value="@dep.DepartmentID"> @dep.DepartmentName</option>
+                        }
+                    </select>
+                </div>
+                <div class="text-center mt-4">
+                    <button asp-page="KnowledgeLib" asp-page-handler="AddDep" class="btn btn-outline-success">Add</button>
+                    <button asp-page="KnowledgeLib" asp-page-handler="Close" class="btn btn-outline-danger">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
 
 <style type="text/css">
     thead {
@@ -133,7 +156,8 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li><a class="dropdown-item" asp-area="" asp-page="/RecordCreate/CreateKnowledge" asp-route-ExistingID="@KnowledgeItem.KnowledgeID">Edit</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-page="/Main/KnowledgeLib" asp-route-actionType="Collab:@KnowledgeItem.KnowledgeID">Collaborate</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/Main/KnowledgeLib" asp-route-actionType="Collab:@KnowledgeItem.KnowledgeID">Add to Collab</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/Main/KnowledgeLib" asp-route-actionType="Dept:@KnowledgeItem.KnowledgeID">Add to Department</a></li>
                                 <li><a class="dropdown-item" asp-area="" asp-page="/Main/KnowledgeLib" asp-route-actionType="Delete:@KnowledgeItem.KnowledgeID">Delete</a></li>
                             </ul>
                         </div>

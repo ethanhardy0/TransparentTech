@@ -353,5 +353,27 @@ namespace MadisonCountySystem.Pages.Main
                 DBClass.KnowledgeDBConnection.Close();
             }
         }
+
+        public IActionResult OnPostAddDep(int selectedDep)
+        {
+            String testQuery = "SELECT * FROM DepartmentKnowledge WHERE DepartmentID = ";
+            testQuery += selectedDep;
+            testQuery += " AND KnowledgeID = ";
+            testQuery += SelectedItemID;
+            if (DBClass.GeneralReader(testQuery).HasRows)
+            {
+                DBClass.KnowledgeDBConnection.Close();
+                return RedirectToPage();
+            }
+            DBClass.KnowledgeDBConnection.Close();
+
+            DBClass.InsertDepartmentKnowledge(new DepartmentKnowledge 
+            { 
+                DepartmentID = selectedDep, 
+                KnowledgeID = SelectedItemID 
+            });
+            DBClass.KnowledgeDBConnection.Close();
+            return RedirectToPage();
+        }
     }
 }
