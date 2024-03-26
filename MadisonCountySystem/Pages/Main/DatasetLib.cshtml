@@ -67,6 +67,7 @@
         <tr>
             <th>Dataset Name:</th>
             <th>File Type:</th>
+            <th>Departments:</th>
             <th>Created Date:</th>
             <th></th>
         </tr>
@@ -78,6 +79,7 @@
                 <tr>
                     <td><a asp-area="" asp-page="/Info/DatasetInfo" asp-route-dataID="@Dataset.DatasetID">@Dataset.DatasetName</a></td>
                     <td>@Dataset.DatasetType</td>
+                    <td>@String.Join(", ", Dataset.Departments)</td>
                     <td>@Dataset.DatasetCreatedDate</td>
                     <td>
                         <!-- New column for actions -->

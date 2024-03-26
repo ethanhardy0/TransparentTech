@@ -19,11 +19,14 @@ namespace MadisonCountySystem.Pages.Main
         public List<Dataset> Dep3Data { get; set; }
         public List<Dataset> Dep4Data { get; set; }
         public List<Dataset> Dep5Data { get; set; }
+        public List<Department> ActiveDepts { get; set; }
+        public List<DepartmentDataset> asscDepts { get; set; }
 
 
         public DatasetModel()
         {
             DatasetList = new List<Dataset>();
+            asscDepts = new List<DepartmentDataset>();
         }
 
         public void OnGet(String actionType)
@@ -140,6 +143,36 @@ namespace MadisonCountySystem.Pages.Main
                     DBClass.KnowledgeDBConnection.Close();
                 }
             }
+            if (HttpContext.Session.GetString("typeUser") != "Admin" && HttpContext.Session.GetString("typeUser") != "Super")
+            {
+                DepartmentItems();
+            }
+            SqlDataReader depKI = DBClass.DepartmentDatasetReader();
+            while (depKI.Read())
+            {
+                asscDepts.Add(new DepartmentDataset
+                {
+                    DatasetID = Int32.Parse(depKI["DatasetID"].ToString()),
+                    DepartmentName = depKI["DepartmentName"].ToString()
+                });
+            }
+            DBClass.KnowledgeDBConnection.Close();
+
+            List<String> asscDept2 = new List<String>();
+            foreach (var data in DatasetList)
+            {
+                foreach (var dep in asscDepts)
+                {
+                    if (dep.DatasetID == data.DatasetID)
+                    {
+                        asscDept2.Add(dep.DepartmentName);
+                    }
+                }
+                data.Departments = new List<String>();
+                data.Departments.AddRange(asscDept2);
+                asscDept2.Clear();
+            }
+            GetActiveDepts();
         }
 
 
@@ -214,6 +247,75 @@ namespace MadisonCountySystem.Pages.Main
             }
             DBClass.KnowledgeDBConnection.Close();
             return CollabList;
+        }
+
+        public void DepartmentItems()
+        {
+            DatasetList = new List<Dataset>();
+            if (HttpContext.Session.GetInt32("dep1") == 1)
+            {
+                DatasetList.AddRange(Dep1Data);
+            }
+            if (HttpContext.Session.GetInt32("dep2") == 1)
+            {
+                DatasetList.AddRange(Dep2Data);
+            }
+            if (HttpContext.Session.GetInt32("dep3") == 1)
+            {
+                DatasetList.AddRange(Dep3Data);
+            }
+            if (HttpContext.Session.GetInt32("dep4") == 1)
+            {
+                DatasetList.AddRange(Dep4Data);
+            }
+            if (HttpContext.Session.GetInt32("dep5") == 1)
+            {
+                DatasetList.AddRange(Dep5Data);
+            }
+
+
+            DatasetList = DatasetList.GroupBy(obj => obj.DatasetID).Select(group => group.First()).ToList();
+        }
+
+        public void GetActiveDepts()
+        {
+            ActiveDepts = new List<Department>();
+
+            if (HttpContext.Session.GetString("typeUser") != "Admin" && HttpContext.Session.GetString("typeUser") != "Super")
+            {
+                for (int i = 1; i < 6; i++)
+                {
+                    SqlDataReader depReader = DBClass.DepartmentReader();
+                    while (depReader.Read())
+                    {
+                        if (Int32.Parse(depReader["DepartmentID"].ToString()) == i)
+                        {
+                            if (HttpContext.Session.GetInt32("dep" + i) == 1)
+                            {
+                                ActiveDepts.Add(new Department
+                                {
+                                    DepartmentID = i,
+                                    DepartmentName = depReader["DepartmentName"].ToString()
+                                });
+                            }
+                        }
+                    }
+                    DBClass.KnowledgeDBConnection.Close();
+                }
+            }
+            else
+            {
+                SqlDataReader depReader = DBClass.DepartmentReader();
+                while (depReader.Read())
+                {
+                    ActiveDepts.Add(new Department
+                    {
+                        DepartmentID = Int32.Parse(depReader["DepartmentID"].ToString()),
+                        DepartmentName = depReader["DepartmentName"].ToString()
+                    });
+                }
+                DBClass.KnowledgeDBConnection.Close();
+            }
         }
     }
 }

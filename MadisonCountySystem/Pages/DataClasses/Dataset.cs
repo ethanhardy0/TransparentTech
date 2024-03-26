@@ -12,5 +12,6 @@
         public String? OwnerName { get; set; }
         public String? OwnerFirst { get; set; }
         public String? OwnerLast { get; set; }
+        public List<String> Departments { get; set; }
     }
 }
