@@ -48,21 +48,37 @@ namespace MadisonCountySystem.Pages.Main
 
                 DBClass.KnowledgeDBConnection.Close();
 
-                SqlDataReader read = DBClass.GeneralReader("SELECT Collaboration.CollabID, CollabName FROM UserCollab JOIN Collaboration ON Collaboration.CollabID " +
-                    "= UserCollab.CollabID WHERE UserCollab.UserID = " + HttpContext.Session.GetString("userID") + ";");
-
                 Collabs = new List<Collab>();
 
-                while (read.Read())
+                if (HttpContext.Session.GetString("typeUser") != "Admin")
                 {
-                    Collabs.Add(new Collab
-                    {
-                        CollabName = read["CollabName"].ToString(),
-                        CollabID = Int32.Parse(read["CollabID"].ToString())
-                    });
-                }
+                    SqlDataReader read = DBClass.GeneralReader("SELECT Collaboration.CollabID, CollabName FROM UserCollab JOIN Collaboration ON Collaboration.CollabID " +
+                        "= UserCollab.CollabID WHERE UserCollab.UserID = " + HttpContext.Session.GetString("userID") + ";");
 
-                DBClass.KnowledgeDBConnection.Close();
+                    while (read.Read())
+                    {
+                        Collabs.Add(new Collab
+                        {
+                            CollabName = read["CollabName"].ToString(),
+                            CollabID = Int32.Parse(read["CollabID"].ToString())
+                        });
+                    }
+
+                    DBClass.KnowledgeDBConnection.Close();
+                }
+                else
+                {
+                    SqlDataReader collabReader = DBClass.CollabReader();
+                    while (collabReader.Read())
+                    {
+                        Collabs.Add(new Collab
+                        {
+                            CollabName = collabReader["CollabName"].ToString(),
+                            CollabID = Int32.Parse(collabReader["CollabID"].ToString())
+                        });
+                    }
+                    DBClass.KnowledgeDBConnection.Close();
+                }
 
                 Departments = new List<Department>();
                 if (HttpContext.Session.GetString("typeUser") == "Admin")

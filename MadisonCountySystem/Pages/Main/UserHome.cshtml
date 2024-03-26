@@ -14,8 +14,8 @@
         border-radius: 20%;
         background-color: #004AAD;
         color: #fff;
-        width: 80%;
-        padding: 10px;
+        width: 90%;
+        padding: 20px;
         box-shadow: 2px 2px 5px black;    
     }
 
@@ -43,27 +43,6 @@
 <br />
 <div class="row">
     <div class="col-lg-4">
-        <div id="userCard" class="text-center box-shadow">
-            <h3>About</h3>
-            <p id="chgMessage">Click To Change Profile Picture</p>
-            @{
-                if (Model.PhotoDir == "~/images/blankuser.jpg")
-                {
-                    <a asp-page="/RecordCreate/UserPhotoEditor" onmouseover="chgPhoto();" onmouseout="revert();"><img src=@Url.Content(Model.PhotoDir) width="175" height="175" /></a>
-                }
-                else
-                {
-                    <a asp-page="/RecordCreate/UserPhotoEditor" onmouseover="chgPhoto();" onmouseout="revert();"><img src="@Model.PhotoDir" width="175" height="175" /></a>
-                }
-            }
-            <br />
-            <p>@Model.LoggedUser.LastName, @Model.LoggedUser.FirstName</p>
-            <p>@Model.LoggedUser.Email</p>
-            <p>@Model.LoggedUser.Phone</p>
-            <p>Permission Level: @Model.LoggedUser.UserType</p>
-        </div>
-    </div>
-    <div class="col-lg-4">
         <table class="table table-bordered table-responsive table-hover">
             <thead>
                 <tr>
@@ -82,6 +61,29 @@
             </tbody>
         </table>
     </div>
+
+    <div class="col-lg-4">
+        <div id="userCard" class="text-center box-shadow">
+            <h3>About</h3>
+            
+            @{
+                if (Model.PhotoDir == "~/images/blankuser.jpg")
+                {
+                    <a asp-page="/RecordCreate/UserPhotoEditor" onmouseover="chgPhoto();" onmouseout="revert();"><img src=@Url.Content(Model.PhotoDir) width="175" height="175" /></a>
+                }
+                else
+                {
+                    <a asp-page="/RecordCreate/UserPhotoEditor" onmouseover="chgPhoto();" onmouseout="revert();"><img src="@Model.PhotoDir" width="175" height="175" /></a>
+                }
+            }
+            <p id="chgMessage">Click To Change Profile Picture</p>
+            <p>@Model.LoggedUser.LastName, @Model.LoggedUser.FirstName</p>
+            <p>@Model.LoggedUser.Email</p>
+            <p>@Model.LoggedUser.Phone</p>
+            <p>Permission Level: @Model.LoggedUser.UserType</p>
+        </div>
+    </div>
+
     <div class="col-lg-4">
         <div id="userCard" class="text-center box-shadow">
             <h3>Your Departments</h3>
