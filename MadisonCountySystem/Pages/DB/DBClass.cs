@@ -1144,5 +1144,19 @@ namespace MadisonCountySystem.Pages.DB
             cmdUserRead.Connection.Open();
             cmdUserRead.ExecuteNonQuery();
         }
+
+        public static void InsertDepartmentDataset(DepartmentDataset d)
+        {
+            String sqlQuery = "INSERT INTO DepartmentDataset (DatasetID, DepartmentID) VALUES (@DatasetID, @DepartmentID);";
+
+            SqlCommand cmdUserRead = new SqlCommand();
+            cmdUserRead.Connection = KnowledgeDBConnection;
+            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdUserRead.CommandText = sqlQuery;
+            cmdUserRead.Parameters.AddWithValue("@DatasetID", d.DatasetID);
+            cmdUserRead.Parameters.AddWithValue("@DepartmentID", d.DepartmentID);
+            cmdUserRead.Connection.Open();
+            cmdUserRead.ExecuteNonQuery();
+        }
     }
 }
