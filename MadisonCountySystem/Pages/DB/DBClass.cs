@@ -161,45 +161,46 @@ namespace MadisonCountySystem.Pages.DB
 
 		// ------------------------------------------- KIs -----------------------------------------------------------------------------------------------------------
 		public static SqlDataReader KnowledgeItemReader()
-        {
-            SqlCommand cmdKnowledgeRead = new SqlCommand();
-            cmdKnowledgeRead.Connection = KnowledgeDBConnection;
-            cmdKnowledgeRead.Connection.ConnectionString = KnowledgeDBConnString;
-            cmdKnowledgeRead.CommandText = "SELECT * FROM KnowledgeItem LEFT JOIN SysUser ON KnowledgeItem.OwnerID = SysUser.UserID WHERE KnowledgeItem.KnowledgeStatus != 'Deleted' OR KnowledgeItem.KnowledgeStatus IS NULL;";
-            cmdKnowledgeRead.Connection.Open(); // Open connection here, close in Model!
+		{
+			SqlCommand cmdKnowledgeRead = new SqlCommand();
+			cmdKnowledgeRead.Connection = KnowledgeDBConnection;
+			cmdKnowledgeRead.Connection.ConnectionString = KnowledgeDBConnString;
+			cmdKnowledgeRead.CommandText = "KnowledgeItemReader";
+			cmdKnowledgeRead.CommandType = CommandType.StoredProcedure;
+			cmdKnowledgeRead.Connection.Open(); // Open connection here, close in Model!
 
-            SqlDataReader tempReader = cmdKnowledgeRead.ExecuteReader();
+			SqlDataReader tempReader = cmdKnowledgeRead.ExecuteReader();
 
-            return tempReader;
-        }
+			return tempReader;
+		}
 
-        public static int InsertKnowledgeItem(KnowledgeItem a)
-        {
-            String sqlQuery = "INSERT INTO KnowledgeItem (KnowledgeTitle, KnowledgeSubject, KnowledgeCategory, KnowledgeInformation, KnowledgePostDate, OwnerID, Strengths, Weaknesses, Opportunities, Threats) VALUES (@KnowledgeTitle," +
-                " @KnowledgeSubject, @KnowledgeCategory, @KnowledgeInformation, @KnowledgePostDate, @OwnerID, @Strengths, @Weaknesses, @Opportunities, @Threats);" +
-                "SELECT CAST(scope_identity() AS int);"; // This line gets the newly generated DatasetID"
+		public static int InsertKnowledgeItem(KnowledgeItem a)
+		{
+			string sqlQuery = "InsertKnowledgeItem";
 
-            using (SqlCommand cmdKnowledgeRead = new SqlCommand(sqlQuery, KnowledgeDBConnection))
-            {
-                cmdKnowledgeRead.Parameters.AddWithValue("@KnowledgeTitle", a.KnowledgeTitle);
-                cmdKnowledgeRead.Parameters.AddWithValue("@KnowledgeSubject", a.KnowledgeSubject);
-                cmdKnowledgeRead.Parameters.AddWithValue("@KnowledgeCategory", a.KnowledgeCategory);
-                cmdKnowledgeRead.Parameters.AddWithValue("@KnowledgeInformation", a.KnowledgeInformation);
-                cmdKnowledgeRead.Parameters.AddWithValue("@KnowledgePostDate", a.KnowledgePostDate);
-                cmdKnowledgeRead.Parameters.AddWithValue("@OwnerID", a.OwnerID);
-                cmdKnowledgeRead.Parameters.AddWithValue("@Strengths", a.Strengths);
-                cmdKnowledgeRead.Parameters.AddWithValue("@Weaknesses", a.Weaknesses);
-                cmdKnowledgeRead.Parameters.AddWithValue("@Opportunities", a.Opportunities);
-                cmdKnowledgeRead.Parameters.AddWithValue("@Threats", a.Threats);
+			using (SqlCommand cmdKnowledgeInsert = new SqlCommand(sqlQuery, KnowledgeDBConnection))
+			{
+				cmdKnowledgeInsert.CommandType = CommandType.StoredProcedure;
 
-                KnowledgeDBConnection.Open();
-                int newKnowledgeID = (int)cmdKnowledgeRead.ExecuteScalar(); // Executes the command and returns the new AnalysisID
-                KnowledgeDBConnection.Close();
-                return newKnowledgeID;
-            }
-        }
+				cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgeTitle", a.KnowledgeTitle);
+				cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgeSubject", a.KnowledgeSubject);
+				cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgeCategory", a.KnowledgeCategory);
+				cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgeInformation", a.KnowledgeInformation);
+				cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgePostDate", a.KnowledgePostDate);
+				cmdKnowledgeInsert.Parameters.AddWithValue("@OwnerID", a.OwnerID);
+				cmdKnowledgeInsert.Parameters.AddWithValue("@Strengths", a.Strengths);
+				cmdKnowledgeInsert.Parameters.AddWithValue("@Weaknesses", a.Weaknesses);
+				cmdKnowledgeInsert.Parameters.AddWithValue("@Opportunities", a.Opportunities);
+				cmdKnowledgeInsert.Parameters.AddWithValue("@Threats", a.Threats);
 
-        public static void DeleteKnowledgeItem(int KnowledgeID)
+				KnowledgeDBConnection.Open();
+				int newKnowledgeID = (int)cmdKnowledgeInsert.ExecuteScalar(); // Executes the command and returns the new KnowledgeID
+				KnowledgeDBConnection.Close();
+				return newKnowledgeID;
+			}
+		}
+
+		public static void DeleteKnowledgeItem(int KnowledgeID)
         {
             String sqlQuery = "UPDATE KnowledgeItem SET KnowledgeStatus = 'Deleted' WHERE KnowledgeID = @KnowledgeID";
 
@@ -1057,7 +1058,7 @@ namespace MadisonCountySystem.Pages.DB
 
         public static SqlDataReader DepartmentAnalysisReader()
         {
-            String SqlQuery = "SELECT * FROM DepartmentAnalysis;";
+            String SqlQuery = "SELECT * FROM DepartmentAnalysis LEFT JOIN Department ON DepartmentAnalysis.DepartmentID = Department.DepartmentID;";
             SqlCommand cmdAnalysisRead = new SqlCommand();
             cmdAnalysisRead.Connection = KnowledgeDBConnection;
             cmdAnalysisRead.Connection.ConnectionString = KnowledgeDBConnString;
@@ -1071,7 +1072,7 @@ namespace MadisonCountySystem.Pages.DB
 
         public static SqlDataReader DepartmentDatasetReader()
         {
-            String SqlQuery = "SELECT * FROM DepartmentDataset;";
+            String SqlQuery = "SELECT * FROM DepartmentDataset LEFT JOIN Department ON DepartmentDataset.DepartmentID = Department.DepartmentID;";
             SqlCommand cmdAnalysisRead = new SqlCommand();
             cmdAnalysisRead.Connection = KnowledgeDBConnection;
             cmdAnalysisRead.Connection.ConnectionString = KnowledgeDBConnString;
