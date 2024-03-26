@@ -125,7 +125,6 @@ namespace MadisonCountySystem.Pages.Main
                             KnowledgeSubject = KIReader["KnowledgeSubject"].ToString(),
                             KnowledgeCategory = KIReader["KnowledgeCategory"].ToString(),
                             KnowledgePostDate = KIReader["KnowledgePostDate"].ToString(),
-                            //Add join to general reader to get owner name
                             OwnerName = KIReader["Username"].ToString(),
                             KnowledgeID = Int32.Parse(KIReader["KnowledgeID"].ToString())
                         };
