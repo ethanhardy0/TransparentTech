@@ -135,11 +135,22 @@ namespace MadisonCountySystem.Pages.RecordCreate
             StringBuilder createTableScript = new StringBuilder($"CREATE TABLE [{tableName}] (");
 
             // Iterate over each header
-            foreach (var header in headers)
+            for (int i = 0; i < headers.Count; i++)
             {
-                var columnName = header.Replace(" ", "_"); // Replace spaces with underscores
-                                                           // Append column name with TEXT data type
-                createTableScript.Append($"[{columnName}] NVARCHAR(100), ");
+                var columnName = headers[i].Replace(" ", "_"); // Replace spaces with underscores
+                                                               // Append column name with TEXT data type
+
+                try
+                {
+                    Double.Parse(rows[0][i]);
+                    createTableScript.Append($"[{columnName}] DECIMAL(18,2), ");
+                }
+                catch
+                {
+
+                    createTableScript.Append($"[{columnName}] NVARCHAR(100), ");
+
+                }
             }
 
             // Remove trailing comma and space
