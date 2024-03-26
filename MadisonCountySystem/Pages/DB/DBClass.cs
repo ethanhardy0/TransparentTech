@@ -201,59 +201,63 @@ namespace MadisonCountySystem.Pages.DB
 		}
 
 		public static void DeleteKnowledgeItem(int KnowledgeID)
-        {
-            String sqlQuery = "UPDATE KnowledgeItem SET KnowledgeStatus = 'Deleted' WHERE KnowledgeID = @KnowledgeID";
+		{
+			string sqlQuery = "DeleteKnowledgeItem";
 
-            SqlCommand cmdUserRead = new SqlCommand();
-            cmdUserRead.Connection = KnowledgeDBConnection;
-            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
-            cmdUserRead.CommandText = sqlQuery;
-            cmdUserRead.Parameters.AddWithValue("@KnowledgeID", KnowledgeID);
-            cmdUserRead.Connection.Open();
-            cmdUserRead.ExecuteNonQuery();
-        }
+			using (SqlCommand cmdDeleteKnowledgeItem = new SqlCommand(sqlQuery, KnowledgeDBConnection))
+			{
+				cmdDeleteKnowledgeItem.CommandType = CommandType.StoredProcedure;
 
-        public static void RemoveKnowledgeItemCollab(int KnowledgeID, int CollabID)
-        {
-            String sqlQuery = "DELETE FROM KnowledgeCollab WHERE KnowledgeID = @KnowledgeID AND CollabID = @CollabID";
+				cmdDeleteKnowledgeItem.Parameters.AddWithValue("@KnowledgeID", KnowledgeID);
 
-            SqlCommand cmdUserRead = new SqlCommand();
-            cmdUserRead.Connection = KnowledgeDBConnection;
-            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
-            cmdUserRead.CommandText = sqlQuery;
-            cmdUserRead.Parameters.AddWithValue("@KnowledgeID", KnowledgeID);
-            cmdUserRead.Parameters.AddWithValue("@CollabID", CollabID);
-            cmdUserRead.Connection.Open();
-            cmdUserRead.ExecuteNonQuery();
-        }
+				KnowledgeDBConnection.Open();
+				cmdDeleteKnowledgeItem.ExecuteNonQuery();
+				KnowledgeDBConnection.Close(); // Don't forget to close the connection
+			}
+		}
 
-        public static void UpdateExistingKI(KnowledgeItem k)
-        {
-            String sqlQuery = "UPDATE KnowledgeItem SET KnowledgeTitle = @KnowledgeTitle, KnowledgeSubject = @KnowledgeSubject, ";
-            sqlQuery += "KnowledgeCategory = @KnowledgeCategory, KnowledgeInformation = @KnowledgeInformation, Strengths = @Strengths, Weaknesses = @Weaknesses, ";
-            sqlQuery += "Opportunities = @Opportunities, Threats = @Threats WHERE KnowledgeID = @KnowledgeID;";
+		public static void RemoveKnowledgeItemCollab(int KnowledgeID, int CollabID)
+		{
+			string sqlQuery = "RemoveKnowledgeItemCollab";
 
-            SqlCommand cmdUserRead = new SqlCommand();
-            cmdUserRead.Connection = KnowledgeDBConnection;
-            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
-            cmdUserRead.CommandText = sqlQuery;
-            cmdUserRead.Parameters.AddWithValue("@KnowledgeID", k.KnowledgeID);
-            cmdUserRead.Parameters.AddWithValue("@KnowledgeTitle", k.KnowledgeTitle); // AddWithValue for KnowledgeTitle
-            cmdUserRead.Parameters.AddWithValue("@KnowledgeSubject", k.KnowledgeSubject); // AddWithValue for KnowledgeSubject
-            cmdUserRead.Parameters.AddWithValue("@KnowledgeCategory", k.KnowledgeCategory); // AddWithValue for KnowledgeCategory
-            cmdUserRead.Parameters.AddWithValue("@KnowledgeInformation", k.KnowledgeInformation); // AddWithValue for KnowledgeInformation
-            cmdUserRead.Parameters.AddWithValue("@Strengths", k.Strengths); // AddWithValue for Strengths
-            cmdUserRead.Parameters.AddWithValue("@Weaknesses", k.Weaknesses); // AddWithValue for Weaknesses
-            cmdUserRead.Parameters.AddWithValue("@Opportunities", k.Opportunities); // AddWithValue for Opportunities
-            cmdUserRead.Parameters.AddWithValue("@Threats", k.Threats); // AddWithValue for Threats
+			using (SqlCommand cmdRemoveCollab = new SqlCommand(sqlQuery, KnowledgeDBConnection))
+			{
+				cmdRemoveCollab.CommandType = CommandType.StoredProcedure;
 
-            cmdUserRead.Connection.Open();
-            cmdUserRead.ExecuteNonQuery();
-        }
+				cmdRemoveCollab.Parameters.AddWithValue("@KnowledgeID", KnowledgeID);
+				cmdRemoveCollab.Parameters.AddWithValue("@CollabID", CollabID);
+
+				KnowledgeDBConnection.Open();
+				cmdRemoveCollab.ExecuteNonQuery();
+			}
+		}
+
+		public static void UpdateExistingKI(KnowledgeItem k)
+		{
+			string sqlQuery = "UpdateExistingKI";
+
+			using (SqlCommand cmdUpdateKI = new SqlCommand(sqlQuery, KnowledgeDBConnection))
+			{
+				cmdUpdateKI.CommandType = CommandType.StoredProcedure;
+
+				cmdUpdateKI.Parameters.AddWithValue("@KnowledgeID", k.KnowledgeID);
+				cmdUpdateKI.Parameters.AddWithValue("@KnowledgeTitle", k.KnowledgeTitle);
+				cmdUpdateKI.Parameters.AddWithValue("@KnowledgeSubject", k.KnowledgeSubject);
+				cmdUpdateKI.Parameters.AddWithValue("@KnowledgeCategory", k.KnowledgeCategory);
+				cmdUpdateKI.Parameters.AddWithValue("@KnowledgeInformation", k.KnowledgeInformation);
+				cmdUpdateKI.Parameters.AddWithValue("@Strengths", k.Strengths);
+				cmdUpdateKI.Parameters.AddWithValue("@Weaknesses", k.Weaknesses);
+				cmdUpdateKI.Parameters.AddWithValue("@Opportunities", k.Opportunities);
+				cmdUpdateKI.Parameters.AddWithValue("@Threats", k.Threats);
+
+				KnowledgeDBConnection.Open();
+				cmdUpdateKI.ExecuteNonQuery();
+			}
+		}
 
 
-// ------------------------------------------- Datasets ------------------------------------------------------------------------------------------------------
-        public static SqlDataReader DatasetReader()
+		// ------------------------------------------- Datasets ------------------------------------------------------------------------------------------------------
+		public static SqlDataReader DatasetReader()
         {
             SqlCommand cmdDatasetRead = new SqlCommand();
             cmdDatasetRead.Connection = KnowledgeDBConnection;
