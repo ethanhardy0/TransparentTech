@@ -7,6 +7,8 @@ using System.Linq;
 using System.Dynamic;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using MadisonCountySystem.Pages.DB;
+using MathNet.Numerics.LinearRegression;
+using MathNet.Numerics;
 
 namespace MadisonCountySystem.Pages.Info
 {
@@ -17,6 +19,8 @@ namespace MadisonCountySystem.Pages.Info
         public List<String> ColNames { get; set; }
         public List<List<String>> Rows { get; set; }
         public List<String> RowValues { get; set; }
+        public double[] XVal { get; set; }
+        public double[] YVal { get; set; }
         [BindProperty]
         public String? sqlQuery { get; set; }
 
@@ -80,6 +84,31 @@ namespace MadisonCountySystem.Pages.Info
 
                 }
             }
+        }
+
+        // This is just an example we still need to figure out how they want us to use this
+        public void OnPostRegression()
+        {
+            SqlDataReader test = DBClass.AuxGeneralReader("SELECT [2024_Actuals], [2023_Actuals], [2022_Actuals] FROM [W];");
+
+            test.Read();
+
+            XVal = new double[test.FieldCount];
+            
+            for (int i = 0; i < test.FieldCount; i++)
+            {
+                XVal[i] = Double.Parse(test[i].ToString());
+            }
+
+            DBClass.KnowledgeDBConnection.Close();
+
+            YVal = new double[] { 1, 2, 3};
+
+            ValueTuple<double, double> z = Fit.Line(YVal, XVal);
+
+            double a = z.Item1;
+            double b = z.Item2;
+
         }
 
     }

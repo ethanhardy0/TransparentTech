@@ -139,17 +139,16 @@ namespace MadisonCountySystem.Pages.RecordCreate
             {
                 var columnName = headers[i].Replace(" ", "_"); // Replace spaces with underscores
                                                                // Append column name with TEXT data type
-
                 try
                 {
+                    // Detect if column contains decimal values
                     Double.Parse(rows[0][i]);
                     createTableScript.Append($"[{columnName}] DECIMAL(18,2), ");
                 }
                 catch
                 {
-
+                    // Fall back if string value is detected
                     createTableScript.Append($"[{columnName}] NVARCHAR(100), ");
-
                 }
             }
 
