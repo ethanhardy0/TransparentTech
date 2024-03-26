@@ -1,6 +1,7 @@
 ﻿@page
 @model MadisonCountySystem.Pages.Main.UserHomeModel
 @{
+    ViewData["Title"] = "Welcome";
 }
 
 <style>
@@ -38,47 +39,57 @@
     }
 </script>
 
-<h1 class="text-center mt-5">Welcome @Model.LoggedUser.Username</h1>
-
+<h1 class="text-center mt-5">Welcome, @Model.LoggedUser.Username</h1>
+<br />
 <div class="row">
-
-<div class="col-lg-4">
-    <div id="userCard" class="text-center box-shadow">
-        <p id="chgMessage">Click To Change Profile Picture</p>
-        @{
-            if (Model.PhotoDir == "~/images/blankuser.jpg")
-            {
-                        <a asp-page="/RecordCreate/UserPhotoEditor" onmouseover="chgPhoto();" onmouseout="revert();"><img src=@Url.Content(Model.PhotoDir) width="175" height="175" /></a>
-            } else
-            {
-                        <a asp-page="/RecordCreate/UserPhotoEditor" onmouseover="chgPhoto();" onmouseout="revert();"><img src="@Model.PhotoDir" width="175" height="175" /></a>
-            }
-        }
-        </br>
-        <p>@Model.LoggedUser.LastName, @Model.LoggedUser.FirstName</p>
-        <p>@Model.LoggedUser.Email</p>
-        <p>@Model.LoggedUser.Phone</p>
-        <p>Permission Level: @Model.LoggedUser.UserType</p>
-    </div>
-</div>
-<div class="col-lg-4">
-    <table class="table table-bordered table-responsive table-hover">
-        <thead>
-            <tr>
-                <th>Collaboration Shortcut</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="col-lg-4">
+        <div id="userCard" class="text-center box-shadow">
+            <h3>About</h3>
+            <p id="chgMessage">Click To Change Profile Picture</p>
             @{
-                foreach (var collab in Model.Collabs)
+                if (Model.PhotoDir == "~/images/blankuser.jpg")
                 {
-                    <tr>
-                        <td><a asp-area="" asp-page="/Collabs/Index" asp-route-collabID="@collab.CollabID">@collab.CollabName</a></td>
-                    </tr>
+                    <a asp-page="/RecordCreate/UserPhotoEditor" onmouseover="chgPhoto();" onmouseout="revert();"><img src=@Url.Content(Model.PhotoDir) width="175" height="175" /></a>
+                }
+                else
+                {
+                    <a asp-page="/RecordCreate/UserPhotoEditor" onmouseover="chgPhoto();" onmouseout="revert();"><img src="@Model.PhotoDir" width="175" height="175" /></a>
                 }
             }
-        </tbody>
-    </table>
+            <br />
+            <p>@Model.LoggedUser.LastName, @Model.LoggedUser.FirstName</p>
+            <p>@Model.LoggedUser.Email</p>
+            <p>@Model.LoggedUser.Phone</p>
+            <p>Permission Level: @Model.LoggedUser.UserType</p>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <table class="table table-bordered table-responsive table-hover">
+            <thead>
+                <tr>
+                    <th>Collaboration Quick Links</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var collab in Model.Collabs)
+                    {
+                        <tr>
+                            <td><a asp-area="" asp-page="/Collabs/Index" asp-route-collabID="@collab.CollabID">@collab.CollabName</a></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-4">
+        <div id="userCard" class="text-center box-shadow">
+            <h3>Your Departments</h3>
+            @foreach (var dep in Model.Departments)
+            {
+                <p>@dep.DepartmentName</p>
+            }
+        </div>
+    </div>
 </div>
 
-</div>

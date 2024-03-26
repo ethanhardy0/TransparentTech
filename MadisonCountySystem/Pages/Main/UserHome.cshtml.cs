@@ -12,6 +12,7 @@ namespace MadisonCountySystem.Pages.Main
         public SysUser LoggedUser { get; set; }
         public String? PhotoDir { get; set; }
         public List<Collab> Collabs { get; set; }
+        public List<Department> Departments { get; set; }
         public IActionResult OnGet()
         {
             // Redirects user if not logged in
@@ -62,6 +63,44 @@ namespace MadisonCountySystem.Pages.Main
                 }
 
                 DBClass.KnowledgeDBConnection.Close();
+
+                Departments = new List<Department>();
+                if (HttpContext.Session.GetString("typeUser") == "Admin")
+                {
+                    SqlDataReader depReader = DBClass.DepartmentReader();
+                    while (depReader.Read())
+                    {
+                        Departments.Add(new Department
+                        {
+                            DepartmentID = Int32.Parse(depReader["DepartmentID"].ToString()),
+                            DepartmentName = depReader["DepartmentName"].ToString()
+                        });
+                    }
+                    DBClass.KnowledgeDBConnection.Close();
+                }
+                else
+                {
+                    for (int i = 1; i <= 5; i++)
+                    {
+                        if (HttpContext.Session.GetInt32("dep" + i) == 1)
+                        {
+                            SqlDataReader depReader = DBClass.DepartmentReader();
+                            while (depReader.Read())
+                            {
+                                if (Int32.Parse(depReader["DepartmentID"].ToString()) == i)
+                                {
+                                    Departments.Add(new Department
+                                    {
+                                        DepartmentID = i,
+                                        DepartmentName = depReader["DepartmentName"].ToString()
+                                    });
+                                    break;
+                                }
+                            }
+                            DBClass.KnowledgeDBConnection.Close();
+                        }
+                    }
+                }
 
                 return Page();
             }
