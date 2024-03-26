@@ -106,6 +106,7 @@ namespace MadisonCountySystem.Pages.Info
 
             ValueTuple<double, double> z = Fit.Line(YVal, XVal);
 
+            // Put breakpoint here because it causes crash
             double a = z.Item1;
             double b = z.Item2;
 
