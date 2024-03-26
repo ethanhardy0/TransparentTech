@@ -1071,7 +1071,7 @@ namespace MadisonCountySystem.Pages.DB
 
         public static SqlDataReader DepartmentDatasetReader()
         {
-            String SqlQuery = "SELECT * FROM DepartmentDataset;";
+            String SqlQuery = "SELECT * FROM DepartmentDataset LEFT JOIN Department ON DepartmentDataset.DepartmentID = Department.DepartmentID;";
             SqlCommand cmdAnalysisRead = new SqlCommand();
             cmdAnalysisRead.Connection = KnowledgeDBConnection;
             cmdAnalysisRead.Connection.ConnectionString = KnowledgeDBConnString;
