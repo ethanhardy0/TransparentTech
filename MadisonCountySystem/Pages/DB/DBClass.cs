@@ -334,9 +334,24 @@ namespace MadisonCountySystem.Pages.DB
             tableName = Regex.Replace(tableName, @"\s", string.Empty);
             //Creates a table based on columns (all fields will be nvarchar)
             string sql = "Create Table " + tableName + "(";
-            foreach (DataColumn column in dt.Columns)
+            for (int i = 0; i < dt.Columns.Count; i++)
             {
-                sql += "[" + column.ColumnName + "] " + "nvarchar(MAX)" + ",";
+                try
+                {
+                    try
+                    {
+                        Int32.Parse(dt.Rows[0][i].ToString());
+                        sql += "[" + dt.Columns[i].ColumnName + "] " + "INT" + ",";
+                    } catch 
+                    {
+                        Double.Parse(dt.Rows[0][i].ToString());
+                        sql += "[" + dt.Columns[i].ColumnName + "] " + "DECIMAL(18,2)" + ",";
+                    }
+                }
+                catch
+                {
+                    sql += "[" + dt.Columns[i].ColumnName + "] " + "nvarchar(MAX)" + ",";
+                }
             }
             sql = sql.TrimEnd(new char[] { ',' }) + ")";
             SqlCommand cmd = new SqlCommand(sql);
