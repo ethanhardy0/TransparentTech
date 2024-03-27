@@ -104,19 +104,20 @@
             <h3>Knowledge Item Library</h3>
         </div>
         <div class="col-auto">
-            <label for="activeDep" class="form-label">Filter Department:</label>
-            <select class="form-control" id="activeDep" name="selectedDep">
-                @foreach (var dep in Model.ActiveDepts)
-                {
-                    <option> @dep.DepartmentName</option>
-                }
-            </select>
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filter by Department
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    @foreach (var dep in Model.ActiveDepts)
+                    {
+                        <li><button class="dropdown-item" type="submit" asp-page="KnowledgeLib" asp-page-handler="FilterDep" name="selectedDep" value="@dep.DepartmentName">@dep.DepartmentName</button></li>
+                    }
+                </ul>
+            </div>
         </div>
         <div class="col-auto">
-            <button asp-page="KnowledgeLib" asp-page-handler="FilterDep" class="btn btn-outline-primary" formnovalidate>Filter</button>
-        </div>
-        <div class="col-auto">
-            <button asp-page="KnowledgeLib" asp-page-handler="Close" class="btn btn-outline-danger" formnovalidate>Clear All Filters</button>
+            <button asp-page="KnowledgeLib" asp-page-handler="Clear" class="btn btn-outline-danger">Clear All Filters</button>
         </div>
     </div>
 </form>
