@@ -70,7 +70,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
             }
 
         }
-        public IActionResult OnPostAddDB()
+        public IActionResult OnPostAddDB(int selectedDep)
         {
             if (!ModelState.IsValid)
             {
@@ -93,7 +93,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
                     ProcessCsvFile(file);
                 }
             }
-
+            
             CreateAndInsertDataset(selectedDep);
 
             // Redirect based on current location
