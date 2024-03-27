@@ -11,12 +11,26 @@
     }
 
     #userCard {
-        border-radius: 20%;
-        background-color: #004AAD;
-        color: #fff;
-        width: 90%;
+        border-radius: 15%;
+        background-color: #9EA5BF;
+        color: #000;
+        width: 60%;
         padding: 20px;
-        box-shadow: 2px 2px 5px black;    
+        margin: 10px;
+        box-shadow: 2px 2px 5px black;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    #department {
+        border-radius: 15%;
+        background-color: #9EA5BF;
+        color: #000;
+        width: 30%;
+        padding: 20px;
+        margin-left: 80px;
+        box-shadow: 2px 2px 5px black;
     }
 
     #chgMessage {
@@ -26,6 +40,16 @@
 
     thead {
         background-color: #EFC935;
+    }
+
+    h1 {
+        background-color: #EFC935;
+        padding: 20px;
+    }
+
+    .card {
+        margin-right: 57px;
+        margin-bottom: 50px;
     }
 </style>
 
@@ -39,9 +63,49 @@
     }
 </script>
 
-<h1 class="text-center mt-5">Welcome, @Model.LoggedUser.Username</h1>
+@*<h1 class="text-center mt-5">Welcome, @Model.LoggedUser.Username</h1>*@
+<h1>My Profile</h1>
 <br />
+
 <div class="row">
+    <section id="userCard" class="text-center box-shadow">
+        <div id="profile">
+            @{
+                if (Model.PhotoDir == "~/images/blankuser.jpg")
+                {
+                    <a asp-page="/RecordCreate/UserPhotoEditor" onmouseover="chgPhoto();" onmouseout="revert();"><img src=@Url.Content(Model.PhotoDir) width="175" height="175" /></a>
+                }
+                else
+                {
+                    <a asp-page="/RecordCreate/UserPhotoEditor" onmouseover="chgPhoto();" onmouseout="revert();"><img src="@Model.PhotoDir" width="175" height="175" /></a>
+                }
+            }
+            <p id="chgMessage">Click To Change Profile Picture</p>
+        </div>
+
+        <p>@Model.LoggedUser.LastName, @Model.LoggedUser.FirstName</p>
+
+        <div id="contactInfo">
+            <h3>User Info</h3>
+            <p>@Model.LoggedUser.Email</p>
+            <p>@Model.LoggedUser.Phone</p>
+            <p>Permission Level: @Model.LoggedUser.UserType</p>
+        </div>
+    </section>
+
+    <section id="department" class="text-center box-shadow">
+        <h3>Your Departments</h3>
+        @foreach (var dep in Model.Departments)
+        {
+            <p>@dep.DepartmentName</p>
+        }
+    </section>
+</div>
+
+<br />
+<br />
+
+@*
     <div class="col-lg-4">
         <table class="table table-bordered table-responsive table-hover">
             <thead>
@@ -61,37 +125,22 @@
             </tbody>
         </table>
     </div>
+    *@
 
-    <div class="col-lg-4">
-        <div id="userCard" class="text-center box-shadow">
-            <h3>About</h3>
-            
-            @{
-                if (Model.PhotoDir == "~/images/blankuser.jpg")
-                {
-                    <a asp-page="/RecordCreate/UserPhotoEditor" onmouseover="chgPhoto();" onmouseout="revert();"><img src=@Url.Content(Model.PhotoDir) width="175" height="175" /></a>
-                }
-                else
-                {
-                    <a asp-page="/RecordCreate/UserPhotoEditor" onmouseover="chgPhoto();" onmouseout="revert();"><img src="@Model.PhotoDir" width="175" height="175" /></a>
-                }
-            }
-            <p id="chgMessage">Click To Change Profile Picture</p>
-            <p>@Model.LoggedUser.LastName, @Model.LoggedUser.FirstName</p>
-            <p>@Model.LoggedUser.Email</p>
-            <p>@Model.LoggedUser.Phone</p>
-            <p>Permission Level: @Model.LoggedUser.UserType</p>
-        </div>
-    </div>
-
-    <div class="col-lg-4">
-        <div id="userCard" class="text-center box-shadow">
-            <h3>Your Departments</h3>
-            @foreach (var dep in Model.Departments)
-            {
-                <p>@dep.DepartmentName</p>
-            }
-        </div>
+<div class="row">
+    <h3>My Collaborations</h3>
+    <br />
+    <br />
+    <div id="collabsContainer" class="col-md-12 d-flex flex-wrap">
+        @foreach (var collab in Model.Collabs)
+        {
+            <div class="card">
+                <img src="~/images/Madison County.png" width="200" height="200">
+                <div class="card-body">
+                    <h5 class="card-title">@collab.CollabName</h5>
+                    <a href="@Url.Page("/Collabs/Index", new { collabID = collab.CollabID })" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        }
     </div>
 </div>
-
