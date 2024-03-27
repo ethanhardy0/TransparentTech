@@ -19,7 +19,7 @@ namespace MadisonCountySystem.Pages.DB
         public static SqlConnection KnowledgeDBConnection = new SqlConnection();
 
         // Connection String - How to find and connect to DB
-        private static readonly String? KnowledgeDBConnString = "Server=Localhost;Database=Test;Trusted_Connection=True";
+        private static readonly String? KnowledgeDBConnString = "Server=Localhost;Database=Lab3;Trusted_Connection=True";
 
         private static readonly String? AUTHConnString = "Server=Localhost;Database=AUTH;Trusted_Connection=True";
 
@@ -1186,7 +1186,7 @@ namespace MadisonCountySystem.Pages.DB
 
         public static SqlDataReader UserDepartmentReader()
         {
-            String SqlQuery = "SELECT * FROM UserDepartment;";
+            String SqlQuery = "SELECT * FROM UserDepartment LEFT JOIN SysUser ON UserDepartment.UserID = SysUser.UserID;";
             SqlCommand cmdAnalysisRead = new SqlCommand();
             cmdAnalysisRead.Connection = KnowledgeDBConnection;
             cmdAnalysisRead.Connection.ConnectionString = KnowledgeDBConnString;
