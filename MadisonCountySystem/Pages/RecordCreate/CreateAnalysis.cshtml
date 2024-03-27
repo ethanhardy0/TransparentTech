@@ -9,22 +9,28 @@
         <div class="row justify-content-md-center">
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label asp-for="AnalysisName" class="form-label">Analysis Name:</label>
+                    <label asp-for="AnalysisName" class="form-label">Name Your Analysis:</label>
                     <input asp-for="AnalysisName" placeholder="Enter Analysis Name:" class="form-control" />
                     <span asp-validation-for="AnalysisName" class="text-danger"></span>
                 </div>
-                <div class="mb-3">
+                <div class="row mb-3">
+                    <div class="col">
                     <label asp-for="AnalysisType" class="form-label">Analysis Type:</label>
                     <select class="form-control" asp-for="AnalysisType">
-                        <option>SUM</option>
-                        <option>COUNT</option>
-                        <option>MAX</option>
-                        <option>MIN</option>
-                        <option>MEAN</option>
+                        <option>Prediction</option>
                     </select>
+                    </div>
+                    <div class="col">
+                        <label asp-for="DataType" class="form-label">Type of Data:</label>
+                        <select class="form-control" asp-for="DataType">
+                            <option>Budget</option>
+                            <option>Spending</option>
+                        </select>
+                    </div>
                 </div>
+                
                 <div class="mb-3">
-                    <label asp-for="activeDataset" class="form-label">Dataset to Analyze:</label>
+                    <label asp-for="activeDataset" class="form-label">Using the Dataset:</label>
                     <select class="form-control" id="activeDataset" name="selectedDataset" asp-for="activeDataset">
                         @foreach (var dataset in Model.DatasetList)
                         {
@@ -32,6 +38,25 @@
                         }
                     </select>
                 </div>
+                <div class="row mb-3">
+                    <div class="col">
+                    <label asp-for="PredictYear" class="form-label">Predicting in Year:</label>
+                    <select class="form-control" asp-for="PredictYear">
+                        @for (int i = DateTime.Now.Year; i <= DateTime.Now.Year+5; i++)
+                        {
+                            <option>@i</option>
+                        }
+                    </select>
+                    </div>
+                    <div class="col">
+                        <label asp-for="InflationRate" class="form-label">Predicted Inflation Rate (0-100%):</label>
+                        <div class="input-group">
+                            <input type="number" asp-for="InflationRate" min="0" max="100" class="form-control" />
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="mb-3">
                     <label asp-for="activeKI" class="form-label">Related Knowledge Item:</label>
                     <select class="form-control" id="activeKI" name="selectedKI" asp-for="activeKI">
