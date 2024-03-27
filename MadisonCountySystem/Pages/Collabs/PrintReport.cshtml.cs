@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Data.SqlClient;
+using System.Diagnostics.Eventing.Reader;
 using System.Numerics;
 using System.Threading;
 
@@ -17,8 +18,12 @@ namespace MadisonCountySystem.Pages.Collabs
         public String dataType { get; set; }
         public static String CollabID { get; set; }
         public string CollabName { get; set; }
-        public List<KnowledgeItem> KeyKI { get; set; }
-        public List<KnowledgeItem> Research { get; set; }
+        public List<KnowledgeItem> KeyStandard { get; set; }
+        public List<SWOT> KeySWOT { get; set; }
+        public List<PEST> KeyPEST { get; set; }
+        public List<KnowledgeItem> ResearchStandard { get; set; }
+        public List<SWOT> ResearchSWOT { get; set; }
+        public List<PEST> ResearchPEST { get; set; }
         public List<KnowledgeItemCollab> KnowledgeCollabs { get; set; }
         public List<PlanStep> PlanSteps { get; set; }
         public List<SysPlan> PlansList { get; set; }
@@ -30,11 +35,15 @@ namespace MadisonCountySystem.Pages.Collabs
         public static List<KnowledgeItemCollab> KnowledgeCollabsRef { get; set; }
         public PrintReportModel()
         {
-            KeyKI = new List<KnowledgeItem>();
+            KeyStandard = new List<KnowledgeItem>();
+            KeySWOT = new List<SWOT>();
+            KeyPEST = new List<PEST>();
             PlanSteps = new List<PlanStep>();
             PlansList = new List<SysPlan>();
             KnowledgeCollabs = new List<KnowledgeItemCollab>();
-            Research = new List<KnowledgeItem>();
+            ResearchStandard = new List<KnowledgeItem>();
+            ResearchSWOT = new List<SWOT>();
+            ResearchPEST = new List<PEST>();
             UserList = new List<SysUser>();
             UserCollabs = new List<UserCollab>();
         }
@@ -92,22 +101,58 @@ namespace MadisonCountySystem.Pages.Collabs
                     {
                         if (ItemID == KnowledgeItemReader["KnowledgeID"].ToString())
                         {
-                            KeyKI.Add(new KnowledgeItem
+                            if (Int32.Parse(KnowledgeItemReader["KnowledgeTypeID"].ToString()) == 1)
                             {
-                                KnowledgeTitle = KnowledgeItemReader["KnowledgeTitle"].ToString(),
-                                KnowledgeSubject = KnowledgeItemReader["KnowledgeSubject"].ToString(),
-                                KnowledgeCategory = KnowledgeItemReader["KnowledgeCategory"].ToString(),
-                                KnowledgeInformation = KnowledgeItemReader["KnowledgeInformation"].ToString(),
-                                KnowledgePostDate = KnowledgeItemReader["KnowledgePostDate"].ToString(),
-                                OwnerName = KnowledgeItemReader["Username"].ToString(),
-                                OwnerFirst = KnowledgeItemReader["FirstName"].ToString(),
-                                OwnerLast = KnowledgeItemReader["LastName"].ToString(),
-                                //Strengths = KnowledgeItemReader["Strengths"].ToString(),
-                                //Weaknesses = KnowledgeItemReader["Weaknesses"].ToString(),
-                                //Opportunities = KnowledgeItemReader["Opportunities"].ToString(),
-                                //Threats = KnowledgeItemReader["Threats"].ToString()
-                            });
-
+                                KeyStandard.Add(new KnowledgeItem
+                                {
+                                    KnowledgeTitle = KnowledgeItemReader["KnowledgeTitle"].ToString(),
+                                    KnowledgeSubject = KnowledgeItemReader["KnowledgeSubject"].ToString(),
+                                    KnowledgeCategory = KnowledgeItemReader["KnowledgeCategory"].ToString(),
+                                    KnowledgeInformation = KnowledgeItemReader["KnowledgeInformation"].ToString(),
+                                    KnowledgePostDate = KnowledgeItemReader["KnowledgePostDate"].ToString(),
+                                    KnowledgeTypeID = Int32.Parse(KnowledgeItemReader["KnowledgeTypeID"].ToString()),
+                                    OwnerName = KnowledgeItemReader["Username"].ToString(),
+                                    OwnerFirst = KnowledgeItemReader["FirstName"].ToString(),
+                                    OwnerLast = KnowledgeItemReader["LastName"].ToString(),
+                                });
+                            } else if (Int32.Parse(KnowledgeItemReader["KnowledgeTypeID"].ToString()) == 2)
+                            {
+                                KeySWOT.Add(new SWOT
+                                {
+                                    KnowledgeTitle = KnowledgeItemReader["KnowledgeTitle"].ToString(),
+                                    KnowledgeSubject = KnowledgeItemReader["KnowledgeSubject"].ToString(),
+                                    KnowledgeCategory = KnowledgeItemReader["KnowledgeCategory"].ToString(),
+                                    KnowledgeInformation = KnowledgeItemReader["KnowledgeInformation"].ToString(),
+                                    KnowledgePostDate = KnowledgeItemReader["KnowledgePostDate"].ToString(),
+                                    KnowledgeTypeID = Int32.Parse(KnowledgeItemReader["KnowledgeTypeID"].ToString()),
+                                    OwnerName = KnowledgeItemReader["Username"].ToString(),
+                                    OwnerFirst = KnowledgeItemReader["FirstName"].ToString(),
+                                    OwnerLast = KnowledgeItemReader["LastName"].ToString(),
+                                    Strengths = KnowledgeItemReader["Strengths"].ToString(),
+                                    Weaknesses = KnowledgeItemReader["Weaknesses"].ToString(),
+                                    Opportunities = KnowledgeItemReader["Opportunities"].ToString(),
+                                    Threats = KnowledgeItemReader["Threats"].ToString()
+                                });
+                            } else if (Int32.Parse(KnowledgeItemReader["KnowledgeTypeID"].ToString()) == 3)
+                            {
+                                KeyPEST.Add(new PEST
+                                {
+                                    KnowledgeTitle = KnowledgeItemReader["KnowledgeTitle"].ToString(),
+                                    KnowledgeSubject = KnowledgeItemReader["KnowledgeSubject"].ToString(),
+                                    KnowledgeCategory = KnowledgeItemReader["KnowledgeCategory"].ToString(),
+                                    KnowledgeInformation = KnowledgeItemReader["KnowledgeInformation"].ToString(),
+                                    KnowledgePostDate = KnowledgeItemReader["KnowledgePostDate"].ToString(),
+                                    KnowledgeTypeID = Int32.Parse(KnowledgeItemReader["KnowledgeTypeID"].ToString()),
+                                    OwnerName = KnowledgeItemReader["Username"].ToString(),
+                                    OwnerFirst = KnowledgeItemReader["FirstName"].ToString(),
+                                    OwnerLast = KnowledgeItemReader["LastName"].ToString(),
+                                    Political = KnowledgeItemReader["Political"].ToString(),
+                                    Economic = KnowledgeItemReader["Economic"].ToString(),
+                                    Social = KnowledgeItemReader["Social"].ToString(),
+                                    Technological = KnowledgeItemReader["Technological"].ToString()
+                                });
+                            }
+                             
                         }
                     }
                     DBClass.KnowledgeDBConnection.Close();
@@ -126,30 +171,65 @@ namespace MadisonCountySystem.Pages.Collabs
                     }
                 }
                 DBClass.KnowledgeDBConnection.Close();
-                SqlDataReader knowledgeReader = DBClass.KnowledgeItemReader();
-                while (knowledgeReader.Read())
+                SqlDataReader KnowledgeReader = DBClass.KnowledgeItemReader();
+                while (KnowledgeReader.Read())
                 {
                     foreach (var knowledgeCollab in KnowledgeCollabs)
                     {
-                        if (knowledgeCollab.KnowledgeID == int.Parse(knowledgeReader["KnowledgeID"].ToString()) && knowledgeCollab.KnowledgeID != int.Parse(KnowledgeID))
+                        if (knowledgeCollab.KnowledgeID == int.Parse(KnowledgeReader["KnowledgeID"].ToString()) && knowledgeCollab.KnowledgeID != int.Parse(KnowledgeID))
                         {
-                            Research.Add(new KnowledgeItem
+                            if (Int32.Parse(KnowledgeReader["KnowledgeTypeID"].ToString()) == 1)
                             {
-                                KnowledgeID = int.Parse(knowledgeReader["KnowledgeID"].ToString()),
-                                KnowledgeTitle = knowledgeReader["KnowledgeTitle"].ToString(),
-                                KnowledgeSubject = knowledgeReader["KnowledgeSubject"].ToString(),
-                                KnowledgeCategory = knowledgeReader["KnowledgeCategory"].ToString(),
-                                KnowledgeInformation = knowledgeReader["KnowledgeInformation"].ToString(),
-                                KnowledgePostDate = knowledgeReader["KnowledgePostDate"].ToString(),
-                                OwnerID = int.Parse(knowledgeReader["OwnerID"].ToString()),
-                                OwnerFirst = knowledgeReader["FirstName"].ToString(),
-                                OwnerLast = knowledgeReader["LastName"].ToString(),
-                                OwnerName = knowledgeReader["Username"].ToString(),
-                                //Strengths = knowledgeReader["Strengths"].ToString(),
-                                //Weaknesses = knowledgeReader["Weaknesses"].ToString(),
-                                //Opportunities = knowledgeReader["Opportunities"].ToString(),
-                                //Threats = knowledgeReader["Threats"].ToString()
-                            });
+                                ResearchStandard.Add(new KnowledgeItem
+                                {
+                                    KnowledgeTitle = KnowledgeReader["KnowledgeTitle"].ToString(),
+                                    KnowledgeSubject = KnowledgeReader["KnowledgeSubject"].ToString(),
+                                    KnowledgeCategory = KnowledgeReader["KnowledgeCategory"].ToString(),
+                                    KnowledgeInformation = KnowledgeReader["KnowledgeInformation"].ToString(),
+                                    KnowledgePostDate = KnowledgeReader["KnowledgePostDate"].ToString(),
+                                    KnowledgeTypeID = Int32.Parse(KnowledgeReader["KnowledgeTypeID"].ToString()),
+                                    OwnerName = KnowledgeReader["Username"].ToString(),
+                                    OwnerFirst = KnowledgeReader["FirstName"].ToString(),
+                                    OwnerLast = KnowledgeReader["LastName"].ToString(),
+                                });
+                            }
+                            else if (Int32.Parse(KnowledgeReader["KnowledgeTypeID"].ToString()) == 2)
+                            {
+                                ResearchSWOT.Add(new SWOT
+                                {
+                                    KnowledgeTitle = KnowledgeReader["KnowledgeTitle"].ToString(),
+                                    KnowledgeSubject = KnowledgeReader["KnowledgeSubject"].ToString(),
+                                    KnowledgeCategory = KnowledgeReader["KnowledgeCategory"].ToString(),
+                                    KnowledgeInformation = KnowledgeReader["KnowledgeInformation"].ToString(),
+                                    KnowledgePostDate = KnowledgeReader["KnowledgePostDate"].ToString(),
+                                    KnowledgeTypeID = Int32.Parse(KnowledgeReader["KnowledgeTypeID"].ToString()),
+                                    OwnerName = KnowledgeReader["Username"].ToString(),
+                                    OwnerFirst = KnowledgeReader["FirstName"].ToString(),
+                                    OwnerLast = KnowledgeReader["LastName"].ToString(),
+                                    Strengths = KnowledgeReader["Strengths"].ToString(),
+                                    Weaknesses = KnowledgeReader["Weaknesses"].ToString(),
+                                    Opportunities = KnowledgeReader["Opportunities"].ToString(),
+                                    Threats = KnowledgeReader["Threats"].ToString()
+                                });
+
+                            } else if (Int32.Parse(KnowledgeReader["KnowledgeTypeID"].ToString()) == 3) { 
+                                ResearchPEST.Add(new PEST
+                                {
+                                    KnowledgeTitle = KnowledgeReader["KnowledgeTitle"].ToString(),
+                                    KnowledgeSubject = KnowledgeReader["KnowledgeSubject"].ToString(),
+                                    KnowledgeCategory = KnowledgeReader["KnowledgeCategory"].ToString(),
+                                    KnowledgeInformation = KnowledgeReader["KnowledgeInformation"].ToString(),
+                                    KnowledgePostDate = KnowledgeReader["KnowledgePostDate"].ToString(),
+                                    KnowledgeTypeID = Int32.Parse(KnowledgeReader["KnowledgeTypeID"].ToString()),
+                                    OwnerName = KnowledgeReader["Username"].ToString(),
+                                    OwnerFirst = KnowledgeReader["FirstName"].ToString(),
+                                    OwnerLast = KnowledgeReader["LastName"].ToString(),
+                                    Political = KnowledgeReader["Political"].ToString(),
+                                    Economic = KnowledgeReader["Economic"].ToString(),
+                                    Social = KnowledgeReader["Social"].ToString(),
+                                    Technological = KnowledgeReader["Technological"].ToString()
+                                });
+                            }
                         }
                     }
                 }
