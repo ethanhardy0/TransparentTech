@@ -39,51 +39,109 @@
 }
 else
 {
-    <div class="text-center mb-4">
-        <h2> @Model.KeyKI.KnowledgeTitle</h2>
-        <h3><strong>Subject:</strong> <span class="fw-normal">@Model.KeyKI.KnowledgeSubject</span></h3>
-        <h4><strong>Category:</strong> <span class="fw-normal">@Model.KeyKI.KnowledgeCategory</span></h4>
-    </div>
-
-    /*
-    <div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
-        <div class="col">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Strengths</h5>
-                    <p class="card-text">@Model.KeyKI.Strengths</p>
-                </div>
-            </div>
+    if (Model.KnowledgeTypeID == 1)
+    {
+        <div class="text-center mb-4">
+            <h2> @Model.KeyKI.KnowledgeTitle</h2>
+            <h3><strong>Subject:</strong> <span class="fw-normal">@Model.KeyKI.KnowledgeSubject</span></h3>
+            <h4><strong>Category:</strong> <span class="fw-normal">@Model.KeyKI.KnowledgeCategory</span></h4>
+        </div>
+    }
+    else if (Model.KnowledgeTypeID == 2)
+    {
+        <div class="text-center mb-4">
+            <h2> @Model.KeySWOT.KnowledgeTitle</h2>
+            <h3><strong>Subject:</strong> <span class="fw-normal">@Model.KeySWOT.KnowledgeSubject</span></h3>
+            <h4><strong>Category:</strong> <span class="fw-normal">@Model.KeySWOT.KnowledgeCategory</span></h4>
         </div>
 
-        <div class="col">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Weaknesses</h5>
-                    <p class="card-text">@Model.KeyKI.Weaknesses</p>
+        <div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Strengths</h5>
+                        <p class="card-text">@Model.KeySWOT.Strengths</p>
+                    </div>
                 </div>
             </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Weaknesses</h5>
+                        <p class="card-text">@Model.KeySWOT.Weaknesses</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Opportunities</h5>
+                        <p class="card-text">@Model.KeySWOT.Opportunities</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Threats</h5>
+                        <p class="card-text">@Model.KeySWOT.Threats</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    } else if (Model.KnowledgeTypeID == 3)
+    {
+        <div class="text-center mb-4">
+            <h2> Model.KeyPEST.KnowledgeTitle</h2>
+            <h3><strong>Subject:</strong> <span class="fw-normal">Model.KeyPEST.KnowledgeSubject</span></h3>
+            <h4><strong>Category:</strong> <span class="fw-normal">Model.KeyPEST.KnowledgeCategory</span></h4>
         </div>
 
-        <div class="col">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Opportunities</h5>
-                    <p class="card-text">@Model.KeyKI.Opportunities</p>
-                </div>
-            </div>
-        </div>
 
-        <div class="col">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Threats</h5>
-                    <p class="card-text">@Model.KeyKI.Threats</p>
+        <div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Political</h5>
+                        <p class="card-text">Model.KeyPEST.Political</p>
+                    </div>
                 </div>
             </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Economic</h5>
+                        <p class="card-text">Model.KeyPEST.Economic</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Social</h5>
+                        <p class="card-text">Model.KeyPEST.Social</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Threats</h5>
+                        <p class="card-text">Model.KeyPEST.Technological</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        
-    </div> */
+    }
+
 }
 <br />
 <div class="container mt-5">
@@ -91,61 +149,13 @@ else
     <hr />
 </div>
 @{
-    foreach (var KnowledgeItem in Model.Research)
+    foreach (var KnowledgeItem in Model.ResearchStandard)
     {
         <div class="text-center mb-4">
             <h2>@KnowledgeItem.KnowledgeTitle</h2>
             <h3><strong>Subject:</strong> <span class="fw-normal">@KnowledgeItem.KnowledgeSubject</span></h3>
             <h4><strong>Category:</strong> <span class="fw-normal">@KnowledgeItem.KnowledgeCategory</span></h4>
         </div>
-
-        /*
-        <div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
-            @if (KnowledgeItem.Strengths != "0")
-            {
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Strengths</h5>
-                            <p class="card-text">@KnowledgeItem.Strengths</p>
-                        </div>
-                    </div>
-                </div>
-            }
-            @if (KnowledgeItem.Weaknesses != "0")
-            {
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Weaknesses</h5>
-                            <p class="card-text">@KnowledgeItem.Weaknesses</p>
-                        </div>
-                    </div>
-                </div>
-            }
-            @if (KnowledgeItem.Opportunities != "0")
-            {
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Opportunities</h5>
-                            <p class="card-text">@KnowledgeItem.Opportunities</p>
-                        </div>
-                    </div>
-                </div>
-            }
-            @if (KnowledgeItem.Threats != "0")
-            {
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Threats</h5>
-                            <p class="card-text">@KnowledgeItem.Threats</p>
-                        </div>
-                    </div>
-                </div>
-            } 
-        </div>*/
 
         <div class="row mt-4">
             <div class="col-12">
@@ -162,6 +172,135 @@ else
         <br />
         <br />
     }
+
+    foreach (var SWOT in Model.ResearchSWOT)
+    {
+        <div class="text-center mb-4">
+            <h2> @SWOT.KnowledgeTitle</h2>
+            <h3><strong>Subject:</strong> <span class="fw-normal">@SWOT.KnowledgeSubject</span></h3>
+            <h4><strong>Category:</strong> <span class="fw-normal">@SWOT.KnowledgeCategory</span></h4>
+        </div>
+
+
+        <div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Strengths</h5>
+                        <p class="card-text">@SWOT.Strengths</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Weaknesses</h5>
+                        <p class="card-text">@SWOT.Weaknesses</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Opportunities</h5>
+                        <p class="card-text">@SWOT.Opportunities</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Threats</h5>
+                        <p class="card-text">@SWOT.Threats</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Knowledge Information</h5>
+                        <p class="card-text">@SWOT.KnowledgeInformation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <hr />
+        <br />
+        <br />
+    }
+
+    foreach (var PEST in Model.ResearchPEST)
+    {
+        <div class="text-center mb-4">
+            <h2> @PEST.KnowledgeTitle</h2>
+            <h3><strong>Subject:</strong> <span class="fw-normal">@PEST.KnowledgeSubject</span></h3>
+            <h4><strong>Category:</strong> <span class="fw-normal">@PEST.KnowledgeCategory</span></h4>
+        </div>
+
+
+        <div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Political</h5>
+                        <p class="card-text">@PEST.Political</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Economic</h5>
+                        <p class="card-text">@PEST.Economic</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Social</h5>
+                        <p class="card-text">@PEST.Social</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Threats</h5>
+                        <p class="card-text">@PEST.Technological</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Knowledge Information</h5>
+                        <p class="card-text">@PEST.KnowledgeInformation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <hr />
+        <br />
+        <br />
+    }
+}
     <div>
         <h1 class="text-center mb-4">@Model.CollabName Users:</h1>
         <table class="table table-bordered table-responsive table-hover">

@@ -955,7 +955,9 @@ namespace MadisonCountySystem.Pages.DB
                 "LEFT JOIN KnowledgeItem ON CollabReport.KnowledgeID = KnowledgeItem.KnowledgeID " +
                 "LEFT JOIN SysUser A ON CollabReport.UserID = A.UserID " +
                 "LEFT JOIN SysUser B ON KnowledgeItem.OwnerID = B.UserID " +
-                "WHERE CollabReportParent = @ReportID";
+                "LEFT JOIN SWOT ON CollabReport.KnowledgeID = SWOT.KnowledgeID " +
+                "LEFT JOIN PEST ON CollabReport.KnowledgeID = PEST.KnowledgeID " +
+                "WHERE CollabReportParent = @ReportID;";
             cmdReportRead.Parameters.AddWithValue("@ReportID", reportID);
             cmdReportRead.Connection.Open(); // Open connection here, close in Model!
 
