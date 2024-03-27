@@ -87,8 +87,10 @@ namespace MadisonCountySystem.Pages.Info
         }
 
         // This is just an example we still need to figure out how they want us to use this
-        public void OnPostRegression()
+        public IActionResult OnPostRegression()
         {
+            return RedirectToPage("/RecordCreate/CreateAnalysis", new {existingDatasetID = DatasetID});
+
             SqlDataReader test = DBClass.AuxGeneralReader("SELECT [2024_Actuals], [2023_Actuals], [2022_Actuals] FROM [W];");
 
             test.Read();

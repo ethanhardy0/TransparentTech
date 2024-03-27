@@ -26,11 +26,11 @@
 </div>
 
 <!--This gives a visual representation of some dataset-->
-<div class="row align align-items-end">
+<div class="row align align-items-end mb-3">
     <h1>Table: @Model.Dataset.DatasetName</h1>
     <p class="fst-italic">*Only Top 100 Rows Displayed</p>
-    <form asp-page-handler="Regression">
-        <button type="submit">Run Regression</button> 
+    <form method="post">
+        <button asp-page="DatasetInfo" asp-page-handler="Regression" class="btn btn-outline-primary">Run Regression Analysis</button>
     </form>
 </div>
 

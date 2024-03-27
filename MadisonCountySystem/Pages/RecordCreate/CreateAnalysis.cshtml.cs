@@ -36,7 +36,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
             KnowledgeItemList = new List<KnowledgeItem>();
         }
 
-        public void OnGet()
+        public void OnGet(int existingDatasetID)
         {
             if (HttpContext.Session.GetString("username") == null)
             {
@@ -56,6 +56,24 @@ namespace MadisonCountySystem.Pages.RecordCreate
                     });
                 }
                 DBClass.KnowledgeDBConnection.Close();
+
+                if(existingDatasetID > 0)
+                {
+                    DatasetList = new List<Dataset>();
+                    SqlDataReader dsReader2 = DBClass.DatasetReader();
+                    while (dsReader2.Read())
+                    {
+                        if(Int32.Parse(dsReader2["DatasetID"].ToString()) == existingDatasetID)
+                        {
+                            DatasetList.Add(new Dataset
+                            {
+                                DatasetID = existingDatasetID,
+                                DatasetName = dsReader2["DatasetName"].ToString()
+                            });
+                        }
+                    }
+                    DBClass.KnowledgeDBConnection.Close();
+                }
 
                 SqlDataReader KnowledgeItemReader = DBClass.KnowledgeItemReader();
                 while (KnowledgeItemReader.Read())
