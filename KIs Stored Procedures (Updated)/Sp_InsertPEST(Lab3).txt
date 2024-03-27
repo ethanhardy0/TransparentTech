@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 CREATE PROCEDURE InsertPEST
     @KnowledgeID INT,
     @Political nvarchar(max),
@@ -12,4 +13,20 @@ BEGIN
     VALUES (@KnowledgeID, @Political, @Economic, @Social, @Technological);
 
     SELECT CAST(scope_identity() AS INT);
+=======
+CREATE PROCEDURE InsertPEST
+    @KnowledgeID INT,
+    @Political nvarchar(max),
+    @Economic nvarchar(max),
+    @Social nvarchar(max),
+    @Technological nvarchar(max)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO PEST(KnowledgeID, Political, Economic, Social, Technological)
+    VALUES (@KnowledgeID, @Political, @Economic, @Social, @Technological);
+
+    SELECT CAST(scope_identity() AS INT);
+>>>>>>> 10378f50b88d87a8c5c516bcf39bfac31f4f8321
 END;

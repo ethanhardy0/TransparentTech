@@ -68,6 +68,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
 
                 GetActiveDepts();
             }
+
         }
         public IActionResult OnPostAddDB()
         {

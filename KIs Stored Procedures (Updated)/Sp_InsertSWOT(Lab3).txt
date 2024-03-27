@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 CREATE PROCEDURE InsertSWOT
     @KnowledgeID INT,
     @Strengths nvarchar(max),
@@ -13,4 +14,21 @@ BEGIN
 
     SELECT CAST(scope_identity() AS INT);
 END;
+=======
+CREATE PROCEDURE InsertSWOT
+    @KnowledgeID INT,
+    @Strengths nvarchar(max),
+    @Weaknesses nvarchar(max),
+    @Opportunities nvarchar(max),
+    @Threats nvarchar(max)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO SWOT(KnowledgeID, Strengths, Weaknesses, Opportunities, Threats)
+    VALUES (@KnowledgeID, @Strengths, @Weaknesses, @Opportunities, @Threats);
+
+    SELECT CAST(scope_identity() AS INT);
+END;
+>>>>>>> 10378f50b88d87a8c5c516bcf39bfac31f4f8321
     
