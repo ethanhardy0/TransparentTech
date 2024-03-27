@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 CREATE PROCEDURE DeleteKnowledgeItem
     @KnowledgeID INT
 AS
@@ -8,7 +7,7 @@ BEGIN
     UPDATE KnowledgeItem
     SET KnowledgeStatus = 'Deleted'
     WHERE KnowledgeID = @KnowledgeID;
-=======
+
 CREATE PROCEDURE DeleteKnowledgeItem
     @KnowledgeID INT
 AS
@@ -18,5 +17,4 @@ BEGIN
     UPDATE KnowledgeItem
     SET KnowledgeStatus = 'Deleted'
     WHERE KnowledgeID = @KnowledgeID;
->>>>>>> 10378f50b88d87a8c5c516bcf39bfac31f4f8321
 END;
