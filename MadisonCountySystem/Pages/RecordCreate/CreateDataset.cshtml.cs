@@ -65,8 +65,8 @@ namespace MadisonCountySystem.Pages.RecordCreate
                         new SelectListItem(file.Name, file.Name));
                 }
             }
-
         }
+
         public IActionResult OnPostAddDB()
         {
             if (!ModelState.IsValid)
@@ -175,7 +175,6 @@ namespace MadisonCountySystem.Pages.RecordCreate
         }
 
 
-        // Inserts headers in first then inserts row data
         private void InsertExcelData(string tableName, List<string> headers, List<string> rowData)
         {
             // Construct insert query
@@ -209,15 +208,23 @@ namespace MadisonCountySystem.Pages.RecordCreate
                     // Add parameter values
                     for (int i = 0; i < headers.Count; i++)
                     {
+                        // Check if the value exists in rowData
+                        string value = i < rowData.Count ? rowData[i] : null;
+
                         // Check if the value is numerical
-                        if (double.TryParse(rowData[i], out double numericValue))
+                        if (double.TryParse(value, out double numericValue))
                         {
                             command.Parameters.AddWithValue($"@param{headers[i].Replace(" ", "_")}", numericValue);
                         }
+                        else if (value != null && value != DBNull.Value.ToString())
+                        {
+                            // If not numerical and not DBNull, add as string
+                            command.Parameters.AddWithValue($"@param{headers[i].Replace(" ", "_")}", value);
+                        }
                         else
                         {
-                            // If not numerical, add as string
-                            command.Parameters.AddWithValue($"@param{headers[i].Replace(" ", "_")}", rowData[i]);
+                            // If value is DBNull or null, add DBNull.Value
+                            command.Parameters.AddWithValue($"@param{headers[i].Replace(" ", "_")}", DBNull.Value);
                         }
                     }
 
@@ -225,6 +232,8 @@ namespace MadisonCountySystem.Pages.RecordCreate
                 }
             }
         }
+
+
 
         private void ProcessCsvFile(IFormFile file)
         {
