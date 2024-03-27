@@ -184,7 +184,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
             StringBuilder insertQuery = new StringBuilder($"INSERT INTO {tableName} (");
             foreach (var header in headers)
             {
-                var columnName = header.Replace(" ", "_"); // Replace spaces with underscores
+                var columnName = header.Replace(" ", "_").Replace("/", "_"); // Replace spaces with underscores
                 insertQuery.Append($"[{columnName}], ");
             }
 
