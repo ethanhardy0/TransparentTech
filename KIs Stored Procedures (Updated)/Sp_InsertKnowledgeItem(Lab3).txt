@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 CREATE PROCEDURE InsertKnowledgeItem
     @KnowledgeTitle NVARCHAR(255),
     @KnowledgeSubject NVARCHAR(255),
@@ -15,22 +14,4 @@ BEGIN
     VALUES (@KnowledgeTitle, @KnowledgeSubject, @KnowledgeCategory, @KnowledgeInformation, @KnowledgePostDate, @OwnerID, @KnowledgeTypeID);
 
     SELECT CAST(scope_identity() AS INT);
-=======
-CREATE PROCEDURE InsertKnowledgeItem
-    @KnowledgeTitle NVARCHAR(255),
-    @KnowledgeSubject NVARCHAR(255),
-    @KnowledgeCategory NVARCHAR(255),
-    @KnowledgeInformation NVARCHAR(MAX),
-    @KnowledgePostDate DATETIME,
-    @OwnerID INT,
-    @KnowledgeTypeID INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO KnowledgeItem (KnowledgeTitle, KnowledgeSubject, KnowledgeCategory, KnowledgeInformation, KnowledgePostDate, OwnerID, KnowledgeTypeID)
-    VALUES (@KnowledgeTitle, @KnowledgeSubject, @KnowledgeCategory, @KnowledgeInformation, @KnowledgePostDate, @OwnerID, @KnowledgeTypeID);
-
-    SELECT CAST(scope_identity() AS INT);
->>>>>>> 10378f50b88d87a8c5c516bcf39bfac31f4f8321
 END;
