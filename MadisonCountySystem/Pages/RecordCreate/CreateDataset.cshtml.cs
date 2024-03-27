@@ -192,7 +192,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
 
             // Remove trailing comma and space
             insertQuery.Remove(insertQuery.Length - 2, 2);
-            insertQuery.Append(") VALUES (");
+            insertQuery.Append(") VALUES ("); 
 
             // Add parameter placeholders
             foreach (var header in headers)
