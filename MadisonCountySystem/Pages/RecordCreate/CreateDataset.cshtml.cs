@@ -70,13 +70,14 @@ namespace MadisonCountySystem.Pages.RecordCreate
             }
 
         }
-        public IActionResult OnPostAddDB()
+        public IActionResult OnPostAddDB(int selectedDep)
         {
             if (!ModelState.IsValid)
             {
                 GetActiveDepts();
                 return Page();
             }
+            DatasetName = DatasetName.Replace(" ", "_").Replace("-", "_").Replace(",", "_").Replace("/", "_").Replace("\\", "_");
 
             foreach (var file in FormFiles)
             {
@@ -173,6 +174,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
             // Insert data into the table
             foreach (var row in rows)
             {
+                
                 InsertExcelData(tableName, headers, row);
             }
         }
@@ -184,7 +186,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
             StringBuilder insertQuery = new StringBuilder($"INSERT INTO {tableName} (");
             foreach (var header in headers)
             {
-                var columnName = header.Replace(" ", "_"); // Replace spaces with underscores
+                var columnName = header.Replace(" ", "_").Replace(",", "_").Replace("-", "_").Replace("/", "_").Replace("\\", "_"); // Replace spaces with underscores
                 insertQuery.Append($"[{columnName}], ");
             }
 
