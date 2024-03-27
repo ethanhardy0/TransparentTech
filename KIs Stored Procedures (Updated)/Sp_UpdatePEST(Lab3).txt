@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 CREATE PROCEDURE UpdatePEST
     @KnowledgeID INT,
     @Political NVARCHAR(255),
@@ -16,7 +15,7 @@ BEGIN
         Social = @Social,
         Technological = @Technological
     WHERE KnowledgeID = @KnowledgeID;
-=======
+
 CREATE PROCEDURE UpdatePEST
     @KnowledgeID INT,
     @Political NVARCHAR(255),
@@ -34,5 +33,4 @@ BEGIN
         Social = @Social,
         Technological = @Technological
     WHERE KnowledgeID = @KnowledgeID;
->>>>>>> 10378f50b88d87a8c5c516bcf39bfac31f4f8321
 END;
