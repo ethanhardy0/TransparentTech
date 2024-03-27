@@ -102,10 +102,10 @@ namespace MadisonCountySystem.Pages.Collabs
                                 OwnerName = KnowledgeItemReader["Username"].ToString(),
                                 OwnerFirst = KnowledgeItemReader["FirstName"].ToString(),
                                 OwnerLast = KnowledgeItemReader["LastName"].ToString(),
-                                Strengths = KnowledgeItemReader["Strengths"].ToString(),
-                                Weaknesses = KnowledgeItemReader["Weaknesses"].ToString(),
-                                Opportunities = KnowledgeItemReader["Opportunities"].ToString(),
-                                Threats = KnowledgeItemReader["Threats"].ToString()
+                                //Strengths = KnowledgeItemReader["Strengths"].ToString(),
+                                //Weaknesses = KnowledgeItemReader["Weaknesses"].ToString(),
+                                //Opportunities = KnowledgeItemReader["Opportunities"].ToString(),
+                                //Threats = KnowledgeItemReader["Threats"].ToString()
                             });
 
                         }
@@ -145,10 +145,10 @@ namespace MadisonCountySystem.Pages.Collabs
                                 OwnerFirst = knowledgeReader["FirstName"].ToString(),
                                 OwnerLast = knowledgeReader["LastName"].ToString(),
                                 OwnerName = knowledgeReader["Username"].ToString(),
-                                Strengths = knowledgeReader["Strengths"].ToString(),
-                                Weaknesses = knowledgeReader["Weaknesses"].ToString(),
-                                Opportunities = knowledgeReader["Opportunities"].ToString(),
-                                Threats = knowledgeReader["Threats"].ToString()
+                                //Strengths = knowledgeReader["Strengths"].ToString(),
+                                //Weaknesses = knowledgeReader["Weaknesses"].ToString(),
+                                //Opportunities = knowledgeReader["Opportunities"].ToString(),
+                                //Threats = knowledgeReader["Threats"].ToString()
                             });
                         }
                     }

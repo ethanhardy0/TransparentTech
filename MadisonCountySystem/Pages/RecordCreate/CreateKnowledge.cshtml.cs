@@ -11,6 +11,8 @@ namespace MadisonCountySystem.Pages.RecordCreate
     public class CreateKnowledgeModel : PageModel
     {
         public KnowledgeItem KnowledgeItem { get; set; }
+        public PEST PEST { get; set; }
+        public SWOT SWOT { get; set; }
         [BindProperty]
         [Required]
         public String KnowledgeTitle { get; set; }
@@ -29,6 +31,8 @@ namespace MadisonCountySystem.Pages.RecordCreate
         [BindProperty]
         public bool IsSwotItem { get; set; } // This property is bound to the checkbox
         [BindProperty]
+        public bool IsPESTItem { get; set; }
+        [BindProperty]
         public String Strengths { get; set; }
         [BindProperty]
         public String Weakness { get; set; }
@@ -36,7 +40,17 @@ namespace MadisonCountySystem.Pages.RecordCreate
         public String Opportunities { get; set; }
         [BindProperty]
         public String Threats { get; set; }
+        [BindProperty]
+        public String Political { get; set; }
+        [BindProperty]
+        public String Economic { get; set; }
+        [BindProperty]
+        public String Social { get; set; }
+        [BindProperty]
+        public String Technological { get; set; }
         public static int ExistingKIID { get; set; }
+        public int newKnowledgeID { get; set; }
+        public int KnowledgeTypeID { get; set; }
         public String CreateorUpdate {  get; set; }
         public List<Department> ActiveDepts { get; set; }
 
@@ -64,13 +78,21 @@ namespace MadisonCountySystem.Pages.RecordCreate
                             KnowledgeSubject = KnowledgeItemReader["KnowledgeSubject"].ToString();
                             KnowledgeCategory = KnowledgeItemReader["KnowledgeCategory"].ToString();
                             KnowledgeInformation = KnowledgeItemReader["KnowledgeInformation"].ToString();
-                            if(KnowledgeItemReader["Strengths"].ToString() != "0")
+                            KnowledgeTypeID = Int32.Parse(KnowledgeItemReader["KnowledgeTypeID"].ToString());
+                            if(Int32.Parse(KnowledgeItemReader["KnowledgeTypeID"].ToString()) == 2)
                             {
                                 IsSwotItem = true;
                                 Strengths = KnowledgeItemReader["Strengths"].ToString();
                                 Weakness = KnowledgeItemReader["Weaknesses"].ToString();
                                 Opportunities = KnowledgeItemReader["Opportunities"].ToString();
                                 Threats = KnowledgeItemReader["Threats"].ToString();
+                            } else if (Int32.Parse(KnowledgeItemReader["KnowledgeTypeID"].ToString()) == 3)
+                            {
+                                IsPESTItem = true;
+                                Political = KnowledgeItemReader["Political"].ToString();
+                                Economic = KnowledgeItemReader["Economic"].ToString();
+                                Social = KnowledgeItemReader["Social"].ToString();
+                                Technological = KnowledgeItemReader["Technological"].ToString();
                             }
                         }
                     }
@@ -96,30 +118,77 @@ namespace MadisonCountySystem.Pages.RecordCreate
         public IActionResult OnPostAddDB(int selectedDep)
         {
 
-            if (!ModelState.IsValid)
+            /*if (!ModelState.IsValid)
             {
                 GetActiveDepts();
                 return Page();
+            }*/
+
+            if (!IsSwotItem && !IsPESTItem)
+            {
+                KnowledgeItem = new KnowledgeItem()
+                {
+                    KnowledgeTitle = KnowledgeTitle,
+                    KnowledgeSubject = KnowledgeSubject,
+                    KnowledgeCategory = KnowledgeCategory,
+                    KnowledgeInformation = KnowledgeInformation,
+                    KnowledgePostDate = DateTime.Now.ToString(),
+                    OwnerID = Int32.Parse(HttpContext.Session.GetString("userID")),
+                    KnowledgeTypeID = 1,
+                    KnowledgeID = ExistingKIID
+                };
+            } else if (IsSwotItem)
+            {
+                SWOT = new SWOT()
+                {
+                    KnowledgeTitle = KnowledgeTitle,
+                    KnowledgeSubject = KnowledgeSubject,
+                    KnowledgeCategory = KnowledgeCategory,
+                    KnowledgeInformation = KnowledgeInformation,
+                    KnowledgePostDate = DateTime.Now.ToString(),
+                    OwnerID = Int32.Parse(HttpContext.Session.GetString("userID")),
+                    KnowledgeTypeID = 2,
+                    KnowledgeID = ExistingKIID,
+                    Strengths = Strengths,
+                    Weaknesses = Weakness,
+                    Opportunities = Opportunities,
+                    Threats = Threats
+                };
+
+            } else if (IsPESTItem)
+            {
+                PEST = new PEST()
+                {
+                    KnowledgeTitle = KnowledgeTitle,
+                    KnowledgeSubject = KnowledgeSubject,
+                    KnowledgeCategory = KnowledgeCategory,
+                    KnowledgeInformation = KnowledgeInformation,
+                    KnowledgePostDate = DateTime.Now.ToString(),
+                    OwnerID = Int32.Parse(HttpContext.Session.GetString("userID")),
+                    KnowledgeTypeID = 3,
+                    KnowledgeID = ExistingKIID,
+                    Political = Political,
+                    Economic = Economic,
+                    Social = Social,
+                    Technological = Technological
+                };
+
             }
 
-
-            KnowledgeItem = new KnowledgeItem()
-            {
-                KnowledgeTitle = KnowledgeTitle,
-                KnowledgeSubject = KnowledgeSubject,
-                KnowledgeCategory = KnowledgeCategory,
-                KnowledgeInformation = KnowledgeInformation,
-                KnowledgePostDate = DateTime.Now.ToString(),
-                OwnerID = Int32.Parse(HttpContext.Session.GetString("userID")),
-                Strengths = Strengths,
-                Opportunities = Opportunities,
-                Threats = Threats,
-                Weaknesses = Weakness,
-                KnowledgeID = ExistingKIID
-            };
             if (ExistingKIID == 0)
             {
-                int newKnowledgeID = DBClass.InsertKnowledgeItem(KnowledgeItem);
+                if (IsSwotItem)
+                {
+                    newKnowledgeID = DBClass.InsertSWOT(SWOT);
+                }
+                else if (IsPESTItem)
+                {
+                    newKnowledgeID = DBClass.InsertPEST(PEST);
+                } else
+                {
+                    newKnowledgeID = DBClass.InsertKnowledgeItem(KnowledgeItem);
+                }
+
                 DBClass.KnowledgeDBConnection.Close();
                 DBClass.InsertDepartmentKnowledge(new DepartmentKnowledge
                 {
@@ -146,7 +215,17 @@ namespace MadisonCountySystem.Pages.RecordCreate
             }
             else
             {
-                DBClass.UpdateExistingKI(KnowledgeItem);
+                if (IsSwotItem)
+                {
+                    DBClass.UpdateExistingKI(SWOT);
+                } else if (IsPESTItem) 
+                {
+                    DBClass.UpdateExistingKI(PEST);
+                } else
+                {
+                    DBClass.UpdateExistingKI(KnowledgeItem);
+                }
+
                 DBClass.KnowledgeDBConnection.Close();
                 if (CurrentLocation == "Collab")
                 {

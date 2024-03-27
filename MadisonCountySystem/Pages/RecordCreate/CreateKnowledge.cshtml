@@ -36,6 +36,10 @@
                     <input type="checkbox" class="form-check-input" asp-for="IsSwotItem" onchange="this.form.submit();" formnovalidate />
                     <label class="form-check-label" asp-for="IsSwotItem">Is this a SWOT Item?</label>
                 </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" asp-for="IsPESTItem" onchange="this.form.submit();" formnovalidate />
+                    <label class="form-check-label" asp-for="IsPESTItem">Is this a PEST Item?</label>
+                </div>
                 @{
                     if (Model.IsSwotItem)
                     {
@@ -54,6 +58,41 @@
                         <div class="mb-3">
                             <label asp-for="Threats" class="form-label">Threats:</label>
                             <input asp-for="Threats" class="form-control" placeholder="Enter Threats:" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="mb-3">
+                            <input asp-for="Strengths" type="hidden" class="form-control" value="0" />
+                        </div>
+                        <div class="mb-3">
+                            <input asp-for="Weakness" type="hidden" class="form-control" value="0" />
+                        </div>
+                        <div class="mb-3">
+                            <input asp-for="Opportunities" type="hidden" class="form-control" value="0" />
+                        </div>
+                        <div class="mb-3">
+                            <input asp-for="Threats" type="hidden" class="form-control" value="0" />
+                        </div>
+                    }
+
+                    if (Model.IsPESTItem)
+                    {
+                        <div class="mb-3">
+                            <label asp-for="Political" class="form-label">Political:</label>
+                            <input asp-for="Political" class="form-control" placeholder="Enter Political Analysis:" />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Economic" class="form-label">Economic:</label>
+                            <input asp-for="Economic" class="form-control" placeholder="Enter Economic Analysis:" />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Social" class="form-label">Social:</label>
+                            <input asp-for="Social" class="form-control" placeholder="Enter Social Analysis:" />
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Technological" class="form-label">Technological:</label>
+                            <input asp-for="Technological" class="form-control" placeholder="Enter Technological Analysis:" />
                         </div>
                     }
                     else

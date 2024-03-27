@@ -101,10 +101,10 @@ namespace MadisonCountySystem.Pages.Info
                             OwnerName = KnowledgeItemReader["Username"].ToString(),
                             OwnerFirst = KnowledgeItemReader["FirstName"].ToString(),
                             OwnerLast = KnowledgeItemReader["LastName"].ToString(),
-                            Strengths = KnowledgeItemReader["Strengths"].ToString(),
-                            Weaknesses = KnowledgeItemReader["Weaknesses"].ToString(),
-                            Opportunities = KnowledgeItemReader["Opportunities"].ToString(),
-                            Threats = KnowledgeItemReader["Threats"].ToString()
+                            //Strengths = KnowledgeItemReader["Strengths"].ToString(),
+                            //Weaknesses = KnowledgeItemReader["Weaknesses"].ToString(),
+                            //Opportunities = KnowledgeItemReader["Opportunities"].ToString(),
+                            //Threats = KnowledgeItemReader["Threats"].ToString()
                         };
                     }
                 }
@@ -129,10 +129,10 @@ namespace MadisonCountySystem.Pages.Info
                             OwnerFirst = reportItemReader["FirstName"].ToString(),
                             OwnerLast = reportItemReader["LastName"].ToString(),
                             OwnerName = reportItemReader["Username"].ToString(),
-                            Strengths = reportItemReader["Strengths"].ToString(),
-                            Weaknesses = reportItemReader["Weaknesses"].ToString(),
-                            Opportunities = reportItemReader["Opportunities"].ToString(),
-                            Threats = reportItemReader["Threats"].ToString()
+                            //Strengths = reportItemReader["Strengths"].ToString(),
+                            //Weaknesses = reportItemReader["Weaknesses"].ToString(),
+                            //Opportunities = reportItemReader["Opportunities"].ToString(),
+                            //Threats = reportItemReader["Threats"].ToString()
                         });
                     }
                 }

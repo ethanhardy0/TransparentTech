@@ -46,7 +46,7 @@ else
             <h4><strong>Category:</strong> <span class="fw-normal">@KnowledgeItem.KnowledgeCategory</span></h4>
         </div>
 
-
+        /*
         <div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
             <div class="col">
                 <div class="card h-100">
@@ -85,7 +85,7 @@ else
             </div>
 
         </div>
-
+        */
     } 
 }
 <br/>
@@ -93,7 +93,7 @@ else
     <h1 class="text-center mb-4">@Model.CollabName Research:</h1>
     <hr />
 </div>
-@{
+@{ 
     foreach (var KnowledgeItem in Model.Research)
     {
         <div class="text-center mb-4">
@@ -102,7 +102,7 @@ else
             <h4><strong>Category:</strong> <span class="fw-normal">@KnowledgeItem.KnowledgeCategory</span></h4>
         </div>
 
-
+        /*
         <div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
             @if (KnowledgeItem.Strengths != "0")
             {
@@ -149,7 +149,7 @@ else
                 </div>
             }
         </div>
-
+        */
         <div class="row mt-4">
             <div class="col-12">
                 <div class="card">
