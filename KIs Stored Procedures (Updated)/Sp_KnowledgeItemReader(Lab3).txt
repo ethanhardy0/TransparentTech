@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 CREATE PROCEDURE KnowledgeItemReader
 AS
 BEGIN
@@ -11,18 +10,4 @@ BEGIN
     LEFT JOIN SWOT ON KnowledgeItem.KnowledgeID = SWOT.KnowledgeID
     LEFT JOIN PEST ON KnowledgeItem.KnowledgeID = PEST.KnowledgeID
     WHERE KnowledgeItem.KnowledgeStatus != 'Deleted' OR KnowledgeItem.KnowledgeStatus IS NULL;
-=======
-CREATE PROCEDURE KnowledgeItemReader
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT *
-    FROM KnowledgeItem
-    LEFT JOIN SysUser ON KnowledgeItem.OwnerID = SysUser.UserID
-    LEFT JOIN KnowledgeType ON KnowledgeItem.KnowledgeTypeID = KnowledgeType.KnowledgeTypeID
-    LEFT JOIN SWOT ON KnowledgeItem.KnowledgeID = SWOT.KnowledgeID
-    LEFT JOIN PEST ON KnowledgeItem.KnowledgeID = PEST.KnowledgeID
-    WHERE KnowledgeItem.KnowledgeStatus != 'Deleted' OR KnowledgeItem.KnowledgeStatus IS NULL;
->>>>>>> 10378f50b88d87a8c5c516bcf39bfac31f4f8321
 END;
