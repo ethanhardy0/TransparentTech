@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 CREATE PROCEDURE UpdateExistingKI
     @KnowledgeID INT,
     @KnowledgeTitle NVARCHAR(255),
@@ -16,7 +15,7 @@ BEGIN
         KnowledgeCategory = @KnowledgeCategory,
         KnowledgeInformation = @KnowledgeInformation
     WHERE KnowledgeID = @KnowledgeID;
-=======
+
 CREATE PROCEDURE UpdateExistingKI
     @KnowledgeID INT,
     @KnowledgeTitle NVARCHAR(255),
@@ -34,5 +33,4 @@ BEGIN
         KnowledgeCategory = @KnowledgeCategory,
         KnowledgeInformation = @KnowledgeInformation
     WHERE KnowledgeID = @KnowledgeID;
->>>>>>> 10378f50b88d87a8c5c516bcf39bfac31f4f8321
 END;
