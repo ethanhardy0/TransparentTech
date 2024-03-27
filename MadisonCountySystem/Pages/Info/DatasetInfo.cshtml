@@ -29,6 +29,9 @@
 <div class="row align align-items-end">
     <h1>Table: @Model.Dataset.DatasetName</h1>
     <p class="fst-italic">*Only Top 100 Rows Displayed</p>
+    <form asp-page-handler="Regression">
+        <button type="submit">Run Regression</button> 
+    </form>
 </div>
 
 <table class="table">

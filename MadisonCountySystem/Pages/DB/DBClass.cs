@@ -188,19 +188,92 @@ namespace MadisonCountySystem.Pages.DB
 				cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgeInformation", a.KnowledgeInformation);
 				cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgePostDate", a.KnowledgePostDate);
 				cmdKnowledgeInsert.Parameters.AddWithValue("@OwnerID", a.OwnerID);
-				cmdKnowledgeInsert.Parameters.AddWithValue("@Strengths", a.Strengths);
-				cmdKnowledgeInsert.Parameters.AddWithValue("@Weaknesses", a.Weaknesses);
-				cmdKnowledgeInsert.Parameters.AddWithValue("@Opportunities", a.Opportunities);
-				cmdKnowledgeInsert.Parameters.AddWithValue("@Threats", a.Threats);
+                cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgeTypeID", a.KnowledgeTypeID);
 
-				KnowledgeDBConnection.Open();
+                KnowledgeDBConnection.Open();
 				int newKnowledgeID = (int)cmdKnowledgeInsert.ExecuteScalar(); // Executes the command and returns the new KnowledgeID
 				KnowledgeDBConnection.Close();
 				return newKnowledgeID;
 			}
 		}
 
-		public static void DeleteKnowledgeItem(int KnowledgeID)
+        public static int InsertSWOT(SWOT a)
+        {
+            string sqlQuery = "InsertKnowledgeItem";
+
+            using (SqlCommand cmdKnowledgeInsert = new SqlCommand(sqlQuery, KnowledgeDBConnection))
+            {
+                cmdKnowledgeInsert.CommandType = CommandType.StoredProcedure;
+
+                cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgeTitle", a.KnowledgeTitle);
+                cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgeSubject", a.KnowledgeSubject);
+                cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgeCategory", a.KnowledgeCategory);
+                cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgeInformation", a.KnowledgeInformation);
+                cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgePostDate", a.KnowledgePostDate);
+                cmdKnowledgeInsert.Parameters.AddWithValue("@OwnerID", a.OwnerID);
+                cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgeTypeID", a.KnowledgeTypeID);
+
+                KnowledgeDBConnection.Open();
+                int newKnowledgeID = (int)cmdKnowledgeInsert.ExecuteScalar(); // Executes the command and returns the new KnowledgeID
+                KnowledgeDBConnection.Close();
+
+                sqlQuery = "InsertSWOT";
+
+                using (SqlCommand cmdSWOTInsert =new SqlCommand(sqlQuery,KnowledgeDBConnection))
+                {
+                    cmdSWOTInsert.CommandType = CommandType.StoredProcedure;
+                    cmdSWOTInsert.Parameters.AddWithValue("@Strengths", a.Strengths);
+                    cmdSWOTInsert.Parameters.AddWithValue("@Weaknesses", a.Weaknesses);
+                    cmdSWOTInsert.Parameters.AddWithValue("@Opportunities", a.Opportunities);
+                    cmdSWOTInsert.Parameters.AddWithValue("@Threats", a.Threats);
+                    cmdSWOTInsert.Parameters.AddWithValue("@KnowledgeID", newKnowledgeID);
+                    KnowledgeDBConnection.Open();
+                    cmdSWOTInsert.ExecuteScalar();
+                    KnowledgeDBConnection.Close();
+                }
+                return newKnowledgeID;
+            }
+        }
+
+        public static int InsertPEST(PEST a)
+        {
+            string sqlQuery = "InsertKnowledgeItem";
+
+            using (SqlCommand cmdKnowledgeInsert = new SqlCommand(sqlQuery, KnowledgeDBConnection))
+            {
+                cmdKnowledgeInsert.CommandType = CommandType.StoredProcedure;
+
+                cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgeTitle", a.KnowledgeTitle);
+                cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgeSubject", a.KnowledgeSubject);
+                cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgeCategory", a.KnowledgeCategory);
+                cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgeInformation", a.KnowledgeInformation);
+                cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgePostDate", a.KnowledgePostDate);
+                cmdKnowledgeInsert.Parameters.AddWithValue("@OwnerID", a.OwnerID);
+                cmdKnowledgeInsert.Parameters.AddWithValue("@KnowledgeTypeID", a.KnowledgeTypeID);
+
+                KnowledgeDBConnection.Open();
+                int newKnowledgeID = (int)cmdKnowledgeInsert.ExecuteScalar(); // Executes the command and returns the new KnowledgeID
+                KnowledgeDBConnection.Close();
+
+                sqlQuery = "InsertPEST";
+
+                using (SqlCommand cmdPESTInsert = new SqlCommand(sqlQuery, KnowledgeDBConnection))
+                {
+                    cmdPESTInsert.CommandType = CommandType.StoredProcedure;
+                    cmdPESTInsert.Parameters.AddWithValue("@Political", a.Political);
+                    cmdPESTInsert.Parameters.AddWithValue("@Economic", a.Economic);
+                    cmdPESTInsert.Parameters.AddWithValue("@Social", a.Social);
+                    cmdPESTInsert.Parameters.AddWithValue("@Technological", a.Technological);
+                    cmdPESTInsert.Parameters.AddWithValue("@KnowledgeID", newKnowledgeID);
+                    KnowledgeDBConnection.Open();
+                    cmdPESTInsert.ExecuteScalar();
+                    KnowledgeDBConnection.Close();
+                }
+                return newKnowledgeID;
+            }
+        }
+
+        public static void DeleteKnowledgeItem(int KnowledgeID)
 		{
 			string sqlQuery = "DeleteKnowledgeItem";
 
@@ -245,19 +318,83 @@ namespace MadisonCountySystem.Pages.DB
 				cmdUpdateKI.Parameters.AddWithValue("@KnowledgeSubject", k.KnowledgeSubject);
 				cmdUpdateKI.Parameters.AddWithValue("@KnowledgeCategory", k.KnowledgeCategory);
 				cmdUpdateKI.Parameters.AddWithValue("@KnowledgeInformation", k.KnowledgeInformation);
-				cmdUpdateKI.Parameters.AddWithValue("@Strengths", k.Strengths);
-				cmdUpdateKI.Parameters.AddWithValue("@Weaknesses", k.Weaknesses);
-				cmdUpdateKI.Parameters.AddWithValue("@Opportunities", k.Opportunities);
-				cmdUpdateKI.Parameters.AddWithValue("@Threats", k.Threats);
 
-				KnowledgeDBConnection.Open();
+                KnowledgeDBConnection.Open();
 				cmdUpdateKI.ExecuteNonQuery();
 			}
 		}
 
+        public static void UpdateExistingKI(PEST a)
+        {
+            string sqlQuery = "UpdateExistingKI";
 
-		// ------------------------------------------- Datasets ------------------------------------------------------------------------------------------------------
-		public static SqlDataReader DatasetReader()
+            using (SqlCommand cmdKnowledge = new SqlCommand(sqlQuery, KnowledgeDBConnection))
+            {
+                cmdKnowledge.CommandType = CommandType.StoredProcedure;
+
+                cmdKnowledge.Parameters.AddWithValue("@KnowledgeID", a.KnowledgeID);
+                cmdKnowledge.Parameters.AddWithValue("@KnowledgeTitle", a.KnowledgeTitle);
+                cmdKnowledge.Parameters.AddWithValue("@KnowledgeSubject", a.KnowledgeSubject);
+                cmdKnowledge.Parameters.AddWithValue("@KnowledgeCategory", a.KnowledgeCategory);
+                cmdKnowledge.Parameters.AddWithValue("@KnowledgeInformation", a.KnowledgeInformation);
+
+                KnowledgeDBConnection.Open();
+                cmdKnowledge.ExecuteScalar();
+                KnowledgeDBConnection.Close();
+
+                sqlQuery = "UpdatePEST";
+
+                using (SqlCommand cmdPEST = new SqlCommand(sqlQuery, KnowledgeDBConnection))
+                {
+                    cmdPEST.CommandType = CommandType.StoredProcedure;
+                    cmdPEST.Parameters.AddWithValue("@Political", a.Political);
+                    cmdPEST.Parameters.AddWithValue("@Economic", a.Economic);
+                    cmdPEST.Parameters.AddWithValue("@Social", a.Social);
+                    cmdPEST.Parameters.AddWithValue("@Technological", a.Technological);
+                    cmdPEST.Parameters.AddWithValue("@KnowledgeID", a.KnowledgeID);
+                    KnowledgeDBConnection.Open();
+                    cmdPEST.ExecuteScalar();
+                }
+            }
+        }
+
+        public static void UpdateExistingKI(SWOT a)
+        {
+            string sqlQuery = "UpdateExistingKI";
+
+            using (SqlCommand cmdKnowledge = new SqlCommand(sqlQuery, KnowledgeDBConnection))
+            {
+                cmdKnowledge.CommandType = CommandType.StoredProcedure;
+
+                cmdKnowledge.Parameters.AddWithValue("@KnowledgeID", a.KnowledgeID);
+                cmdKnowledge.Parameters.AddWithValue("@KnowledgeTitle", a.KnowledgeTitle);
+                cmdKnowledge.Parameters.AddWithValue("@KnowledgeSubject", a.KnowledgeSubject);
+                cmdKnowledge.Parameters.AddWithValue("@KnowledgeCategory", a.KnowledgeCategory);
+                cmdKnowledge.Parameters.AddWithValue("@KnowledgeInformation", a.KnowledgeInformation);
+
+                KnowledgeDBConnection.Open();
+                cmdKnowledge.ExecuteScalar();
+                KnowledgeDBConnection.Close();
+
+                sqlQuery = "UpdateSWOT";
+
+                using (SqlCommand cmdSWOT = new SqlCommand(sqlQuery, KnowledgeDBConnection))
+                {
+                    cmdSWOT.CommandType = CommandType.StoredProcedure;
+                    cmdSWOT.Parameters.AddWithValue("@Strengths", a.Strengths);
+                    cmdSWOT.Parameters.AddWithValue("@Weaknesses", a.Weaknesses);
+                    cmdSWOT.Parameters.AddWithValue("@Opportunities", a.Opportunities);
+                    cmdSWOT.Parameters.AddWithValue("@Threats", a.Threats);
+                    cmdSWOT.Parameters.AddWithValue("@KnowledgeID", a.KnowledgeID);
+                    KnowledgeDBConnection.Open();
+                    cmdSWOT.ExecuteScalar();
+                }
+            }
+        }
+
+
+        // ------------------------------------------- Datasets ------------------------------------------------------------------------------------------------------
+        public static SqlDataReader DatasetReader()
         {
             SqlCommand cmdDatasetRead = new SqlCommand();
             cmdDatasetRead.Connection = KnowledgeDBConnection;
@@ -1049,7 +1186,7 @@ namespace MadisonCountySystem.Pages.DB
 
         public static SqlDataReader UserDepartmentReader()
         {
-            String SqlQuery = "SELECT * FROM UserDepartment;";
+            String SqlQuery = "SELECT * FROM UserDepartment LEFT JOIN SysUser ON UserDepartment.UserID = SysUser.UserID;";
             SqlCommand cmdAnalysisRead = new SqlCommand();
             cmdAnalysisRead.Connection = KnowledgeDBConnection;
             cmdAnalysisRead.Connection.ConnectionString = KnowledgeDBConnString;
@@ -1140,6 +1277,20 @@ namespace MadisonCountySystem.Pages.DB
             cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
             cmdUserRead.CommandText = sqlQuery;
             cmdUserRead.Parameters.AddWithValue("@KnowledgeID", d.KnowledgeID);
+            cmdUserRead.Parameters.AddWithValue("@DepartmentID", d.DepartmentID);
+            cmdUserRead.Connection.Open();
+            cmdUserRead.ExecuteNonQuery();
+        }
+
+        public static void InsertDepartmentDataset(DepartmentDataset d)
+        {
+            String sqlQuery = "INSERT INTO DepartmentDataset (DatasetID, DepartmentID) VALUES (@DatasetID, @DepartmentID);";
+
+            SqlCommand cmdUserRead = new SqlCommand();
+            cmdUserRead.Connection = KnowledgeDBConnection;
+            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdUserRead.CommandText = sqlQuery;
+            cmdUserRead.Parameters.AddWithValue("@DatasetID", d.DatasetID);
             cmdUserRead.Parameters.AddWithValue("@DepartmentID", d.DepartmentID);
             cmdUserRead.Connection.Open();
             cmdUserRead.ExecuteNonQuery();

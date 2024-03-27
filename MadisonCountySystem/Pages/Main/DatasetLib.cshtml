@@ -40,6 +40,30 @@
         </form>
     </div>
 }
+
+@if (Model.ActionType == "Dept")
+{
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4);">
+        <form method="post">
+            <div style="background-color:#fff; margin:10% auto; padding:20px; width:50%; max-width: 500px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <div class="col">
+                    <label for="activeDep" class="form-label">Department:</label>
+                    <select class="form-control" id="activeDep" name="selectedDep">
+                        @foreach (var dep in Model.ActiveDepts)
+                        {
+                            <option value="@dep.DepartmentID"> @dep.DepartmentName</option>
+                        }
+                    </select>
+                </div>
+                <div class="text-center mt-4">
+                    <button asp-page="DatasetLib" asp-page-handler="AddDep" class="btn btn-outline-success">Add</button>
+                    <button asp-page="DatasetLib" asp-page-handler="Close" class="btn btn-outline-danger">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
 <br/>
         <form method="post">
             <div class="row align-items-end">
@@ -89,7 +113,8 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li><a class="dropdown-item" asp-area="" asp-page="/RecordCreate/CreateDataset" asp-route-ExistingID="@Dataset.DatasetID">Edit (not working)</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-page="/Main/DatasetLib" asp-route-actionType="Collab:@Dataset.DatasetID">Collaborate</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/Main/DatasetLib" asp-route-actionType="Collab:@Dataset.DatasetID">Add to Collab</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/Main/DatasetLib" asp-route-actionType="Dept:@Dataset.DatasetID">Add to Department</a></li>
                                 <li><a class="dropdown-item" asp-area="" asp-page="/Main/DatasetLib" asp-route-actionType="Delete:@Dataset.DatasetID">Delete</a></li>
                             </ul>
                         </div>
@@ -99,7 +124,7 @@
         }
     </tbody>
 </table>
-
+@*
 @{
     <h1>Department 1 Dataset</h1>
     foreach (var Data in Model.Dep1Data)
@@ -131,3 +156,4 @@
         <p>@Data.DatasetName</p>
     }
 }
+*@

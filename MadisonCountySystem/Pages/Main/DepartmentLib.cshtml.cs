@@ -18,6 +18,7 @@ namespace MadisonCountySystem.Pages.Main
         public List<SysUser> OtherUsers { get; set; }
         public List<UserDepartment> UserDepartments { get; set; }
         public String ActionType { get; set; }
+        public List<UserDepartment> ActiveUsers { get; set; }
 
         public DepartmentLibModel() 
         {
@@ -26,6 +27,7 @@ namespace MadisonCountySystem.Pages.Main
         }
         public void OnGet(String SelectedDepartmentID)
         {
+            HttpContext.Session.SetString("LibType", "Main");
             if (HttpContext.Session.GetString("username") == null)
             {
                 HttpContext.Session.SetString("LoginError", "You must login to access that page!");
@@ -37,6 +39,19 @@ namespace MadisonCountySystem.Pages.Main
             }
             else
             {
+                ActiveUsers = new List<UserDepartment>();
+                SqlDataReader userReader = DBClass.UserDepartmentReader();
+                while (userReader.Read())
+                {
+                    ActiveUsers.Add(new UserDepartment
+                    {
+                        UserID = Int32.Parse(userReader["UserID"].ToString()),
+                        DepartmentID = Int32.Parse(userReader["DepartmentID"].ToString()),
+                        Username = userReader["Username"].ToString()
+                    });
+                }
+                DBClass.KnowledgeDBConnection.Close();
+
                 if (SelectedDepartmentID == null)
                 {
                     SqlDataReader depReader = DBClass.DepartmentReader();
@@ -77,7 +92,8 @@ namespace MadisonCountySystem.Pages.Main
                             UserDepartments.Add(new UserDepartment
                             {
                                 UserID = Int32.Parse(userDepReader["UserID"].ToString()),
-                                DepartmentID = Int32.Parse(userDepReader["DepartmentID"].ToString())
+                                DepartmentID = Int32.Parse(userDepReader["DepartmentID"].ToString()),
+                                Username = userDepReader["Username"].ToString()
                             });
                         }
                     }

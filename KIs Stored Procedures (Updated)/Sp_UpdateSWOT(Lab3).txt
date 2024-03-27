@@ -1,0 +1,18 @@
+CREATE PROCEDURE UpdateSWOT
+    @KnowledgeID INT,
+    @Strengths NVARCHAR(255),
+    @Weaknesses NVARCHAR(255),
+    @Opportunities NVARCHAR(255),
+    @Threats NVARCHAR(MAX)
+    
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE SWOT
+    SET Strengths = @Strengths,
+        Opportunities = @Opportunities,
+        Weaknesses = @Weaknesses,
+        Threats = @Threats
+    WHERE KnowledgeID = @KnowledgeID;
+END;

@@ -13,46 +13,81 @@
     </div>
 
     <div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
-        @if (Model.KnowledgeItem.Strengths != "0")
+        @if (Model.KnowledgeTypeID == 2)
         {
             <div class="col">
                 <div class="card h-100">
                     <div class="card-body text-center">
                         <h5 class="card-title">Strengths</h5>
-                        <p class="card-text">@Model.KnowledgeItem.Strengths</p>
+                        <p class="card-text">@Model.SWOT.Strengths</p>
                     </div>
                 </div>
             </div>
-        }
-        @if (Model.KnowledgeItem.Weaknesses != "0")
-        {
+        
+        
             <div class="col">
                 <div class="card h-100">
                     <div class="card-body text-center">
                         <h5 class="card-title">Weaknesses</h5>
-                        <p class="card-text">@Model.KnowledgeItem.Weaknesses</p>
+                        <p class="card-text">@Model.SWOT.Weaknesses</p>
                     </div>
                 </div>
             </div>
-        }
-        @if (Model.KnowledgeItem.Opportunities != "0")
-        {
+        
             <div class="col">
                 <div class="card h-100">
                     <div class="card-body text-center">
                         <h5 class="card-title">Opportunities</h5>
-                        <p class="card-text">@Model.KnowledgeItem.Opportunities</p>
+                        <p class="card-text">@Model.SWOT.Opportunities</p>
                     </div>
                 </div>
             </div>
-        }
-        @if (Model.KnowledgeItem.Threats != "0")
-        {
+        
             <div class="col">
                 <div class="card h-100">
                     <div class="card-body text-center">
                         <h5 class="card-title">Threats</h5>
-                        <p class="card-text">@Model.KnowledgeItem.Threats</p>
+                        <p class="card-text">@Model.SWOT.Threats</p>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (Model.KnowledgeTypeID == 3)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Political</h5>
+                        <p class="card-text">@Model.PEST.Political</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Economic</h5>
+                        <p class="card-text">@Model.PEST.Economic</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Social</h5>
+                        <p class="card-text">@Model.PEST.Social</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Technological</h5>
+                        <p class="card-text">@Model.PEST.Technological</p>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,18 @@
+CREATE PROCEDURE UpdatePEST
+    @KnowledgeID INT,
+    @Political NVARCHAR(255),
+    @Economic NVARCHAR(255),
+    @Social NVARCHAR(255),
+    @Technological NVARCHAR(MAX)
+    
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE PEST
+    SET Political = @Political,
+        Economic = @Economic,
+        Social = @Social,
+        Technological = @Technological
+    WHERE KnowledgeID = @KnowledgeID;
+END;

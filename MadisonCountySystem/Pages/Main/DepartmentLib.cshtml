@@ -57,11 +57,12 @@
 </style>
 <br />
 <h2>Department Management</h2>
-
+<br />
 <table class="table table-bordered table-responsive table-hover">
     <thead>
         <tr>
             <th>Department:</th>
+            <th>Users:</th>
             <th></th>
         </tr>
     </thead>
@@ -71,6 +72,19 @@
             {
                 <tr>
                     <td>@dep.DepartmentName</td>
+                    <td>
+                        @foreach(var user in Model.ActiveUsers)
+                        {
+                            if (dep.DepartmentID == user.DepartmentID)
+                            {
+                                <span>@user.Username</span>
+                                @if (user != Model.ActiveUsers.LastOrDefault(u => dep.DepartmentID == u.DepartmentID))
+                                {
+                                    <span>,</span>
+                                }
+                            }
+                        }
+                    </td>
                     <td>
                         
                         <div class="dropdown">

@@ -33,6 +33,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
         public static String CurrentLocation { get; set; }
         public DatasetCollab DatasetCollab { get; set; }
         public int newDatasetID { get; set; }
+        public List<Department> ActiveDepts { get; set; }
 
         public Dictionary<string, ExcelTable> HeadersByFile { get; set; }
 
@@ -64,13 +65,15 @@ namespace MadisonCountySystem.Pages.RecordCreate
                     CSVFiles.Add(
                         new SelectListItem(file.Name, file.Name));
                 }
+
+                GetActiveDepts();
             }
         }
-
         public IActionResult OnPostAddDB()
         {
             if (!ModelState.IsValid)
             {
+                GetActiveDepts();
                 return Page();
             }
 
@@ -90,7 +93,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
                 }
             }
 
-            CreateAndInsertDataset();
+            CreateAndInsertDataset(selectedDep);
 
             // Redirect based on current location
             return CurrentLocation == "Collab"
@@ -139,17 +142,16 @@ namespace MadisonCountySystem.Pages.RecordCreate
             {
                 var columnName = headers[i].Replace(" ", "_"); // Replace spaces with underscores
                                                                // Append column name with TEXT data type
-
                 try
                 {
+                    // Detect if column contains decimal values
                     Double.Parse(rows[0][i]);
                     createTableScript.Append($"[{columnName}] DECIMAL(18,2), ");
                 }
                 catch
                 {
-
+                    // Fall back if string value is detected
                     createTableScript.Append($"[{columnName}] NVARCHAR(100), ");
-
                 }
             }
 
@@ -262,7 +264,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
             }
         }
 
-        public void CreateAndInsertDataset()
+        public void CreateAndInsertDataset(int selectedDep)
         {
             // Create new Dataset
             Dataset = new Dataset()
@@ -277,6 +279,15 @@ namespace MadisonCountySystem.Pages.RecordCreate
             // Insert Dataset into database
             newDatasetID = DBClass.InsertDataset(Dataset);
             DBClass.KnowledgeDBConnection.Close();
+            if (selectedDep != 0)
+            {
+                DBClass.InsertDepartmentDataset(new DepartmentDataset
+                {
+                    DepartmentID = selectedDep,
+                    DatasetID = newDatasetID
+                });
+                DBClass.KnowledgeDBConnection.Close();
+            }
         }
 
         public IActionResult InsertDatasetCollab()
@@ -304,6 +315,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
                     FormFiles.Add(file);
                 }
             }
+            GetActiveDepts();
             return Page();
         }
         public IActionResult OnPostCancel()
@@ -312,6 +324,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
             DatasetName = null;
             DatasetType = null;
             DatasetContents = null;
+            GetActiveDepts();
             return Page();
 
         }
@@ -346,6 +359,46 @@ namespace MadisonCountySystem.Pages.RecordCreate
                     }
                 }
                 OnGet();
+            }
+        }
+        public void GetActiveDepts()
+        {
+            ActiveDepts = new List<Department>();
+
+            if (HttpContext.Session.GetString("typeUser") != "Admin" && HttpContext.Session.GetString("typeUser") != "Super")
+            {
+                for (int i = 1; i < 6; i++)
+                {
+                    SqlDataReader depReader = DBClass.DepartmentReader();
+                    while (depReader.Read())
+                    {
+                        if (Int32.Parse(depReader["DepartmentID"].ToString()) == i)
+                        {
+                            if (HttpContext.Session.GetInt32("dep" + i) == 1)
+                            {
+                                ActiveDepts.Add(new Department
+                                {
+                                    DepartmentID = i,
+                                    DepartmentName = depReader["DepartmentName"].ToString()
+                                });
+                            }
+                        }
+                    }
+                    DBClass.KnowledgeDBConnection.Close();
+                }
+            }
+            else
+            {
+                SqlDataReader depReader = DBClass.DepartmentReader();
+                while (depReader.Read())
+                {
+                    ActiveDepts.Add(new Department
+                    {
+                        DepartmentID = Int32.Parse(depReader["DepartmentID"].ToString()),
+                        DepartmentName = depReader["DepartmentName"].ToString()
+                    });
+                }
+                DBClass.KnowledgeDBConnection.Close();
             }
         }
     }

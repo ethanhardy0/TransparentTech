@@ -26,6 +26,9 @@ namespace MadisonCountySystem.Pages.RecordCreate
         public String activeDataset { get; set; }
 
         public String activeKI { get; set; }
+        [BindProperty] public String DataType { get; set; }
+        [BindProperty] public int PredictYear { get; set; }
+        [BindProperty] public double InflationRate { get; set; }
 
         public CreateAnalysisModel()
         {

@@ -1,6 +1,7 @@
 ﻿@page
 @model MadisonCountySystem.Pages.DBLoginModel
 @{
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     if (HttpContext.Session.GetString("username") != null)
     {
         ViewData["Title"] = "Log Out";
@@ -30,7 +31,7 @@
         <p class="text-danger row justify-content-md-center">@HttpContext.Session.GetString("LoginError")</p>
 
 
-                // Let the user try login again.
+         // Let the user try login again.
         <form method="post">
             <div class="row justify-content-md-center">
                 <div class="col-md-6">
@@ -64,30 +65,33 @@
         // First time loading the page
         <br />
         <br />
-        <h2 class="display-4 text-center font-weight-bold">Knowledge Management System Login</h2>
+        <h2 style="text-align: center; font-weight: bold; color: #293A80; font-size: 3em; font-family: 'Open Sans', sans-serif; letter-spacing: 2px;">MADISON COUNTY</h2>
+        <h3 style="text-align: center; color: #293A80; font-family: 'Open Sans', sans-serif; letter-spacing: 2px;">VIRGINIA</h3>
         <br />
         <p class="text-success row justify-content-md-center">@ViewData["LoginMessage"]</p>
         <form method="post">
             <div class="row justify-content-md-center">
-                <div class="col-md-6">
+                <div class="col-md-6" style="font-family: 'Open Sans', sans-serif; color: #9EA5BF;">
                     <div class="mb-3">
-                        <label asp-for="Username" class="form-label">Username:</label>
-                        <input asp-for="Username" placeholder="Enter Username:" class="form-control" />
+                        <label asp-for="Username" class="form-label">Username</label>
+                        <input asp-for="Username" placeholder="Enter Username" class="form-control" />
                         <span asp-validation-for="Username" class="text-danger"></span>
                     </div>
-                    <div class="mb-3">
-                        <label asp-for="Password" class="form-label">Password:</label>
-                        <input asp-for="Password" class="form-control" type="password" />
+                    <div class="mb-3" style="font-family: 'Open Sans', sans-serif; color: #9EA5BF;">
+                        <label asp-for="Password" class="form-label">Password</label>
+                        <input asp-for="Password" placeholder="Enter Password" class="form-control" type="password" />
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                     <div class="text-center mb-4">
-                        <button style="width: 40%" asp-page="DBLogin" asp-page-handler="TryLogin" class="btn btn-outline-primary btn-lg">Log In</button>
-                        <button style="width: 40%" asp-page="DBLogin" asp-page-handler="Clear" class="btn btn-outline-danger btn-lg" formnovalidate>Clear</button>
+                        <br/>
+                        <button style="width: 15%; background-color: #293A80; font-size: 14px;" asp-page="DBLogin" asp-page-handler="TryLogin" class="btn btn-primary btn-lg">Log In</button>
+                        <button style="width: 20%; background-color: #293A80; font-size: 14px;" asp-page="DBLogin" asp-page-handler="Clear" class="btn btn-primary btn-lg" formnovalidate>Clear</button>
                     </div>
-                    @*                    For redirect to Signup form 
+                    <br />
                     <div class="text-center">
-                        <button style="width: 40%" asp-page="DBLogin" asp-page-handler="Signup" class="btn btn-outline-success btn-lg">Sign Up</button>
-                    </div> *@
+                        <p style="text-align: center;  font-family: 'Open Sans', sans-serif; color: #9EA5BF; font-size: 16px;">Don't have an account?</p>
+                        <button style="width: 15%; background-color: #293A80; font-size: 12px;" asp-page="/RecordCreate/SignupForm" asp-page-handler="OnPostAddDB" class="btn btn-primary btn-lg">Sign Up</button>
+                    </div> 
                 </div>
             </div>
         </form>
