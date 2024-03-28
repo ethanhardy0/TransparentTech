@@ -7,14 +7,19 @@
 @{
         if (HttpContext.Session.GetString("username") != null)
         {
-            <h2 style="margin-left: 10px; text-align: left; font-weight: bold; font-size: 40px; font-family: 'Open Sans', sans-serif; letter-spacing: 2px; margin-bottom: 5px;">Analysis Management</h2>
-
+            <h2 style="margin-left: 10px; text-align: left; font-weight: bold; font-size: 40px; font-family: 'Open Sans', sans-serif; letter-spacing: 2px; margin-bottom: 5px;">Analysis Library</h2>
+            <br />
             <form method="post">
-                <div class="row align-items-end">
+                <div class="row align-items-end mb-3">
+                    <!-- Use col-auto for button to take up only the required space -->
+                    <div class="col-auto">
+                        <button asp-page="AnalysisLib" asp-page-handler="CreateAnalysis" class="btn btn-primary text-black" style=" margin-left: 10px; width: 300px; background-color: #DDBD3F; font-size: 14px; font-family: 'Open Sans', sans-serif; border: none;">Create New Analysis</button>
+                    </div>
                     <!-- Use align-items-end to align items vertically at their end -->
                     <div class="col">
-                        <label for="activeAnalysis" class="form-label">Select an Analysis:</label>
-                        <select class="form-control" id="activeAnalysis" name="selectedAnalysis">
+                        @*<label for="activeAnalysis" class="form-label">Select an Analysis:</label>*@
+                        <select class="form-control" name="selectedAnalysis" style="border: none; width: 300px; font-size: 14px; font-family: 'Open Sans', sans-serif; background-color: #FFFFFF;" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">>
+                            <option value="" disabled selected>Select an Analysis</option>
                             @foreach (var Analysis in Model.AnalysisList)
                             {
                                 <option value="@Analysis.AnalysisID"> @Analysis.AnalysisName</option>
@@ -23,10 +28,7 @@
                     </div>
                     <div class="col-auto">
                         <!-- Use col-auto for button to take up only the required space -->
-                        <button asp-page="AnalysisLib" asp-page-handler="AddCollab" class="btn btn-outline-success">Add to Collaboration</button>
-                    </div>
-                    <div class="col-auto">
-                        <button asp-page="AnalysisLib" asp-page-handler="CreateAnalysis" class="btn btn-outline-primary">Create New Analysis</button>
+                        <button asp-page="AnalysisLib" asp-page-handler="AddCollab" class="btn btn-primary text-black" style=" margin-left: 10px; width: 300px; background-color: #DDBD3F; font-size: 14px; font-family: 'Open Sans', sans-serif; border: none;">Add to Collaboration</button>
                     </div>
                 </div>
             </form>
