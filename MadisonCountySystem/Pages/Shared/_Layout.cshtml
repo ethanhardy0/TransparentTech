@@ -40,7 +40,17 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                @if (Context.Session.GetString("username") == null)
+                {
+                    <a class="nav-link text-white" asp-area="" asp-page="/Main/ReportLib">
+                        <div class="navbar-text text-white text-center">
+                            <h1 style="margin: 0;">MADISON COUNTY</h1>
+                            <h2 style="margin: 0;">VIRGINIA</h2>
+                        </div>
+                    </a>
+                }
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    
                     <ul class="navbar-nav flex-grow-1">
                         @if (Context.Session.GetString("username") != null)
                         {
