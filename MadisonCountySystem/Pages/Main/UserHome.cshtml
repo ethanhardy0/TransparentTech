@@ -11,6 +11,7 @@
     }
 
     #userCard {
+        font-family: 'Open Sans', sans-serif;
         border-radius: 15%;
         background-color: #9EA5BF;
         color: #000;
@@ -24,6 +25,7 @@
     }
 
     #department {
+        font-family: 'Open Sans', sans-serif;
         border-radius: 15%;
         background-color: #9EA5BF;
         color: #000;
@@ -41,13 +43,26 @@
     thead {
         background-color: #EFC935;
     }
-
+  
     h1 {
+        font-family: 'Open Sans', sans-serif;
         background-color: #EFC935;
         padding: 20px;
+        letter-spacing: 2px;
+        text-align: center;
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+    h3{
+        font-family: 'Open Sans', sans-serif;
+        font-size: 20px;
+        font-weight: bold;
+    }
     }
 
     .card {
+        font-family: 'Open Sans', sans-serif;
         margin-right: 57px;
         margin-bottom: 50px;
     }
@@ -82,10 +97,9 @@
             <p id="chgMessage">Click To Change Profile Picture</p>
         </div>
 
-        <p>@Model.LoggedUser.LastName, @Model.LoggedUser.FirstName</p>
-
         <div id="contactInfo">
             <h3>User Info</h3>
+            <p>@Model.LoggedUser.LastName, @Model.LoggedUser.FirstName</p>
             <p>@Model.LoggedUser.Email</p>
             <p>@Model.LoggedUser.Phone</p>
             <p>Permission Level: @Model.LoggedUser.UserType</p>

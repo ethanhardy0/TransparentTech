@@ -11,53 +11,54 @@
         }
         else
         {
-            <h2 class="text-center mb-4">Create a Knowledge Item</h2>
+            <h2 style="text-align: center; font-weight: bold; font-size: 40px; font-family: 'Open Sans', sans-serif; letter-spacing: 2px; margin-bottom: 5px;">Create a Knowledge Item</h2>
         }
     }
+    <br/>
     <form method="post">
         <div class="row justify-content-md-center">
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label asp-for="KnowledgeTitle" class="form-label">Knowledge Item Title:</label>
-                    <input asp-for="KnowledgeTitle" placeholder="Enter Knowledge Item Title:" class="form-control" />
+                    <label asp-for="KnowledgeTitle" class="form-label" style="font-size: 16px; font-family: 'Open Sans', sans-serif;">Knowledge Item Title</label>
+                    <input asp-for="KnowledgeTitle" placeholder="Enter Knowledge Item Title" class="form-control" />
                     <span asp-validation-for="KnowledgeTitle" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="KnowledgeSubject" class="form-label">Knowledge Subject:</label>
-                    <input asp-for="KnowledgeSubject" placeholder="Enter Knowledge Subject:" class="form-control" />
+                    <label asp-for="KnowledgeSubject" class="form-label" style="font-size: 16px; font-family: 'Open Sans', sans-serif;">Knowledge Subject</label>
+                    <input asp-for="KnowledgeSubject" placeholder="Enter Knowledge Subject" class="form-control" />
                     <span asp-validation-for="KnowledgeSubject" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="KnowledgeCategory" class="form-label">Knowledge Category:</label>
-                    <input asp-for="KnowledgeCategory" placeholder="Enter Knowledge Category:" class="form-control" />
+                    <label asp-for="KnowledgeCategory" class="form-label" style="font-size: 16px; font-family: 'Open Sans', sans-serif;">Knowledge Category:</label>
+                    <input asp-for="KnowledgeCategory" placeholder="Enter Knowledge Category" class="form-control" />
                     <span asp-validation-for="KnowledgeCategory" class="text-danger"></span>
                 </div>
                 <div class="mb-3 form-check">
                     <input type="checkbox" class="form-check-input" asp-for="IsSwotItem" onchange="this.form.submit();" formnovalidate />
-                    <label class="form-check-label" asp-for="IsSwotItem">Is this a SWOT Item?</label>
+                    <label class="form-check-label" style="font-size: 16px; font-family: 'Open Sans', sans-serif;" asp-for="IsSwotItem">Is this a SWOT Item?</label>
                 </div>
                 <div class="mb-3 form-check">
                     <input type="checkbox" class="form-check-input" asp-for="IsPESTItem" onchange="this.form.submit();" formnovalidate />
-                    <label class="form-check-label" asp-for="IsPESTItem">Is this a PEST Item?</label>
+                    <label class="form-check-label" style="font-size: 16px; font-family: 'Open Sans', sans-serif;" asp-for="IsPESTItem">Is this a PEST Item?</label>
                 </div>
                 @{
                     if (Model.IsSwotItem)
                     {
                         <div class="mb-3">
-                            <label asp-for="Strengths" class="form-label">Strengths:</label>
-                            <input asp-for="Strengths" class="form-control" placeholder="Enter Strengths:" />
+                            <label asp-for="Strengths" class="form-label" style="font-size: 16px; font-family: 'Open Sans', sans-serif;">Strengths</label>
+                            <input asp-for="Strengths" class="form-control" placeholder="Enter Strengths" />
                         </div>
                         <div class="mb-3">
-                            <label asp-for="Weakness" class="form-label">Weaknesses:</label>
-                            <input asp-for="Weakness" class="form-control" placeholder="Enter Weaknesses:" />
+                            <label asp-for="Weakness" class="form-label" style="font-size: 16px; font-family: 'Open Sans', sans-serif;">Weaknesses</label>
+                            <input asp-for="Weakness" class="form-control" placeholder="Enter Weaknesses" />
                         </div>
                         <div class="mb-3">
-                            <label asp-for="Opportunities" class="form-label">Opportunities:</label>
-                            <input asp-for="Opportunities" class="form-control" placeholder="Enter Opportunities:" />
+                            <label asp-for="Opportunities" class="form-label" style="font-size: 16px; font-family: 'Open Sans', sans-serif;">Opportunities</label>
+                            <input asp-for="Opportunities" class="form-control" placeholder="Enter Opportunities" />
                         </div>
                         <div class="mb-3">
-                            <label asp-for="Threats" class="form-label">Threats:</label>
-                            <input asp-for="Threats" class="form-control" placeholder="Enter Threats:" />
+                            <label asp-for="Threats" class="form-label" style="font-size: 16px; font-family: 'Open Sans', sans-serif;">Threats</label>
+                            <input asp-for="Threats" class="form-control" placeholder="Enter Threats" />
                         </div>
                     }
                     else
@@ -79,20 +80,20 @@
                     if (Model.IsPESTItem)
                     {
                         <div class="mb-3">
-                            <label asp-for="Political" class="form-label">Political:</label>
-                            <input asp-for="Political" class="form-control" placeholder="Enter Political Analysis:" />
+                            <label asp-for="Political" class="form-label" style="font-size: 16px; font-family: 'Open Sans', sans-serif;">Political</label>
+                            <input asp-for="Political" class="form-control" placeholder="Enter Political Analysis" />
                         </div>
                         <div class="mb-3">
-                            <label asp-for="Economic" class="form-label">Economic:</label>
-                            <input asp-for="Economic" class="form-control" placeholder="Enter Economic Analysis:" />
+                            <label asp-for="Economic" class="form-label" style="font-size: 16px; font-family: 'Open Sans', sans-serif;">Economic</label>
+                            <input asp-for="Economic" class="form-control" placeholder="Enter Economic Analysis" />
                         </div>
                         <div class="mb-3">
-                            <label asp-for="Social" class="form-label">Social:</label>
-                            <input asp-for="Social" class="form-control" placeholder="Enter Social Analysis:" />
+                            <label asp-for="Social" class="form-label" style="font-size: 16px; font-family: 'Open Sans', sans-serif;">Social</label>
+                            <input asp-for="Social" class="form-control" placeholder="Enter Social Analysis" />
                         </div>
                         <div class="mb-3">
-                            <label asp-for="Technological" class="form-label">Technological:</label>
-                            <input asp-for="Technological" class="form-control" placeholder="Enter Technological Analysis:" />
+                            <label asp-for="Technological" class="form-label" style="font-size: 16px; font-family: 'Open Sans', sans-serif;">Technological</label>
+                            <input asp-for="Technological" class="form-control" placeholder="Enter Technological Analysis" />
                         </div>
                     }
                     else
@@ -113,15 +114,15 @@
                 }
                 
                 <div class="mb-3">
-                    <label asp-for="KnowledgeInformation" class="form-label">Knowledge Information:</label>
-                    <textarea asp-for="KnowledgeInformation" placeholder="Enter Knowledge Information:" class="form-control" rows="4"></textarea>
+                    <label asp-for="KnowledgeInformation" class="form-label" style="font-size: 16px; font-family: 'Open Sans', sans-serif;">Knowledge Information</label>
+                    <textarea asp-for="KnowledgeInformation" placeholder="Enter Knowledge Information" class="form-control" rows="4"></textarea>
                     <span asp-validation-for="KnowledgeInformation" class="text-danger"></span>
                 </div>
 
                 @if(Model.CreateorUpdate == "Create")
                 {
                     <div class="mb-3">
-                        <label for="activeDep" class="form-label">Add to a Department:</label>
+                        <label for="activeDep" class="form-label" style="font-size: 16px; font-family: 'Open Sans', sans-serif;">Add to a Department</label>
                         <select class="form-control" id="activeDep" name="selectedDep">
                             @foreach(var dep in Model.ActiveDepts)
                             {
@@ -132,18 +133,20 @@
                 }
 
                 <div class="text-center">
-                    <button style="width: 30%" asp-page="CreateKnowledge" asp-page-handler="PopulateHandler" class="btn btn-outline-primary btn-lg" formnovalidate>Populate</button>
                     @{
                         if (Model.CreateorUpdate == "Update")
                         {
-                            <button style="width: 33%" asp-page="CreateKnowledge" asp-page-handler="AddDB" class="btn btn-outline-success btn-lg">Update</button>
+                            <button style=" background-color: #293A80; font-size: 14px; font-family: 'Open Sans', sans-serif; border: none;" asp-page="CreateKnowledge" asp-page-handler="AddDB" class="btn btn-primary text-white">Update</button>
                         }
                         else
                         {
-                            <button style="width: 33%" asp-page="CreateKnowledge" asp-page-handler="AddDB" class="btn btn-outline-success btn-lg">Create</button>
+                            <button style=" background-color: #293A80; font-size: 14px; font-family: 'Open Sans', sans-serif; border: none;" asp-page="CreateKnowledge" asp-page-handler="AddDB" class="btn btn-primary text-white">Create</button>
                         }
                     }
-                        <button style="width: 30%" asp-page="CreateKnowledge" asp-page-handler="Cancel" class="btn btn-outline-danger btn-lg" formnovalidate>Clear</button>
+                    <button style=" background-color: #293A80; font-size: 14px; font-family: 'Open Sans', sans-serif; border: none;" asp-page="CreateKnowledge" asp-page-handler="Cancel" class="btn btn-primary text-white" formnovalidate>Clear</button>
+                    <br/>
+                    <br />
+                    <button style=" background-color: #9EA5BF; font-size: 14px; font-family: 'Open Sans', sans-serif; border: none;" asp-page="CreateKnowledge" asp-page-handler="PopulateHandler" class="btn btn-primary text-black" formnovalidate>Populate</button>
                 </div>
             </div>
         </div>

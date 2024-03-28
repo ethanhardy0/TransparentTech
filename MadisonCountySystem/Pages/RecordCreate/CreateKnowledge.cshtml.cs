@@ -241,8 +241,6 @@ namespace MadisonCountySystem.Pages.RecordCreate
         {
             if (!ModelState.IsValid)
             {
-                ModelState.Clear();
-
                 if (IsSwotItem)
                 {
                     Strengths = "Learning is good";
@@ -250,12 +248,36 @@ namespace MadisonCountySystem.Pages.RecordCreate
                     Opportunities = "Learning is fun sometimes";
                     Threats = "You should probably go to class to learn";
                 }
+                else
+                {
+                    Strengths = null;
+                    Weakness = null;
+                    Opportunities = null;
+                    Threats = null;
+                }
+                if (IsPESTItem)
+                {
+                    Political = "Political analysis text";
+                    Economic = "Economic analysis text";
+                    Social = "Social analysis text";
+                    Technological = "Technological analysis text";
+                }
+                else
+                {
+                    Political = null;
+                    Economic = null;
+                    Social = null;
+                    Technological = null;
+                }
                 KnowledgeTitle = "How to learn";
                 KnowledgeSubject = "Wisdom";
                 KnowledgeCategory = "Book";
                 KnowledgeInformation = "300 Pages";
                 CreateorUpdate = "Create";
+
+                ModelState.Clear();
             }
+
             GetActiveDepts();
             return Page();
         }
