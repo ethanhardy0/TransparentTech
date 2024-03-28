@@ -29,7 +29,7 @@ namespace MadisonCountySystem.Pages.Info
             Dataset = new Dataset();
         }
 
-        public void OnGet(int dataID, string DatasetError)
+        public void OnGet(int dataID)
         {
             HttpContext.Session.SetInt32("CurrentDataset", dataID);
 
