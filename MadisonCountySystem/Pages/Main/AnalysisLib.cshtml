@@ -3,35 +3,36 @@
 @{
     ViewData["Title"] = "Analysis Library";
 }
-
+<div style="background-color: #9EA5BF; padding: 30px;">
 @{
-    if (HttpContext.Session.GetString("username") != null)
-    {
-        <h2>Analysis Management</h2>
+        if (HttpContext.Session.GetString("username") != null)
+        {
+            <h2 style="margin-left: 10px; text-align: left; font-weight: bold; font-size: 40px; font-family: 'Open Sans', sans-serif; letter-spacing: 2px; margin-bottom: 5px;">Analysis Management</h2>
 
-        <form method="post">
-            <div class="row align-items-end">
-                <!-- Use align-items-end to align items vertically at their end -->
-                <div class="col">
-                    <label for="activeAnalysis" class="form-label">Select an Analysis:</label>
-                    <select class="form-control" id="activeAnalysis" name="selectedAnalysis">
-                        @foreach (var Analysis in Model.AnalysisList)
-                        {
-                            <option value="@Analysis.AnalysisID"> @Analysis.AnalysisName</option>
-                        }
-                    </select>
+            <form method="post">
+                <div class="row align-items-end">
+                    <!-- Use align-items-end to align items vertically at their end -->
+                    <div class="col">
+                        <label for="activeAnalysis" class="form-label">Select an Analysis:</label>
+                        <select class="form-control" id="activeAnalysis" name="selectedAnalysis">
+                            @foreach (var Analysis in Model.AnalysisList)
+                            {
+                                <option value="@Analysis.AnalysisID"> @Analysis.AnalysisName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <!-- Use col-auto for button to take up only the required space -->
+                        <button asp-page="AnalysisLib" asp-page-handler="AddCollab" class="btn btn-outline-success">Add to Collaboration</button>
+                    </div>
+                    <div class="col-auto">
+                        <button asp-page="AnalysisLib" asp-page-handler="CreateAnalysis" class="btn btn-outline-primary">Create New Analysis</button>
+                    </div>
                 </div>
-                <div class="col-auto">
-                    <!-- Use col-auto for button to take up only the required space -->
-                    <button asp-page="AnalysisLib" asp-page-handler="AddCollab" class="btn btn-outline-success">Add to Collaboration</button>
-                </div>
-                <div class="col-auto">
-                    <button asp-page="AnalysisLib" asp-page-handler="CreateAnalysis" class="btn btn-outline-primary">Create New Analysis</button>
-                </div>
-            </div>
-        </form>
-    }
+            </form>
+        }
 }
+</div>
 
 <style type="text/css">
     thead {
@@ -40,7 +41,8 @@
 </style>
 
 <br />
-<h3>Analysis Library</h3>
+<div style="margin-top: 70px; margin-left: 30px; margin-right: 30px;">
+@*<h3>Analysis Library</h3>*@
 <table class="table table-bordered table-responsive table-hover">
     <thead>
         <tr>
@@ -62,6 +64,7 @@
         }
     </tbody>
 </table>
+
 
 
 @{
@@ -95,3 +98,4 @@
         <p>@Analysis.AnalysisName</p>
     }
 }
+</div>

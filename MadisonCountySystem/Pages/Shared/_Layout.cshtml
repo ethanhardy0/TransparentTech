@@ -26,9 +26,10 @@
             margin-left: 35px;
         }
 
-        h1 {
-            margin-left: 45px;
+        #mainPage {
+            font-family: 'Open Sans', sans-serif;
         }
+
     </style>
 </head>
 <body>
@@ -122,6 +123,7 @@
             <h1>MY PROFILE</h1>
         </header>
     }
+
     @if (Context.Session.GetString("LibType") == "Collab")
     {
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color: #9EA5BF;  font-family: 'Open Sans', sans-serif; font-size: 14px;">
@@ -159,9 +161,12 @@
             </div>
         </nav>
     }
+
+    <section id="mainPage">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+    </section>
 
     <footer class="border-top footer text-muted">
         <div class="container">
