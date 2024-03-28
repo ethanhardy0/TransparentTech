@@ -34,8 +34,8 @@ namespace MadisonCountySystem.Pages.RecordCreate
         public DatasetCollab DatasetCollab { get; set; }
         public int newDatasetID { get; set; }
         public List<Department> ActiveDepts { get; set; }
-
         public Dictionary<string, ExcelTable> HeadersByFile { get; set; }
+        public string ErrorMessage = "";
 
         private static readonly String? connectionString =
             "Server=Localhost;Database=Auxillary;Trusted_Connection=true";
@@ -70,6 +70,8 @@ namespace MadisonCountySystem.Pages.RecordCreate
             }
 
         }
+
+
         public IActionResult OnPostAddDB(int selectedDep)
         {
             if (!ModelState.IsValid)
@@ -78,29 +80,53 @@ namespace MadisonCountySystem.Pages.RecordCreate
                 return Page();
             }
 
+            DatasetName = DatasetName.Replace(" ", "_").Replace("-", "_").Replace(",", "_").Replace("/", "_").Replace("\\", "_");
+
             foreach (var file in FormFiles)
             {
-                if (file.FileName.EndsWith(".xlsx") || file.FileName.EndsWith(".xls")) // Check if the file is an Excel file
+                try
                 {
-                    using (var stream = file.OpenReadStream())
+                    if (file.FileName.EndsWith(".xlsx") || file.FileName.EndsWith(".xls")) // Check if the file is an Excel file
                     {
-                        // Read Excel file and insert data into the database
-                        ReadExcel(stream, file.FileName);
+                        using (var stream = file.OpenReadStream())
+                        {
+                            // Read Excel file and insert data into the database
+                            ReadExcel(stream, file.FileName);
+                        }
+                    }
+                    else if (file.FileName.EndsWith(".csv")) // Check if the file is a CSV file
+                    {
+                        ProcessCsvFile(file);
                     }
                 }
-                else if (file.FileName.EndsWith(".csv")) // Check if the file is a CSV file
+                catch (Exception ex)
                 {
-                    ProcessCsvFile(file);
+                    // Store the error message in ViewData
+                    ViewData["ErrorMessage"] = $"Error processing file {file.FileName}: {ex.Message}";
+                    GetActiveDepts();
+                    return Page(); // Return the page to display the error message
                 }
             }
-            
-            CreateAndInsertDataset(selectedDep);
 
-            // Redirect based on current location
-            return CurrentLocation == "Collab"
-                ? InsertDatasetCollab()
-                : RedirectToPage("/Main/DatasetLib");
+            try
+            {
+                CreateAndInsertDataset(selectedDep);
+
+                // Redirect based on current location
+                return CurrentLocation == "Collab"
+                    ? InsertDatasetCollab()
+                    : RedirectToPage("/Main/DatasetLib");
+            }
+            catch (Exception ex)
+            {
+                // Store the error message in ViewData
+                ViewData["ErrorMessage"] = $"Error creating or inserting dataset: {ex.Message}";
+                GetActiveDepts();
+                return Page(); // Return the page to display the error message
+            }
         }
+
+
 
         // Reads Excel file to display on page then takes the data read and sends it to DB
         public void ReadExcel(Stream fileStream, string fileName)
@@ -115,6 +141,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
                 reader.Read();
                 for (int i = 0; i < reader.FieldCount; i++)
                 {
+                    var columnName = CleanColumnName(reader.GetValue(i)?.ToString());
                     fileData.Columns.Add(reader.GetValue(i)?.ToString());
                 }
 
@@ -141,8 +168,12 @@ namespace MadisonCountySystem.Pages.RecordCreate
             // Iterate over each header
             for (int i = 0; i < headers.Count; i++)
             {
-                var columnName = headers[i].Replace(" ", "_"); // Replace spaces with underscores
-                                                               // Append column name with TEXT data type
+                var columnName = headers[i]
+                    .Replace(" ", "_")      // Replace spaces with underscores
+                    .Replace("/", "_")      // Replace / with underscores
+                    .Replace("%", "pct");   // Replace % with pct
+
+                // Append column name with TEXT data type
                 try
                 {
                     // Detect if column contains decimal values
@@ -177,65 +208,63 @@ namespace MadisonCountySystem.Pages.RecordCreate
             }
         }
 
-
         private void InsertExcelData(string tableName, List<string> headers, List<string> rowData)
         {
-            // Construct insert query
-            StringBuilder insertQuery = new StringBuilder($"INSERT INTO {tableName} (");
+            // Create the parameterized query string for inserting data
+            StringBuilder insertQuery = new StringBuilder($"INSERT INTO [{tableName}] (");
+
+            // Append column names
             foreach (var header in headers)
             {
-                var columnName = header.Replace(" ", "_").Replace("/", "_"); // Replace spaces with underscores
-                insertQuery.Append($"[{columnName}], ");
+                insertQuery.Append($"[{CleanColumnName(header)}], ");
             }
 
             // Remove trailing comma and space
             insertQuery.Remove(insertQuery.Length - 2, 2);
             insertQuery.Append(") VALUES (");
 
-            // Add parameter placeholders
-            foreach (var header in headers)
+            // Append parameter placeholders
+            for (int i = 0; i < headers.Count; i++)
             {
-                insertQuery.Append($"@param{header.Replace(" ", "_")}, ");
+                insertQuery.Append($"@param{i}, ");
             }
 
             // Remove trailing comma and space
             insertQuery.Remove(insertQuery.Length - 2, 2);
             insertQuery.Append(")");
 
-            // Execute insert query
+            // Execute the parameterized query
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 using (var command = new SqlCommand(insertQuery.ToString(), connection))
                 {
-                    // Add parameter values
+                    // Add parameters for each column value
                     for (int i = 0; i < headers.Count; i++)
                     {
-                        // Check if the value exists in rowData
-                        string value = i < rowData.Count ? rowData[i] : null;
-
-                        // Check if the value is numerical
-                        if (double.TryParse(value, out double numericValue))
-                        {
-                            command.Parameters.AddWithValue($"@param{headers[i].Replace(" ", "_")}", numericValue);
-                        }
-                        else if (value != null && value != DBNull.Value.ToString())
-                        {
-                            // If not numerical and not DBNull, add as string
-                            command.Parameters.AddWithValue($"@param{headers[i].Replace(" ", "_")}", value);
-                        }
-                        else
-                        {
-                            // If value is DBNull or null, add DBNull.Value
-                            command.Parameters.AddWithValue($"@param{headers[i].Replace(" ", "_")}", DBNull.Value);
-                        }
+                        // Assuming all values are strings for simplicity
+                        var paramValue = (object)rowData[i] ?? DBNull.Value;
+                        command.Parameters.AddWithValue($"@param{i}", paramValue);
                     }
 
+                    // Execute the command
                     command.ExecuteNonQuery();
                 }
             }
         }
 
+
+        private string CleanColumnName(string columnName)
+        {
+            // Remove special characters and trim leading/trailing spaces
+            if (!string.IsNullOrEmpty(columnName))
+            {
+                // Remove non-alphanumeric characters and replace spaces with underscores
+                columnName = Regex.Replace(columnName, @"[^\w\s]", "").Replace(" ", "_");
+                columnName = columnName.Trim();
+            }
+            return columnName;
+        }
 
 
         private void ProcessCsvFile(IFormFile file)
