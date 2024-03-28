@@ -1,7 +1,6 @@
 ﻿@page
 @model MadisonCountySystem.Pages.Main.DatasetModel
 @{
-    ViewData["Title"] = "Dataset Library";
 }
 
 @if (!string.IsNullOrEmpty(Model.ErrorMessage))
@@ -72,66 +71,76 @@
     </div>
 }
 
-<br/>
-        <form method="post">
-            <div class="row align-items-end">
-                <div class="col">
-                    <h2>Dataset Management</h2>
-                </div>
-
-                <div class="col-auto">
-                    <button asp-page="DatasetLib" asp-page-handler="CreateDataset" class="btn btn-outline-primary">Create New Dataset</button>
-                </div>
-            </div>
-        </form>
-<hr />
-
 <style type="text/css">
     thead {
-        background-color: #EFC945;
-    }     
+        background-color: #EFC935;
+    }
+
+    th {
+        text-align: center;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 14px;
+    }
+
+    tbody {
+        text-align: left;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 14px;
+    }
 </style>
+<br/>
+<div style="background-color: #9EA5BF; padding: 30px;">
+    <div class="row align-items-center">
+        <div class="col">
+            <p style="margin-left: 10px; text-align: left; font-weight: bold; font-size: 40px; font-family: 'Open Sans', sans-serif; letter-spacing: 2px; margin-bottom: 5px;">Dataset Library</p>
+            <form method="post">
+                <button asp-page="DatasetLib" asp-page-handler="CreateDataset" class="btn btn-primary text-black" style="width: 300px; background-color: #DDBD3F; font-size: 14px; font-family: 'Open Sans', sans-serif; border: none; margin-left: 10px;">Create New Dataset</button>
+            </form>
+        </div>
+    </div>
+</div>
 
-<h3>Dataset Library</h3>
-
-<table class="table table-bordered table-responsive table-hover">
-    <thead>
-        <tr>
-            <th>Dataset Name:</th>
-            <th>File Type:</th>
-            <th>Departments:</th>
-            <th>Created Date:</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            foreach (var Dataset in Model.DatasetList)
-            {
-                <tr>
-                    <td><a asp-area="" asp-page="/Info/DatasetInfo" asp-route-dataID="@Dataset.DatasetID">@Dataset.DatasetName</a></td>
-                    <td>@Dataset.DatasetType</td>
-                    <td>@String.Join(", ", Dataset.Departments)</td>
-                    <td>@Dataset.DatasetCreatedDate</td>
-                    <td>
-                        <!-- New column for actions -->
-                        <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                                Actions
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item" asp-area="" asp-page="/RecordCreate/CreateDataset" asp-route-ExistingID="@Dataset.DatasetID">Edit</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-page="/Main/DatasetLib" asp-route-actionType="Collab:@Dataset.DatasetID">Add to Collab</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-page="/Main/DatasetLib" asp-route-actionType="Dept:@Dataset.DatasetID">Add to Department</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-page="/Main/DatasetLib" asp-route-actionType="Delete:@Dataset.DatasetID">Delete</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
+<div style="margin-top: 70px; margin-left: 30px; margin-right: 30px;">
+    <table class="table table-bordered table-responsive table-hover">
+        <thead>
+            <tr>
+                <th>Dataset Name</th>
+                <th>File Type</th>
+                <th>Departments</th>
+                <th>Created Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var Dataset in Model.DatasetList)
+                {
+                    <tr>
+                        <td><a asp-area="" asp-page="/Info/DatasetInfo" asp-route-dataID="@Dataset.DatasetID">@Dataset.DatasetName</a></td>
+                        <td>@Dataset.DatasetType</td>
+                        <td>@String.Join(", ", Dataset.Departments)</td>
+                        <td>@Dataset.DatasetCreatedDate</td>
+                        <td>
+                            <!-- New column for actions -->
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" style="background-color: #293A80;" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Actions
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li><a class="dropdown-item" asp-area="" asp-page="/RecordCreate/CreateDataset" asp-route-ExistingID="@Dataset.DatasetID">Edit</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-page="/Main/DatasetLib" asp-route-actionType="Collab:@Dataset.DatasetID">Add to Collab</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-page="/Main/DatasetLib" asp-route-actionType="Dept:@Dataset.DatasetID">Add to Department</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-page="/Main/DatasetLib" asp-route-actionType="Delete:@Dataset.DatasetID">Delete</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
             }
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
+
 @*
 @{
     <h1>Department 1 Dataset</h1>

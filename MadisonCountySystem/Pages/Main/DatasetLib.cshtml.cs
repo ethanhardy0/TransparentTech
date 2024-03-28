@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using MadisonCountySystem.Pages.DataClasses;
 using MadisonCountySystem.Pages.DB;
 using System.Data.SqlClient;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace MadisonCountySystem.Pages.Main
@@ -22,6 +23,11 @@ namespace MadisonCountySystem.Pages.Main
         public List<Department> ActiveDepts { get; set; }
         public List<DepartmentDataset> asscDepts { get; set; }
         public string ErrorMessage = "";
+
+        [BindProperty]
+        [Required] public String Search { get; set; }
+
+        public static List<Dataset> SearchData { get; set; }
 
         public DatasetModel()
         {
@@ -175,8 +181,18 @@ namespace MadisonCountySystem.Pages.Main
                 data.Departments.AddRange(asscDept2);
                 asscDept2.Clear();
             }
+            //SearchData = new List<Dataset>();
+            //SearchData.AddRange(DatasetList);
             GetActiveDepts();
         }
+
+        //public IActionResult OnPostNarrowSearch()
+        //{
+        //    DatasetList = SearchData.Where(item => item.DatasetName.ToLower().Contains(Search.ToLower())).ToList();
+        //    GetActiveDepts();
+        //    return Page();
+        //}
+
 
 
 
@@ -192,6 +208,7 @@ namespace MadisonCountySystem.Pages.Main
 
         public IActionResult OnPostClose()
         {
+            Search = "";
             return RedirectToPage();
         }
 

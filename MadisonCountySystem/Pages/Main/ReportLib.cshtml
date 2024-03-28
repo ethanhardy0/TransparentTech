@@ -29,15 +29,12 @@
     
 </style>
 
-<body>
     @*
     <section id="welcome">
         <h1>Report Library</h1>
         <p>This is a shared knowledge management system to easily access information.</p>
     </section>
     *@
-
-    <br/>
 
     @*
     <form method="post">
@@ -52,31 +49,28 @@
         </div>
     </form>
     *@
-
-    <br />
-
-    <table class="table table-bordered table-responsive table-hover" style="margin: auto;">
+    <div style="margin-top: 70px; margin-left: 30px; margin-right: 30px;">
+        <table class="table table-bordered table-responsive table-hover" style="margin: auto;">
             <thead>
-            <tr>
-                <th>Report Key Item</th>
-                <th>Collaboration Name</th>
-                <th>Report Key Type</th>
-                <th>Date Created</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                foreach (var report in Model.CollabReports2)
-                {
-                    <tr>
-                        <td><a asp-area="" asp-page="/Info/ReportInfo" asp-route-reportID="@report.CollabReportID">@report.KeyName</a></td>
-                        <td>@report.CollabName</td>
-                        <td>@report.KeyType</td>
-                        <td>@report.ReportCreatedDate</td>
-                    </tr>
+                <tr>
+                    <th>Report Key Item</th>
+                    <th>Collaboration Name</th>
+                    <th>Report Key Type</th>
+                    <th>Date Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var report in Model.CollabReports2)
+                    {
+                        <tr>
+                            <td><a asp-area="" asp-page="/Info/ReportInfo" asp-route-reportID="@report.CollabReportID">@report.KeyName</a></td>
+                            <td>@report.CollabName</td>
+                            <td>@report.KeyType</td>
+                            <td>@report.ReportCreatedDate</td>
+                        </tr>
+                    }
                 }
-            }
-        </tbody>
-    </table>
-</body>
-
+            </tbody>
+        </table>
+    </div>
