@@ -34,8 +34,11 @@ namespace MadisonCountySystem.Pages.RecordCreate
         public DatasetCollab DatasetCollab { get; set; }
         public int newDatasetID { get; set; }
         public List<Department> ActiveDepts { get; set; }
-
         public Dictionary<string, ExcelTable> HeadersByFile { get; set; }
+        public string ErrorMessage = "";
+        public String CreateorUpdate { get; set; }
+        public static String PriorName { get; set; }
+        public static int ExistingDatasetID { get; set; }
 
         private static readonly String? connectionString =
             "Server=Localhost;Database=Auxillary;Trusted_Connection=true";
@@ -45,7 +48,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
             HeadersByFile = new Dictionary<string, ExcelTable>();
         }
 
-        public void OnGet()
+        public void OnGet(int ExistingID)
         {
             if (HttpContext.Session.GetString("username") == null)
             {
@@ -55,6 +58,26 @@ namespace MadisonCountySystem.Pages.RecordCreate
             else
             {
                 CurrentLocation = HttpContext.Session.GetString("LibType");
+                CreateorUpdate = "Create";
+                PriorName = null;
+                ExistingDatasetID = 0;
+                if (ExistingID > 0)
+                {
+                    CreateorUpdate = "Update";
+                    ExistingDatasetID = ExistingID;
+                    SqlDataReader newDatasetReader = DBClass.DatasetReader();
+                    while (newDatasetReader.Read())
+                    {
+                        if (Int32.Parse(newDatasetReader["DatasetID"].ToString()) == ExistingID)
+                        {
+                            DatasetName = newDatasetReader["DatasetName"].ToString();
+                            DatasetType = newDatasetReader["DatasetType"].ToString();
+                            DatasetContents = newDatasetReader["DatasetContents"].ToString();
+                            PriorName = newDatasetReader["DatasetName"].ToString();
+                        }
+                    }
+                    DBClass.KnowledgeDBConnection.Close();
+                }
 
                 String fileDir = Directory.GetCurrentDirectory() + @"\wwwroot\csvupload\";
                 DirectoryInfo fileInfo = new DirectoryInfo(fileDir);
@@ -70,6 +93,8 @@ namespace MadisonCountySystem.Pages.RecordCreate
             }
 
         }
+
+
         public IActionResult OnPostAddDB(int selectedDep)
         {
             if (!ModelState.IsValid)
@@ -78,29 +103,83 @@ namespace MadisonCountySystem.Pages.RecordCreate
                 return Page();
             }
 
+            DatasetName = DatasetName.Replace(" ", "_").Replace("-", "_").Replace(",", "_").Replace("/", "_").Replace("\\", "_");
+            if (PriorName != null)
+            {
+                String sqlQuery = "UPDATE Dataset SET DatasetName = '";
+                sqlQuery += DatasetName;
+                sqlQuery += "', DatasetContents = '";
+                sqlQuery += DatasetContents;
+                sqlQuery += "', DatasetType = '";
+                sqlQuery += DatasetType;
+                sqlQuery += "' WHERE DatasetID = ";
+                sqlQuery += ExistingDatasetID;
+                DBClass.GeneralReader(sqlQuery);
+                DBClass.KnowledgeDBConnection.Close();
+
+                String sqlQueryAux = "EXEC sp_rename '";
+                sqlQueryAux += PriorName;
+                sqlQueryAux += "', '";
+                sqlQueryAux += DatasetName;
+                sqlQueryAux += "';";
+                DBClass.AuxGeneralReader(sqlQueryAux);
+                DBClass.KnowledgeDBConnection.Close();
+                if (HttpContext.Session.GetString("LibType") == "Collab")
+                {
+                    return RedirectToPage("/Collabs/DatasetList");
+                }
+                else
+                {
+                    return RedirectToPage("/Main/DatasetLib");
+                }
+
+            }
+
             foreach (var file in FormFiles)
             {
-                if (file.FileName.EndsWith(".xlsx") || file.FileName.EndsWith(".xls")) // Check if the file is an Excel file
+                try
                 {
-                    using (var stream = file.OpenReadStream())
+                    if (file.FileName.EndsWith(".xlsx") || file.FileName.EndsWith(".xls")) // Check if the file is an Excel file
                     {
-                        // Read Excel file and insert data into the database
-                        ReadExcel(stream, file.FileName);
+                        using (var stream = file.OpenReadStream())
+                        {
+                            // Read Excel file and insert data into the database
+                            ReadExcel(stream, file.FileName);
+                        }
+                    }
+                    else if (file.FileName.EndsWith(".csv")) // Check if the file is a CSV file
+                    {
+                        ProcessCsvFile(file);
                     }
                 }
-                else if (file.FileName.EndsWith(".csv")) // Check if the file is a CSV file
+                catch (Exception ex)
                 {
-                    ProcessCsvFile(file);
+                    // Store the error message in ViewData
+                    ViewData["ErrorMessage"] = $"Error processing file {file.FileName}: {ex.Message}";
+                    GetActiveDepts();
+                    return Page(); // Return the page to display the error message
                 }
             }
-            
-            CreateAndInsertDataset(selectedDep);
 
-            // Redirect based on current location
-            return CurrentLocation == "Collab"
-                ? InsertDatasetCollab()
-                : RedirectToPage("/Main/DatasetLib");
+            try
+            {
+                CreateAndInsertDataset(selectedDep);
+
+                // Redirect based on current location
+                return CurrentLocation == "Collab"
+                    ? InsertDatasetCollab()
+                    : RedirectToPage("/Main/DatasetLib");
+            }
+            catch (Exception ex)
+            {
+                // Store the error message in ViewData
+                ViewData["ErrorMessage"] = $"Error creating or inserting dataset: {ex.Message}";
+                GetActiveDepts();
+                return Page(); // Return the page to display the error message
+            }
         }
+
+
 
         // Reads Excel file to display on page then takes the data read and sends it to DB
         public void ReadExcel(Stream fileStream, string fileName)
@@ -115,6 +194,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
                 reader.Read();
                 for (int i = 0; i < reader.FieldCount; i++)
                 {
+                    var columnName = CleanColumnName(reader.GetValue(i)?.ToString());
                     fileData.Columns.Add(reader.GetValue(i)?.ToString());
                 }
 
@@ -141,8 +221,12 @@ namespace MadisonCountySystem.Pages.RecordCreate
             // Iterate over each header
             for (int i = 0; i < headers.Count; i++)
             {
-                var columnName = headers[i].Replace(" ", "_"); // Replace spaces with underscores
-                                                               // Append column name with TEXT data type
+                var columnName = headers[i]
+                    .Replace(" ", "_")      // Replace spaces with underscores
+                    .Replace("/", "_")      // Replace / with underscores
+                    .Replace("%", "pct");   // Replace % with pct
+
+                // Append column name with TEXT data type
                 try
                 {
                     // Detect if column contains decimal values
@@ -177,65 +261,63 @@ namespace MadisonCountySystem.Pages.RecordCreate
             }
         }
 
-
         private void InsertExcelData(string tableName, List<string> headers, List<string> rowData)
         {
-            // Construct insert query
-            StringBuilder insertQuery = new StringBuilder($"INSERT INTO {tableName} (");
+            // Create the parameterized query string for inserting data
+            StringBuilder insertQuery = new StringBuilder($"INSERT INTO [{tableName}] (");
+
+            // Append column names
             foreach (var header in headers)
             {
-                var columnName = header.Replace(" ", "_").Replace("/", "_"); // Replace spaces with underscores
-                insertQuery.Append($"[{columnName}], ");
+                insertQuery.Append($"[{CleanColumnName(header)}], ");
             }
 
             // Remove trailing comma and space
             insertQuery.Remove(insertQuery.Length - 2, 2);
             insertQuery.Append(") VALUES (");
 
-            // Add parameter placeholders
-            foreach (var header in headers)
+            // Append parameter placeholders
+            for (int i = 0; i < headers.Count; i++)
             {
-                insertQuery.Append($"@param{header.Replace(" ", "_")}, ");
+                insertQuery.Append($"@param{i}, ");
             }
 
             // Remove trailing comma and space
             insertQuery.Remove(insertQuery.Length - 2, 2);
             insertQuery.Append(")");
 
-            // Execute insert query
+            // Execute the parameterized query
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 using (var command = new SqlCommand(insertQuery.ToString(), connection))
                 {
-                    // Add parameter values
+                    // Add parameters for each column value
                     for (int i = 0; i < headers.Count; i++)
                     {
-                        // Check if the value exists in rowData
-                        string value = i < rowData.Count ? rowData[i] : null;
-
-                        // Check if the value is numerical
-                        if (double.TryParse(value, out double numericValue))
-                        {
-                            command.Parameters.AddWithValue($"@param{headers[i].Replace(" ", "_")}", numericValue);
-                        }
-                        else if (value != null && value != DBNull.Value.ToString())
-                        {
-                            // If not numerical and not DBNull, add as string
-                            command.Parameters.AddWithValue($"@param{headers[i].Replace(" ", "_")}", value);
-                        }
-                        else
-                        {
-                            // If value is DBNull or null, add DBNull.Value
-                            command.Parameters.AddWithValue($"@param{headers[i].Replace(" ", "_")}", DBNull.Value);
-                        }
+                        // Assuming all values are strings for simplicity
+                        var paramValue = (object)rowData[i] ?? DBNull.Value;
+                        command.Parameters.AddWithValue($"@param{i}", paramValue);
                     }
 
+                    // Execute the command
                     command.ExecuteNonQuery();
                 }
             }
         }
 
+
+        private string CleanColumnName(string columnName)
+        {
+            // Remove special characters and trim leading/trailing spaces
+            if (!string.IsNullOrEmpty(columnName))
+            {
+                // Remove non-alphanumeric characters and replace spaces with underscores
+                columnName = Regex.Replace(columnName, @"[^\w\s]", "").Replace(" ", "_");
+                columnName = columnName.Trim();
+            }
+            return columnName;
+        }
 
 
         private void ProcessCsvFile(IFormFile file)
@@ -311,6 +393,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
                 DatasetName = "Capital Gains Data";
                 DatasetType = "WORD";
                 DatasetContents = "You paid no Capital Gains Tax";
+                CreateorUpdate = "Create";
                 foreach (var file in FormFiles)
                 {
                     FormFiles.Add(file);
@@ -359,7 +442,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
                         }
                     }
                 }
-                OnGet();
+                OnGet(0);
             }
         }
         public void GetActiveDepts()

@@ -7,6 +7,29 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/KnowledgeManagement_Lab1.styles.css" asp-append-version="true" />
+    <style>
+        #reports, #profile {
+            background-color: #EFC935;
+        }
+
+        #welcome {
+            color: #293A80;
+            padding: 20px;
+        }
+
+        #reportsUser {
+            background-color: #9EA5BF;
+            padding: 20px;
+        }
+
+        #reph1 {
+            margin-left: 35px;
+        }
+
+        h1 {
+            margin-left: 45px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -67,6 +90,38 @@
             </div>
         </nav>
     </header>
+
+    @* Styling - citizen user view page *@
+    @if (Context.Session.GetString("username") == null)
+    {
+        @if (ViewContext.RouteData.Values["page"].ToString() == "/Main/ReportLib")
+        {
+            <header id="reports" style="font-family: 'Open Sans', sans-serif;">
+                <div id="welcome">
+                    <h1 id="reph1">Report Library</h1>
+                    <p>This is a shared knowledge management system to easily access information.</p>
+                </div>
+            </header>
+        }
+    }
+    @if (Context.Session.GetString("username") != null)
+    {
+        @if (ViewContext.RouteData.Values["page"].ToString() == "/Main/ReportLib")
+        {
+            <header id="reportsUser" style="font-family: 'Open Sans', sans-serif;">
+                <h1>Reports</h1>
+            </header>
+        }
+    }
+
+
+    @* Styling - only shows up in profile page *@
+    @if (ViewContext.RouteData.Values["page"].ToString() == "/Main/UserHome")
+    {
+        <header id="profile" style="font-family: 'Open Sans', sans-serif;">
+            <h1>My Profile</h1>
+        </header>
+    }
     @if (Context.Session.GetString("LibType") == "Collab")
     {
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color: #9EA5BF;  font-family: 'Open Sans', sans-serif; font-size: 14px;">
@@ -112,7 +167,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy- <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy Transparent Technologies - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
 

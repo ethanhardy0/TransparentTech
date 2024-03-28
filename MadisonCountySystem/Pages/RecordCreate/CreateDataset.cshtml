@@ -4,7 +4,14 @@
     ViewData["Title"] = "Create a Dataset";
 }
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Create a Dataset</h2>
+    @if (Model.CreateorUpdate == "Create")
+    {
+        <h2 class="text-center mb-4">Create a Dataset</h2>
+    }
+    @if (Model.CreateorUpdate == "Update")
+    {
+        <h2 class="text-center mb-4">Update @Model.DatasetName</h2>
+    }
     <form method="post">
         <div class="row justify-content-md-center">
             <div class="col-md-6">
@@ -26,14 +33,23 @@
                     <input asp-for="DatasetContents" placeholder="Enter Dataset Description:" class="form-control" />
                     <span asp-validation-for="DatasetContents" class="text-danger"></span>
                 </div>
-                <div class="mb-3">
-                    <label asp-for="FormFiles" class="form-label">Upload a File:</label>
-                    <input asp-for="FormFiles" type="file" accept=".csv, .xlsx" class="form-control" />
-                    <span asp-validation-for="FormFiles" class="text-danger"></span>
-                </div>
 
-                @if ("Create" == "Create")
+                @if (Model.CreateorUpdate == "Create")
                 {
+
+                    <div class="mb-3">
+                        <label asp-for="FormFiles" class="form-label">Upload a File:</label>
+                        <input asp-for="FormFiles" type="file" accept=".csv, .xlsx" class="form-control" />
+                        <span asp-validation-for="FormFiles" class="text-danger"></span>
+                    </div>
+
+                    @if (ViewData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @ViewData["ErrorMessage"]
+                        </div>
+                    }
+
                     <div class="mb-3">
                         <label for="activeDep" class="form-label">Add to a Department:</label>
                         <select class="form-control" id="activeDep" name="selectedDep">
@@ -47,7 +63,15 @@
 
                 <div class="text-center">
                     <button style="width: 30%" asp-page="CreateDataset" asp-page-handler="PopulateHandler" class="btn btn-outline-primary btn-lg" formnovalidate>Populate</button>
-                    <button style="width: 33%" asp-page="CreateDataset" formenctype="multipart/form-data" asp-page-handler="AddDB" class="btn btn-outline-success btn-lg">Upload Dataset</button>
+                    @if (Model.CreateorUpdate == "Create")
+                    {
+                        <button style="width: 33%" asp-page="CreateDataset" formenctype="multipart/form-data" asp-page-handler="AddDB" class="btn btn-outline-success btn-lg">Upload Dataset</button>
+                    }
+                    @if (Model.CreateorUpdate == "Update")
+                    {
+                        <button style="width: 33%" asp-page="CreateDataset" formenctype="multipart/form-data" asp-page-handler="AddDB" class="btn btn-outline-success btn-lg">Update Dataset</button>
+                    }
+
                     <button style="width: 30%" asp-page="CreateDataset" asp-page-handler="Cancel" class="btn btn-outline-danger btn-lg" formnovalidate>Clear</button>
                 </div>
 
