@@ -64,12 +64,11 @@
 </script>
 
 @*<h1 class="text-center mt-5">Welcome, @Model.LoggedUser.Username</h1>*@
-<h1>My Profile</h1>
 <br />
 
 <div class="row">
     <section id="userCard" class="text-center box-shadow">
-        <div id="profile">
+        <div id="profilePic">
             @{
                 if (Model.PhotoDir == "~/images/blankuser.jpg")
                 {
