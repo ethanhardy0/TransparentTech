@@ -17,11 +17,6 @@
             padding: 20px;
         }
 
-        #reportsUser {
-            background-color: #9EA5BF;
-            padding: 20px;
-        }
-
         #reph1 {
             margin-left: 35px;
         }
@@ -119,9 +114,9 @@
     {
         @if (ViewContext.RouteData.Values["page"].ToString() == "/Main/ReportLib")
         {
-            <header id="reportsUser" style="font-family: 'Open Sans', sans-serif;">
-                <h1>REPORT LIBRARY</h1>
-            </header>
+            <div style="background-color: #9EA5BF; padding: 30px;">
+                <h2 style="margin-left: 10px; text-align: left; font-weight: bold; font-size: 40px; font-family: 'Open Sans', sans-serif; letter-spacing: 2px; margin-bottom: 5px;">Report Library</h2>
+            </div>
         }
     }
 
