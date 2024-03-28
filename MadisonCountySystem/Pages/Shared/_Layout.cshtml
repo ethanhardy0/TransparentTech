@@ -17,8 +17,17 @@
             padding: 20px;
         }
 
-        h1 {
+        #reportsUser {
+            background-color: #9EA5BF;
+            padding: 20px;
+        }
+
+        #reph1 {
             margin-left: 35px;
+        }
+
+        h1 {
+            margin-left: 45px;
         }
     </style>
 </head>
@@ -82,16 +91,29 @@
         </nav>
     </header>
 
-    @* Styling - only shows up in reports page *@
-    @if (ViewContext.RouteData.Values["page"].ToString() == "/Main/ReportLib")
+    @* Styling - citizen user view page *@
+    @if (Context.Session.GetString("username") == null)
     {
-        <header id="reports" style="font-family: 'Open Sans', sans-serif;">
-            <div id="welcome">
-                <h1>Report Library</h1>
-                <p>This is a shared knowledge management system to easily access information.</p>
-            </div>
-        </header>
+        @if (ViewContext.RouteData.Values["page"].ToString() == "/Main/ReportLib")
+        {
+            <header id="reports" style="font-family: 'Open Sans', sans-serif;">
+                <div id="welcome">
+                    <h1 id="reph1">Report Library</h1>
+                    <p>This is a shared knowledge management system to easily access information.</p>
+                </div>
+            </header>
+        }
     }
+    @if (Context.Session.GetString("username") != null)
+    {
+        @if (ViewContext.RouteData.Values["page"].ToString() == "/Main/ReportLib")
+        {
+            <header id="reportsUser" style="font-family: 'Open Sans', sans-serif;">
+                <h1>Reports</h1>
+            </header>
+        }
+    }
+
 
     @* Styling - only shows up in profile page *@
     @if (ViewContext.RouteData.Values["page"].ToString() == "/Main/UserHome")
