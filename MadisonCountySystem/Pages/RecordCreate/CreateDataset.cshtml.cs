@@ -216,7 +216,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
             }
         }
 
-
+        // Creates the excel based off the excel spreadsheet
         private void CreateTableAndInsertExcelData(string tableName, List<string> headers, List<List<string>> rows)
         {
             // Create table script
@@ -225,10 +225,12 @@ namespace MadisonCountySystem.Pages.RecordCreate
             // Iterate over each header
             for (int i = 0; i < headers.Count; i++)
             {
-                var columnName = headers[i]
+                var columnName = headers[i].Trim()
                     .Replace(" ", "_")      // Replace spaces with underscores
                     .Replace("/", "_")      // Replace / with underscores
                     .Replace("%", "pct");   // Replace % with pct
+                columnName = Regex.Replace(columnName, @"_+", "_");
+                columnName = columnName.TrimEnd('_');
 
                 // Append column name with TEXT data type
                 try
@@ -265,6 +267,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
             }
         }
 
+        // Inserts the data from excel based off of the columns
         private void InsertExcelData(string tableName, List<string> headers, List<string> rowData)
         {
             // Create the parameterized query string for inserting data
