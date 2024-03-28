@@ -134,49 +134,53 @@ namespace MadisonCountySystem.Pages.RecordCreate
                 }
 
             }
-
-            foreach (var file in FormFiles)
+            else
             {
-                try
+                foreach (var file in FormFiles)
                 {
-                    if (file.FileName.EndsWith(".xlsx") || file.FileName.EndsWith(".xls")) // Check if the file is an Excel file
+                    try
                     {
-                        using (var stream = file.OpenReadStream())
+                        if (file.FileName.EndsWith(".xlsx") || file.FileName.EndsWith(".xls")) // Check if the file is an Excel file
                         {
-                            // Read Excel file and insert data into the database
-                            ReadExcel(stream, file.FileName);
+                            using (var stream = file.OpenReadStream())
+                            {
+                                // Read Excel file and insert data into the database
+                                ReadExcel(stream, file.FileName);
+                            }
+                        }
+                        else if (file.FileName.EndsWith(".csv")) // Check if the file is a CSV file
+                        {
+                            ProcessCsvFile(file);
                         }
                     }
-                    else if (file.FileName.EndsWith(".csv")) // Check if the file is a CSV file
+                    catch (Exception ex)
                     {
-                        ProcessCsvFile(file);
+                        // Store the error message 
+                        TempData["ErrorMessage"] = $"Error processing file {file.FileName}: {ex.Message}";
+                        GetActiveDepts();
+                        return RedirectToPage("/Main/DatasetLib"); // Return the page to display the error message
                     }
+                }
+
+                try
+                {
+                    CreateAndInsertDataset(selectedDep);
+
+                    // Redirect based on current location
+                    return CurrentLocation == "Collab"
+                        ? InsertDatasetCollab()
+                        : RedirectToPage("/Main/DatasetLib");
                 }
                 catch (Exception ex)
                 {
-                    // Store the error message in ViewData
-                    ViewData["ErrorMessage"] = $"Error processing file {file.FileName}: {ex.Message}";
+                    // Store the error message
+                    TempData["ErrorMessage"] = $"Error creating or inserting dataset: {ex.Message}";
                     GetActiveDepts();
-                    return Page(); // Return the page to display the error message
+                    return RedirectToPage("/Main/DatasetLib"); // Return the page to display the error message
                 }
             }
 
-            try
-            {
-                CreateAndInsertDataset(selectedDep);
 
-                // Redirect based on current location
-                return CurrentLocation == "Collab"
-                    ? InsertDatasetCollab()
-                    : RedirectToPage("/Main/DatasetLib");
-            }
-            catch (Exception ex)
-            {
-                // Store the error message in ViewData
-                ViewData["ErrorMessage"] = $"Error creating or inserting dataset: {ex.Message}";
-                GetActiveDepts();
-                return Page(); // Return the page to display the error message
-            }
         }
 
 

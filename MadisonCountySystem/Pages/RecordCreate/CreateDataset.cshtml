@@ -43,13 +43,6 @@
                         <span asp-validation-for="FormFiles" class="text-danger"></span>
                     </div>
 
-                    @if (ViewData["ErrorMessage"] != null)
-                    {
-                        <div class="alert alert-danger" role="alert">
-                            @ViewData["ErrorMessage"]
-                        </div>
-                    }
-
                     <div class="mb-3">
                         <label for="activeDep" class="form-label">Add to a Department:</label>
                         <select class="form-control" id="activeDep" name="selectedDep">

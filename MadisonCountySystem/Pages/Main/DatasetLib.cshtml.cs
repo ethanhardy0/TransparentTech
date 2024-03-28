@@ -21,7 +21,7 @@ namespace MadisonCountySystem.Pages.Main
         public List<Dataset> Dep5Data { get; set; }
         public List<Department> ActiveDepts { get; set; }
         public List<DepartmentDataset> asscDepts { get; set; }
-
+        public string ErrorMessage = "";
 
         public DatasetModel()
         {
@@ -31,6 +31,9 @@ namespace MadisonCountySystem.Pages.Main
 
         public void OnGet(String actionType)
         {
+            // Get the error message from TempData
+            ErrorMessage = TempData["ErrorMessage"]?.ToString();
+
             if (HttpContext.Session.GetString("username") == null)
             {
                 HttpContext.Session.SetString("LoginError", "You must login to access that page!");

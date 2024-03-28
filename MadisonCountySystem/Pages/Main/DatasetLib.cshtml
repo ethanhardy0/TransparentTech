@@ -3,6 +3,14 @@
 @{
     ViewData["Title"] = "Dataset Library";
 }
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.ErrorMessage
+    </div>
+}
+
 @if (Model.ActionType == "Delete")
 {
     <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4);">
