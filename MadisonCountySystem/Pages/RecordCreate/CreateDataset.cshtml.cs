@@ -229,8 +229,8 @@ namespace MadisonCountySystem.Pages.RecordCreate
                     .Replace(" ", "_")      // Replace spaces with underscores
                     .Replace("/", "_")      // Replace / with underscores
                     .Replace("%", "pct");   // Replace % with pct
-                columnName = Regex.Replace(columnName, @"_+", "_");
-                columnName = columnName.TrimEnd('_');
+                columnName = Regex.Replace(columnName, @"_+", "_"); //multiple underscores into sinle
+                columnName = columnName.TrimEnd('_'); // trims the end of the column
 
                 // Append column name with TEXT data type
                 try
