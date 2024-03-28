@@ -181,6 +181,7 @@ namespace MadisonCountySystem.Pages.Main
                 ki.Departments.AddRange(asscDept2);
                 asscDept2.Clear();
             }
+
             SearchKI = new List<KnowledgeItem>();
             SearchKI.AddRange(KnowledgeItemList);
             GetActiveDepts();
