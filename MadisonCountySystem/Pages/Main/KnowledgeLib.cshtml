@@ -1,7 +1,6 @@
 ﻿@page
 @model MadisonCountySystem.Pages.Main.KnowledgeLibModel
 @{
-    ViewData["Title"] = "Knowledge Item Library";
 }
 @if (Model.ActionType == "Delete")
 {
@@ -64,74 +63,77 @@
     </div>
 }
 
-
 <style type="text/css">
     thead {
         background-color: #EFC935;
     }
+
+    th {
+        text-align: center;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 14px;
+    }
+
+    tbody{
+        text-align: left;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 14px;
+    }
+
 </style>
-<br/>
 
-<form method="post">
-    <div class="row align-items-end">
-        <div class="col">
-            <h2>Knowledge Item Management</h2>
-        </div>
-        <div class="col-auto">
-            <button asp-page="KnowledgeLib" asp-page-handler="CreateKnowledgeItem" class="btn btn-outline-primary">Create New Knowledge Item</button>
-        </div>
-    </div>
-</form>
-
-<br />
-<form method="post">
-    <div class="row align-items-end">
-        <div class="col">
-            <input asp-for="Search" placeholder="Search Knowledge Item Name, Owner Username..." class="form-control" />
-            <span asp-validation-for="Search" class="text-danger"></span>
-        </div>
-        <div class="col-auto">
-            <button asp-page="KnowledgeLib" asp-page-handler="NarrowSearch" class="btn btn-outline-success">Search</button>
-        </div>
-    </div>
-</form>
-
-<br />
-
-<form method="post">
-    <div class="row align-items-end mb-3">
-        <div class="col">
-            <h3>Knowledge Item Library</h3>
-        </div>
-        <div class="col-auto">
-            <div class="dropdown">
-                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                    Filter by Department
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    @foreach (var dep in Model.ActiveDepts)
-                    {
-                        <li><button class="dropdown-item" type="submit" asp-page="KnowledgeLib" asp-page-handler="FilterDep" name="selectedDep" value="@dep.DepartmentName">@dep.DepartmentName</button></li>
-                    }
-                </ul>
+<div style="background-color: #9EA5BF; padding: 30px;">
+    <form method="post">
+        <div class="row align-items-end mb-3">
+            <div class="col">
+                <br />
+                <p style="text-align: left; font-weight: bold; font-size: 40px; font-family: 'Open Sans', sans-serif; letter-spacing: 2px; margin-bottom: 5px;">Knowledge Library</p>
+            </div>
+            <div class="col-auto">
+                <div class="input-group">
+                    <input asp-for="Search" placeholder="Search by Item Name or Owner Username" class="form-control" style="width: 300px; text-align: center; font-family: 'Open Sans', sans-serif; font-size: 14px; margin-right: 5px;">
+                    <button asp-page="KnowledgeLib" asp-page-handler="NarrowSearch" class="btn btn-primary" style="width: 100px; background-color: #DDBD3F; font-size: 14px; font-family: 'Open Sans', sans-serif; border: none; color: black;">Search</button>
+                </div>
             </div>
         </div>
-        <div class="col-auto">
-            <button asp-page="KnowledgeLib" asp-page-handler="Clear" class="btn btn-outline-danger">Clear All Filters</button>
-        </div>
-    </div>
-</form>
 
-<table class="table table-bordered table-responsive table-hover">
+        <div class="row align-items-end mb-3">
+            <div class="col">
+                <button asp-page="KnowledgeLib" asp-page-handler="CreateKnowledgeItem" class="btn btn-primary text-black" style="width: 300px; background-color: #DDBD3F; font-size: 14px; font-family: 'Open Sans', sans-serif; border: none;">Create New Knowledge Item</button>
+            </div>
+            <div class="col-auto">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle text-black" style=" border: none; width: 300px; font-size: 14px; font-family: 'Open Sans', sans-serif; background-color: #FFFFFF;" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filter by Department
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        @foreach (var dep in Model.ActiveDepts)
+                        {
+                            <li>
+                                <button class="dropdown-item" type="submit" asp-page="KnowledgeLib" asp-page-handler="FilterDep" name="selectedDep" value="@dep.DepartmentName" style="background-color: #DDBD3F; color: #000000; font-size: 14px; font-family: 'Open Sans', sans-serif; border: none;">
+                                    @dep.DepartmentName
+                                </button>
+                            </li>
+                        }
+                    </ul>
+                    <button asp-page="KnowledgeLib" asp-page-handler="Close" class="btn btn-primary" style="width: 100px; background-color: #DDBD3F; font-size: 14px; font-family: 'Open Sans', sans-serif; border: none; color: black;">Clear Filter</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<table class="table table-bordered table-responsive table-hover" style="margin-top: 70px;">
     <thead>
         <tr>
-            <th>Name:</th>
-            <th>Subject:</th>
-            <th>Category:</th>
-            <th>Departments:</th>
-            <th>Date Created:</th>
-            <th>Owner:</th>
-            <th></th>
+            <th>Name</th>
+            <th>Subject</th>
+            <th>Category</th>
+            <th>Departments</th>
+            <th>Date</th>
+            <th>Owner</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -152,7 +154,7 @@
                     <td>
                         <!-- New column for actions -->
                         <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-primary dropdown-toggle" style="background-color: #293A80;" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
                                 Actions
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
