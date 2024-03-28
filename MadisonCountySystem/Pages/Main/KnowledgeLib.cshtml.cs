@@ -207,6 +207,7 @@ namespace MadisonCountySystem.Pages.Main
 
         public IActionResult OnPostClose()
         {
+            Search = "";
             return RedirectToPage();
         }
 
