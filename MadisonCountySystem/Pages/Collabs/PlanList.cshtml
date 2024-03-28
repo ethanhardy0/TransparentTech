@@ -30,13 +30,25 @@
                             <option class="dropdown-header" disabled>Plans</option>
                         @foreach (var plan in Model.PlansList)
                         {
-                                    <option value="@($"Plan-{plan.PlanID}")">@plan.PlanName</option>
+                            <option value="@($"Plan-{plan.PlanID}")">@plan.PlanName</option>
                         }
-                            <option class="dropdown-divider" disabled></option>
-                            <option class="dropdown-header" disabled>SWOT Items</option>
+                        <option class="dropdown-divider" disabled></option>
+                        <option class="dropdown-header" disabled>Standard Knowledge Items</option>
                         @foreach (var knowledgeItem in Model.KnowledgeList)
                         {
-                                    <option value="@($"Knowledge Item-{knowledgeItem.KnowledgeID}")">@knowledgeItem.KnowledgeTitle</option>
+                            <option value="@($"Knowledge Item-{knowledgeItem.KnowledgeID}")">@knowledgeItem.KnowledgeTitle</option>
+                        }
+                        <option class="dropdown-divider" disabled></option>
+                        <option class="dropdown-header" disabled>SWOT Items</option>
+                        @foreach (var SWOT in Model.SWOTList)
+                        {
+                            <option value="@($"Knowledge Item-{SWOT.KnowledgeID}")">@SWOT.KnowledgeTitle</option>
+                        }
+                        <option class="dropdown-divider" disabled></option>
+                        <option class="dropdown-header" disabled>PEST Items</option>
+                        @foreach (var PEST in Model.PESTList)
+                        {
+                            <option value="@($"Knowledge Item-{PEST.KnowledgeID}")">@PEST.KnowledgeTitle</option>
                         }
                         </select>
                     </div>

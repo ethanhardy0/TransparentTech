@@ -212,7 +212,9 @@ namespace MadisonCountySystem.Pages.Collabs
                                     Threats = KnowledgeReader["Threats"].ToString()
                                 });
 
-                            } else if (Int32.Parse(KnowledgeReader["KnowledgeTypeID"].ToString()) == 3) { 
+                            } 
+                            else if (Int32.Parse(KnowledgeReader["KnowledgeTypeID"].ToString()) == 3) 
+                            { 
                                 ResearchPEST.Add(new PEST
                                 {
                                     KnowledgeTitle = KnowledgeReader["KnowledgeTitle"].ToString(),
