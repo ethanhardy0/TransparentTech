@@ -36,6 +36,9 @@ namespace MadisonCountySystem.Pages.RecordCreate
         public List<Department> ActiveDepts { get; set; }
         public Dictionary<string, ExcelTable> HeadersByFile { get; set; }
         public string ErrorMessage = "";
+        public String CreateorUpdate { get; set; }
+        public static String PriorName { get; set; }
+        public static int ExistingDatasetID { get; set; }
 
         private static readonly String? connectionString =
             "Server=Localhost;Database=Auxillary;Trusted_Connection=true";
@@ -45,7 +48,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
             HeadersByFile = new Dictionary<string, ExcelTable>();
         }
 
-        public void OnGet()
+        public void OnGet(int ExistingID)
         {
             if (HttpContext.Session.GetString("username") == null)
             {
@@ -55,6 +58,26 @@ namespace MadisonCountySystem.Pages.RecordCreate
             else
             {
                 CurrentLocation = HttpContext.Session.GetString("LibType");
+                CreateorUpdate = "Create";
+                PriorName = null;
+                ExistingDatasetID = 0;
+                if (ExistingID > 0)
+                {
+                    CreateorUpdate = "Update";
+                    ExistingDatasetID = ExistingID;
+                    SqlDataReader newDatasetReader = DBClass.DatasetReader();
+                    while (newDatasetReader.Read())
+                    {
+                        if (Int32.Parse(newDatasetReader["DatasetID"].ToString()) == ExistingID)
+                        {
+                            DatasetName = newDatasetReader["DatasetName"].ToString();
+                            DatasetType = newDatasetReader["DatasetType"].ToString();
+                            DatasetContents = newDatasetReader["DatasetContents"].ToString();
+                            PriorName = newDatasetReader["DatasetName"].ToString();
+                        }
+                    }
+                    DBClass.KnowledgeDBConnection.Close();
+                }
 
                 String fileDir = Directory.GetCurrentDirectory() + @"\wwwroot\csvupload\";
                 DirectoryInfo fileInfo = new DirectoryInfo(fileDir);
@@ -81,6 +104,36 @@ namespace MadisonCountySystem.Pages.RecordCreate
             }
 
             DatasetName = DatasetName.Replace(" ", "_").Replace("-", "_").Replace(",", "_").Replace("/", "_").Replace("\\", "_");
+            if (PriorName != null)
+            {
+                String sqlQuery = "UPDATE Dataset SET DatasetName = '";
+                sqlQuery += DatasetName;
+                sqlQuery += "', DatasetContents = '";
+                sqlQuery += DatasetContents;
+                sqlQuery += "', DatasetType = '";
+                sqlQuery += DatasetType;
+                sqlQuery += "' WHERE DatasetID = ";
+                sqlQuery += ExistingDatasetID;
+                DBClass.GeneralReader(sqlQuery);
+                DBClass.KnowledgeDBConnection.Close();
+
+                String sqlQueryAux = "EXEC sp_rename '";
+                sqlQueryAux += PriorName;
+                sqlQueryAux += "', '";
+                sqlQueryAux += DatasetName;
+                sqlQueryAux += "';";
+                DBClass.AuxGeneralReader(sqlQueryAux);
+                DBClass.KnowledgeDBConnection.Close();
+                if (HttpContext.Session.GetString("LibType") == "Collab")
+                {
+                    return RedirectToPage("/Collabs/DatasetList");
+                }
+                else
+                {
+                    return RedirectToPage("/Main/DatasetLib");
+                }
+
+            }
 
             foreach (var file in FormFiles)
             {
@@ -340,6 +393,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
                 DatasetName = "Capital Gains Data";
                 DatasetType = "WORD";
                 DatasetContents = "You paid no Capital Gains Tax";
+                CreateorUpdate = "Create";
                 foreach (var file in FormFiles)
                 {
                     FormFiles.Add(file);
@@ -388,7 +442,7 @@ namespace MadisonCountySystem.Pages.RecordCreate
                         }
                     }
                 }
-                OnGet();
+                OnGet(0);
             }
         }
         public void GetActiveDepts()
