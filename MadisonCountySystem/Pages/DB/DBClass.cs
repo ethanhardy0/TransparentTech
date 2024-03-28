@@ -525,26 +525,30 @@ namespace MadisonCountySystem.Pages.DB
 
         public static void DeleteDataset(int datasetID)
         {
-            String sqlQuery = "UPDATE Dataset SET DatasetStatus = 'Deleted' WHERE DatasetID = @DatasetID;";
+            SqlDataReader read = GeneralReader("SELECT DatasetName FROM Dataset WHERE DatasetID = " + datasetID + ";");
 
-            SqlCommand cmdUserRead = new SqlCommand();
-            cmdUserRead.Connection = KnowledgeDBConnection;
-            cmdUserRead.Connection.ConnectionString = KnowledgeDBConnString;
-            cmdUserRead.CommandText = sqlQuery;
-            cmdUserRead.Parameters.AddWithValue("@DatasetID", datasetID);
-            cmdUserRead.Connection.Open();
-            cmdUserRead.ExecuteNonQuery();
-            cmdUserRead.Connection.Close();
+            read.Read();
 
-            //String query2 = "DROP TABLE @TableName";
-            //SqlCommand cmdTableRead = new SqlCommand();
-            //cmdTableRead.Connection = KnowledgeDBConnection;
-            //cmdTableRead.Connection.ConnectionString = KnowledgeDBConnString;
-            //cmdTableRead.CommandText = query2;
-            //cmdTableRead.Parameters.AddWithValue("@TableName", dataset.DatasetName);
-            //cmdTableRead.Connection.Open();
-            //cmdTableRead.ExecuteNonQuery();
-            //cmdTableRead.Connection.Close();
+            String tableName = read[0].ToString();
+
+            KnowledgeDBConnection.Close();
+
+            String query2 = "DROP TABLE " + tableName + ";";
+            SqlCommand cmdTableRead = new SqlCommand();
+            cmdTableRead.Connection = KnowledgeDBConnection;
+            cmdTableRead.Connection.ConnectionString = AuxConnString;
+            cmdTableRead.CommandText = query2;
+            cmdTableRead.Connection.Open();
+            cmdTableRead.ExecuteNonQuery();
+            cmdTableRead.Connection.Close();
+
+            cmdTableRead = new SqlCommand();
+            cmdTableRead.Connection = KnowledgeDBConnection;
+            cmdTableRead.Connection.ConnectionString = KnowledgeDBConnString;
+            cmdTableRead.CommandText = "UPDATE Dataset SET DatasetStatus = 'Deleted' WHERE DatasetID = " + datasetID;
+            cmdTableRead.Connection.Open();
+            cmdTableRead.ExecuteNonQuery();
+            cmdTableRead.Connection.Close();
         }
 
         // ------------------------------------------- Plans ---------------------------------------------------------------------------------------------------------
